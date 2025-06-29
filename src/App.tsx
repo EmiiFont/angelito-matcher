@@ -1,11 +1,19 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { APITester } from "./APITester";
+import GiftMatcher from "./GiftMatcher";
 import "./index.css";
 
 import logo from "./logo.svg";
 import reactLogo from "./react.svg";
 
 export function App() {
+  const [page, setPage] = useState<"home" | "matcher">("home");
+
+  if (page === "matcher") {
+    return <GiftMatcher onBack={() => setPage("home")}></GiftMatcher>;
+  }
+
   return (
     <div className="container mx-auto p-8 text-center relative z-10">
       <div className="flex justify-center items-center gap-8 mb-8">
@@ -30,6 +38,9 @@ export function App() {
             save to test HMR
           </p>
           <APITester />
+          <div className="mt-4 text-center">
+            <button className="underline text-sm" onClick={() => setPage("matcher")}>Go to Gift Matcher</button>
+          </div>
         </CardContent>
       </Card>
     </div>
