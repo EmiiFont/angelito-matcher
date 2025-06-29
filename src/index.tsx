@@ -26,11 +26,12 @@ const server = serve({
 
     "/api/sendEmails": async req => {
       try {
-        const { persons, matches } = await req.json();
+        const { persons, matches, amount } = await req.json();
 
         if (!Array.isArray(persons) || !Array.isArray(matches)) {
           return new Response("Invalid payload", { status: 400 });
         }
+        const giftAmount = Number(amount) || 0;
 
         console.log("Sending emails to:", persons.length, "recipients");
 
@@ -49,7 +50,7 @@ const server = serve({
                 from: "angelitomatcher@emiliofont.dev",
                 to: recipient.email,
                 subject: "Tu angelito",
-                html: `<p>Hola, tu angelito es ${match.name}</p>`,
+                html: `<p>Hola, tu angelito es ${match.name}. El monto del regalo es RD$${giftAmount}</p>`,
               });
               console.log(`Email sent to ${recipient.email}`);
             } catch (error) {
