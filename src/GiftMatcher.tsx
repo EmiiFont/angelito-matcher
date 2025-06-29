@@ -45,7 +45,7 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
     return arr;
   };
 
-  const handleMatch = () => {
+  const handleMatch = async () => {
     const n = persons.length;
     const indices = Array.from({ length: n }, (_, i) => i);
 
@@ -61,6 +61,17 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
       }
       if (valid) {
         setMatches(shuffled);
+
+        try {
+          await fetch("/api/sendEmails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ persons, matches: shuffled }),
+          });
+        } catch (err) {
+          console.error(err);
+        }
+
         return;
       }
     }
