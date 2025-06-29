@@ -106,7 +106,7 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
   };
 
   return (
-    <div className="container mx-auto p-8 relative z-10">
+    <div className="mx-auto p-8 relative z-10 w-full max-w-3xl">
       <h1 className="text-3xl font-bold mb-6 text-center">Angelito Matcher</h1>
       {onBack && (
         <button className="underline mb-4 text-sm" onClick={onBack}>
@@ -151,10 +151,19 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
             <button className="underline text-sm" onClick={addPerson}>
               + Add person
             </button>
-            <Button size="lg" onClick={() => handleMatch()}>Match</Button>
           </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-center mt-6">
+        <Button
+          size="lg"
+          className="px-8 text-lg"
+          onClick={() => handleMatch()}
+        >
+          Match
+        </Button>
+      </div>
 
       {matches && (
         <Card className="bg-card/50 backdrop-blur-sm border-muted mt-4">
