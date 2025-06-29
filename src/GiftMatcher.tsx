@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const LOCAL_STORAGE_KEY = "giftMatcherData";
 
@@ -148,8 +149,9 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
           ))}
 
           <div className="flex gap-4">
-            <button className="underline text-sm" onClick={addPerson}>
-              + Add person
+            <button className="underline text-sm flex items-center gap-1" onClick={addPerson}>
+              <Plus className="size-3.5" />
+              Add person
             </button>
           </div>
         </CardContent>
