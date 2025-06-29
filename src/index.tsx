@@ -32,22 +32,36 @@ const server = serve({
           return new Response("Invalid payload", { status: 400 });
         }
 
-        await Promise.all(
-          matches.map((toIdx: number, fromIdx: number) => {
-            const recipient = persons[fromIdx];
-            const match = persons[toIdx];
+        console.log("Sending emails to:", persons.length, "recipients");
 
-            if (!recipient?.email || !match?.name) return Promise.resolve();
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-            return resend.emails.send({
-              from: "angelito@matcher.dev",
-              to: recipient.email,
-              subject: "Tu angelito",
-              html: `<p>Hola, tu angelito es ${match.name}</p>`,
-            });
-          }),
-        );
+        for (let fromIdx = 0; fromIdx < matches.length; fromIdx++) {
+          const toIdx = matches[fromIdx];
+          const recipient = persons[fromIdx];
+          const match = persons[toIdx];
 
+          console.log(recipient, match);
+
+          if (recipient?.email && match?.name) {
+            try {
+              await resend.emails.send({
+                from: "angelitomatcher@emiliofont.dev",
+                to: recipient.email,
+                subject: "Tu angelito",
+                html: `<p>Hola, tu angelito es ${match.name}</p>`,
+              });
+              console.log(`Email sent to ${recipient.email}`);
+            } catch (error) {
+              console.error(`Failed to send email to ${recipient.email}:`, error);
+            }
+
+            // Wait 2 seconds before next email (except for the last one)
+            if (fromIdx < matches.length - 1) {
+              await delay(2000);
+            }
+          }
+        }
         return new Response("sent");
       } catch (err) {
         console.error(err);
