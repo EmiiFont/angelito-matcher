@@ -80,6 +80,9 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="container mx-auto p-8 relative z-10">
+      <h2 className="text-3xl font-bold mb-6">
+        Angelito Matcher
+      </h2>
       <button className="underline mb-4 text-sm" onClick={onBack}>
         ← Back to Home
       </button>
