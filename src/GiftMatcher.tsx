@@ -1,13 +1,40 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
-export function GiftMatcher({ onBack }: { onBack: () => void }) {
+const LOCAL_STORAGE_KEY = "giftMatcherData";
+
+export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
   const [persons, setPersons] = useState([{ name: "", email: "" }]);
   const [restrictionIndex, setRestrictionIndex] = useState<number | null>(null);
   const [restrictions, setRestrictions] = useState<Record<number, number[]>>({});
   const [matches, setMatches] = useState<number[] | null>(null);
+  const [amount, setAmount] = useState("");
   const [tempRestrictions, setTempRestrictions] = useState<number[]>([]);
+
+  // Load saved data on mount
+  useEffect(() => {
+    const raw = typeof localStorage !== "undefined" &&
+      localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.persons)) setPersons(data.persons);
+      if (data.restrictions) setRestrictions(data.restrictions);
+      if (typeof data.amount === "string") setAmount(data.amount);
+    } catch (err) {
+      console.error("Failed to parse saved data", err);
+    }
+  }, []);
+
+  // Persist form data while editing
+  useEffect(() => {
+    if (matches) return; // don't save after matching
+    const data = JSON.stringify({ persons, restrictions, amount });
+    localStorage.setItem(LOCAL_STORAGE_KEY, data);
+  }, [persons, restrictions, amount, matches]);
 
   useEffect(() => {
     if (restrictionIndex !== null) {
@@ -61,12 +88,13 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
       }
       if (valid) {
         setMatches(shuffled);
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
 
         try {
           await fetch("/api/sendEmails", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ persons, matches: shuffled }),
+            body: JSON.stringify({ persons, matches: shuffled, amount }),
           });
         } catch (err) {
           console.error(err);
@@ -80,15 +108,25 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="container mx-auto p-8 relative z-10">
-      <h2 className="text-3xl font-bold mb-6">
-        Angelito Matcher
-      </h2>
-      <button className="underline mb-4 text-sm" onClick={onBack}>
-        ← Back to Home
-      </button>
+      <h1 className="text-3xl font-bold mb-6 text-center">Angelito Matcher</h1>
+      {onBack && (
+        <button className="underline mb-4 text-sm" onClick={onBack}>
+          ← Back to Home
+        </button>
+      )}
 
       <Card className="bg-card/50 backdrop-blur-sm border-muted">
         <CardContent className="pt-6 flex flex-col gap-4">
+          <div className="flex items-end gap-2">
+            <span>RD$</span>
+            <Input
+              type="number"
+              placeholder="Monto"
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              className="w-32"
+            />
+          </div>
           {persons.map((p, idx) => (
             <div key={idx} className="flex gap-2 items-end">
               <Input
@@ -111,28 +149,14 @@ export function GiftMatcher({ onBack }: { onBack: () => void }) {
           ))}
 
           <div className="flex gap-4">
-            <button className="underline text-sm" onClick={addPerson}>
+            <button className="underline text-sm flex items-center gap-1" onClick={addPerson}>
+              <Plus className="size-3.5" />
               Add person
             </button>
-            <button className="underline text-sm" onClick={() => handleMatch()}>
-              Match
-            </button>
+            <Button size="lg" onClick={() => handleMatch()}>Match</Button>
           </div>
         </CardContent>
       </Card>
-
-      {matches && (
-        <Card className="bg-card/50 backdrop-blur-sm border-muted mt-4">
-          <CardContent className="pt-6 space-y-2">
-            {matches.map((toIdx, fromIdx) => (
-              <p key={fromIdx}>
-                {(persons[fromIdx].name || `Person ${fromIdx + 1}`)} →{' '}
-                {(persons[toIdx].name || `Person ${toIdx + 1}`)}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
 
       {restrictionIndex !== null && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
