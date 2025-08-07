@@ -6,11 +6,17 @@
   "main": "src/index.tsx",
   "module": "src/index.tsx",
   "scripts": {
-    "dev": "bun --hot src/index.tsx",
+    "dev": "bun run build && bun --hot src/dev-server.tsx",
+    "dev:old": "bun --hot src/index.tsx",
+    "dev:worker": "wrangler dev",
     "start": "NODE_ENV=production bun src/index.tsx",
-    "build": "bun run build.ts"
+    "build": "bun run build.ts && bun run build-worker.ts",
+    "build:worker": "bun run build-worker.ts",
+    "deploy": "wrangler deploy",
+    "cf:login": "wrangler auth login"
   },
   "dependencies": {
+    "@hono/node-server": "^1.18.1",
     "@hookform/resolvers": "^4.1.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-select": "^2.1.6",
@@ -18,19 +24,22 @@
     "bun-plugin-tailwind": "^0.0.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "hono": "^4.8.12",
     "lucide-react": "^0.475.0",
     "react": "^19",
     "react-dom": "^19",
     "react-hook-form": "^7.54.2",
+    "resend": "latest",
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^4.0.6",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.2",
-    "resend": "latest"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250807.0",
+    "@types/bun": "latest",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/bun": "latest"
+    "wrangler": "^4.28.1"
   }
 }
