@@ -17,8 +17,8 @@ NODE_ENV = "development"
 
 [[env.production.kv_namespaces]]
 binding = "STORAGE"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "acfa423426a24336bb408b112457eeaa"
 
 [[kv_namespaces]]
 binding = "STORAGE"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "acfa423426a24336bb408b112457eeaa"
