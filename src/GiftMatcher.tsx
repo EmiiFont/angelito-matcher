@@ -88,7 +88,7 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
       }
       if (valid) {
         setMatches(shuffled);
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        // localStorage.removeItem(LOCAL_STORAGE_KEY);
 
         try {
           await fetch("/api/sendEmails", {
