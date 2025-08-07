@@ -1,0 +1,24 @@
+name = "angelito-matcher"
+main = "dist/worker/worker.js"
+compatibility_date = "2025-08-07"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "bun run build"
+
+[assets]
+directory = "./dist"
+
+[env.production.vars]
+NODE_ENV = "production"
+
+[vars]
+NODE_ENV = "development"
+
+[[env.production.kv_namespaces]]
+binding = "STORAGE"
+id = "YOUR_KV_NAMESPACE_ID"
+
+[[kv_namespaces]]
+binding = "STORAGE"
+id = "YOUR_KV_NAMESPACE_ID"
