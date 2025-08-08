@@ -101,8 +101,11 @@ app.get('*', async (c) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/logo-kygw735p.svg" />
     <title>Angelito Matcher</title>
-    <link rel="stylesheet" crossorigin href="/chunk-31pn3bws.css">
-    <script type="module" crossorigin src="/chunk-4j5y2c5y.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" crossorigin href="/chunk-verh5ctz.css">
+    <script type="module" crossorigin src="/chunk-0fj39e6p.js"></script>
   </head>
   <body>
     <div id="root"></div>

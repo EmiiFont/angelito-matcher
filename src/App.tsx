@@ -1,8 +1,8 @@
-import GiftMatcher from "./GiftMatcher";
+import { HomePage } from "./HomePage";
 import "./index.css";
 
 export function App() {
-  return <GiftMatcher />;
+  return <HomePage />;
 }
 
 export default App;
