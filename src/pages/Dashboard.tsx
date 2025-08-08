@@ -307,11 +307,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
     return (
         <div className="flex h-screen bg-gray-50">
             {/* Sidebar */}
-            <div className={`bg-white border-r border-sky-200 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-64 hidden lg:block'
+            <div className={`bg-white border-r border-purple-200 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-64 hidden lg:block'
                 }`}>
-                <div className="flex items-center justify-between p-6 border-b border-sky-200">
+                <div className="flex items-center justify-between p-6 border-b border-purple-200">
                     <div className="flex items-center">
-                        <Gift className="h-8 w-8 text-sky-600" />
+                        <Gift className="h-8 w-8 text-purple-600" />
                         <span className="ml-3 text-xl font-bold text-gray-900">Angelito</span>
                     </div>
                     <button
@@ -328,8 +328,8 @@ export function Dashboard({ onLogout }: DashboardProps) {
                             key={index}
                             href="#"
                             className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${item.active
-                                ? 'text-sky-600 bg-sky-50 border-r-2 border-sky-600'
-                                : 'text-gray-600 hover:text-sky-600 hover:bg-sky-50'
+                                ? 'text-purple-600 bg-purple-50 border-r-2 border-purple-600'
+                                : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                                 }`}
                         >
                             <item.icon className="h-5 w-5 mr-3" />
@@ -338,10 +338,10 @@ export function Dashboard({ onLogout }: DashboardProps) {
                     ))}
                 </nav>
 
-                <div className="absolute bottom-0 w-64 p-6 border-t border-sky-200">
+                <div className="absolute bottom-0 w-64 p-6 border-t border-purple-200">
                     <button
                         onClick={onLogout}
-                        className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
+                        className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                     >
                         <LogOut className="h-5 w-5 mr-3" />
                         Sign Out
@@ -360,7 +360,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Header */}
-                <header className="bg-white border-b border-sky-200 px-6 py-4">
+                <header className="bg-white border-b border-purple-200 px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <button
@@ -373,7 +373,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
-                                <div className="w-8 h-8 bg-sky-600 rounded-full flex items-center justify-center">
+                                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
                                     <span className="text-white text-sm font-medium">JD</span>
                                 </div>
                                 <span className="ml-3 text-sm font-medium text-gray-700">John Doe</span>
@@ -394,8 +394,8 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                     {/* Header */}
                                     <div className="border-b border-gray-100 p-6">
                                         <div className="flex items-center">
-                                            <div className="w-10 h-10 bg-sky-50 rounded-lg flex items-center justify-center mr-4">
-                                                <Gift className="h-5 w-5 text-sky-600" />
+                                            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center mr-4">
+                                                <Gift className="h-5 w-5 text-purple-600" />
                                             </div>
                                             <div>
                                                 <h2 className="text-lg font-medium text-gray-900">Gift Exchange Setup</h2>
@@ -437,7 +437,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                             const value = parseInt(e.target.value) || 1;
                                                             updateParticipantCount(value);
                                                         }}
-                                                        className="w-20 text-center border-gray-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                                        className="w-20 text-center border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                                                     />
                                                     <Users className="h-5 w-5 text-gray-400" />
                                                 </div>
@@ -452,7 +452,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 placeholder="Enter gift budget amount"
                                                 value={amount}
                                                 onChange={e => setAmount(e.target.value)}
-                                                className="w-full sm:w-64 border-gray-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                                className="w-full sm:w-64 border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                                             />
                                         </div>
 
@@ -460,78 +460,78 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                         <div>
                                             <label className="block text-sm font-medium text-gray-900 mb-3">Notification Method</label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-sky-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
                                                         value="email"
                                                         checked={notificationChannel === "email"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-sky-600 border-gray-300 focus:ring-sky-500/20"
+                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Mail className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">Email</span>
                                                     </div>
                                                     {notificationChannel === "email" && (
-                                                        <div className="absolute inset-0 border border-sky-500 bg-sky-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-sky-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
                                                         value="sms"
                                                         checked={notificationChannel === "sms"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-sky-600 border-gray-300 focus:ring-sky-500/20"
+                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <MessageSquare className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">SMS</span>
                                                     </div>
                                                     {notificationChannel === "sms" && (
-                                                        <div className="absolute inset-0 border border-sky-500 bg-sky-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-sky-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
                                                         value="whatsapp"
                                                         checked={notificationChannel === "whatsapp"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-sky-600 border-gray-300 focus:ring-sky-500/20"
+                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Phone className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">WhatsApp</span>
                                                     </div>
                                                     {notificationChannel === "whatsapp" && (
-                                                        <div className="absolute inset-0 border border-sky-500 bg-sky-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-sky-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
                                                         value="all"
                                                         checked={notificationChannel === "all"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-sky-600 border-gray-300 focus:ring-sky-500/20"
+                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Users className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">All Methods</span>
                                                     </div>
                                                     {notificationChannel === "all" && (
-                                                        <div className="absolute inset-0 border border-sky-500 bg-sky-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                             </div>
                                             {requiresPhoneNumber() && (
-                                                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                                    <p className="text-sm text-blue-700 flex items-center">
+                                                <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                                                    <p className="text-sm text-purple-700 flex items-center">
                                                         <Phone className="h-4 w-4 mr-2" />
                                                         Phone numbers will be required for all participants
                                                     </p>
@@ -594,28 +594,28 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Generated Link Display */}
                                         {participantLink && (
-                                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                                                 <div className="flex items-start">
                                                     <div className="flex-shrink-0">
-                                                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                                                        <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
                                                     </div>
                                                     <div className="ml-3 flex-1">
-                                                        <h3 className="text-sm font-medium text-blue-800">
+                                                        <h3 className="text-sm font-medium text-purple-800">
                                                             Participant Registration Link Generated
                                                         </h3>
-                                                        <p className="mt-1 text-sm text-blue-700">
+                                                        <p className="mt-1 text-sm text-purple-700">
                                                             Share this link with participants. They'll be automatically added here when they register.
                                                         </p>
-                                                        <div className="mt-3 flex items-center gap-2 p-2 bg-white rounded border border-blue-200">
-                                                            <Link className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                                                            <code className="flex-1 text-sm text-blue-800 bg-transparent break-all">
+                                                        <div className="mt-3 flex items-center gap-2 p-2 bg-white rounded border border-purple-200">
+                                                            <Link className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                                                            <code className="flex-1 text-sm text-purple-800 bg-transparent break-all">
                                                                 {participantLink}
                                                             </code>
                                                             <Button
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={copyLinkToClipboard}
-                                                                className="flex-shrink-0 border-blue-300 text-blue-700 hover:bg-blue-50"
+                                                                className="flex-shrink-0 border-purple-300 text-purple-700 hover:bg-purple-50"
                                                             >
                                                                 {linkCopied ? (
                                                                     <>
@@ -630,7 +630,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                 )}
                                                             </Button>
                                                         </div>
-                                                        <div className="mt-3 flex items-center text-sm text-blue-600">
+                                                        <div className="mt-3 flex items-center text-sm text-purple-600">
                                                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                                             Waiting for participants to register...
                                                         </div>
@@ -654,7 +654,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Full name"
                                                                     value={p.name}
                                                                     onChange={e => updatePerson(idx, "name", e.target.value)}
-                                                                    className="border-gray-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                                                                 />
                                                             </div>
                                                             <div>
@@ -663,7 +663,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Email address"
                                                                     value={p.email}
                                                                     onChange={e => updatePerson(idx, "email", e.target.value)}
-                                                                    className="border-gray-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                                                                 />
                                                             </div>
                                                             <div className="flex gap-2">
@@ -693,7 +693,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Phone number"
                                                                     value={p.phone || ""}
                                                                     onChange={e => updatePerson(idx, "phone", e.target.value)}
-                                                                    className="border-gray-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
                                                                 />
                                                             </div>
                                                         )}
@@ -717,7 +717,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 <Button
                                                     size="lg"
                                                     onClick={handleMatch}
-                                                    className="bg-sky-600 hover:bg-sky-700 text-white px-8 h-12 font-medium"
+                                                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 h-12 font-medium"
                                                 >
                                                     <Gift className="h-5 w-5 mr-2" />
                                                     Generate Matches & Send Notifications
@@ -728,7 +728,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                 </CardContent>
                                 </Card>
                                 ) : (
-                                    <Card className="bg-white shadow-sm border-sky-200">
+                                    <Card className="bg-white shadow-sm border-purple-200">
                                         <CardContent className="p-8 text-center">
                                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Gift className="h-8 w-8 text-green-600" />
@@ -746,7 +746,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                     setRestrictions({});
                                                     setNotificationChannel("email");
                                                 }}
-                                                className="bg-sky-600 hover:bg-sky-700 text-white"
+                                                className="bg-purple-600 hover:bg-purple-700 text-white"
                                             >
                                                 Create New Event
                                             </Button>
@@ -840,7 +840,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         : prev.filter(i => i !== idx),
                                                 );
                                             }}
-                                            className="w-4 h-4 text-sky-600 border-sky-300 rounded focus:ring-sky-500"
+                                            className="w-4 h-4 text-purple-600 border-purple-300 rounded focus:ring-purple-500"
                                         />
                                         <span className="text-gray-700">
                                             {p.name || `Person ${idx + 1}`}
@@ -853,13 +853,13 @@ export function Dashboard({ onLogout }: DashboardProps) {
                             <Button
                                 variant="outline"
                                 onClick={() => setRestrictionIndex(null)}
-                                className="border-sky-300 text-sky-700 hover:bg-sky-50"
+                                className="border-purple-300 text-purple-700 hover:bg-purple-50"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 onClick={() => saveRestriction(tempRestrictions)}
-                                className="bg-sky-600 hover:bg-sky-700 text-white"
+                                className="bg-purple-600 hover:bg-purple-700 text-white"
                             >
                                 Save Restrictions
                             </Button>
