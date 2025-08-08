@@ -1,4 +1,4 @@
-name = "angelito-matcher"
+name = "myangelito"
 main = "dist/worker/worker.js"
 compatibility_date = "2025-08-07"
 compatibility_flags = ["nodejs_compat"]
