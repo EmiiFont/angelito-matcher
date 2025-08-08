@@ -11,7 +11,7 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
     <section id="pricing" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-4">
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-gray-600">
@@ -23,9 +23,9 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
           {/* Free */}
           <Card className="border-purple-200 hover:shadow-lg transition-shadow h-full">
             <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Free</h3>
+              <h3 className="text-xl font-normal text-gray-900 mb-2">Free</h3>
               <div className="mb-4">
-                <span className="text-3xl font-bold text-purple-600">$0</span>
+                <span className="text-3xl font-normal text-purple-600">$0</span>
                 <span className="text-gray-600">/forever</span>
               </div>
               <p className="text-gray-600 mb-6">Perfect for small family and friend groups</p>
@@ -59,14 +59,14 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
           {/* Per Event */}
           <Card className="border-purple-500 hover:shadow-lg transition-shadow ring-2 ring-purple-500 relative h-full">
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+              <span className="bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-normal">
                 Most Popular
               </span>
             </div>
             <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Per Event</h3>
+              <h3 className="text-xl font-normal text-gray-900 mb-2">Per Event</h3>
               <div className="mb-4">
-                <span className="text-3xl font-bold text-purple-600">$4.99</span>
+                <span className="text-3xl font-normal text-purple-600">$4.99</span>
                 <span className="text-gray-600">/event</span>
               </div>
               <p className="text-gray-600 mb-6">Perfect for one-time events and larger groups</p>
@@ -100,9 +100,9 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
           {/* Business */}
           <Card className="border-purple-200 hover:shadow-lg transition-shadow h-full">
             <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Business</h3>
+              <h3 className="text-xl font-normal text-gray-900 mb-2">Business</h3>
               <div className="mb-4">
-                <span className="text-3xl font-bold text-purple-600">$12.99</span>
+                <span className="text-3xl font-normal text-purple-600">$12.99</span>
                 <span className="text-gray-600">/month</span>
               </div>
               <p className="text-gray-600 mb-6">Ideal for companies with multiple events</p>

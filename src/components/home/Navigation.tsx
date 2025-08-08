@@ -23,7 +23,7 @@ export function Navigation({ onGetStarted }: NavigationProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Gift className="h-8 w-8 text-purple-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">My Angelito</span>
+            <span className="ml-2 text-xl font-normal text-gray-900">My Angelito</span>
           </div>
 
           {/* Desktop Menu */}
@@ -31,19 +31,19 @@ export function Navigation({ onGetStarted }: NavigationProps) {
             <div className="ml-10 flex items-baseline space-x-4">
               <button
                 onClick={() => scrollToSection('features')}
-                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-normal transition-colors"
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection('how-it-works')}
-                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-normal transition-colors"
               >
                 How It Works
               </button>
               <button
                 onClick={() => scrollToSection('pricing')}
-                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-normal transition-colors"
               >
                 Pricing
               </button>
@@ -75,19 +75,19 @@ export function Navigation({ onGetStarted }: NavigationProps) {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-purple-200">
               <button
                 onClick={() => scrollToSection('features')}
-                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-medium w-full text-left"
+                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-normal w-full text-left"
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection('how-it-works')}
-                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-medium w-full text-left"
+                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-normal w-full text-left"
               >
                 How It Works
               </button>
               <button
                 onClick={() => scrollToSection('pricing')}
-                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-medium w-full text-left"
+                className="text-gray-700 hover:text-purple-600 block px-3 py-2 text-base font-normal w-full text-left"
               >
                 Pricing
               </button>

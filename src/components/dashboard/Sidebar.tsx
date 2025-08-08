@@ -22,7 +22,7 @@ export function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
         <div className="flex items-center justify-between p-6 border-b border-purple-200">
           <div className="flex items-center">
             <Gift className="h-8 w-8 text-purple-600" />
-            <span className="ml-3 text-xl font-bold text-gray-900">Angelito</span>
+            <span className="ml-3 text-xl font-normal text-gray-900">Angelito</span>
           </div>
           <button className="lg:hidden" onClick={onClose}>
             <X className="h-6 w-6 text-gray-500" />
@@ -34,7 +34,7 @@ export function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
             <a
               key={index}
               href="#"
-              className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${
+              className={`flex items-center px-6 py-3 text-sm font-normal transition-colors ${
                 item.active
                   ? 'text-purple-600 bg-purple-50 border-r-2 border-purple-600'
                   : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
@@ -49,7 +49,7 @@ export function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
         <div className="absolute bottom-0 w-64 p-6 border-t border-purple-200">
           <button
             onClick={onLogout}
-            className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+            className="flex items-center w-full px-3 py-2 text-sm font-normal text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
           >
             <LogOut className="h-5 w-5 mr-3" />
             Sign Out

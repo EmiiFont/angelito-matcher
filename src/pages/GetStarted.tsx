@@ -59,7 +59,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Gift className="h-8 w-8 text-purple-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">Angelito Matcher</span>
+              <span className="ml-2 text-xl font-normal text-gray-900">Angelito Matcher</span>
             </div>
             
             {onBack && (
@@ -99,7 +99,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName" className="text-gray-700 font-medium">
+                    <Label htmlFor="firstName" className="text-gray-700 font-normal">
                       First Name
                     </Label>
                     <Input
@@ -113,7 +113,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-gray-700 font-medium">
+                    <Label htmlFor="lastName" className="text-gray-700 font-normal">
                       Last Name
                     </Label>
                     <Input
@@ -130,7 +130,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Email */}
                 <div>
-                  <Label htmlFor="email" className="text-gray-700 font-medium">
+                  <Label htmlFor="email" className="text-gray-700 font-normal">
                     Email Address
                   </Label>
                   <Input
@@ -146,7 +146,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Company (Optional) */}
                 <div>
-                  <Label htmlFor="company" className="text-gray-700 font-medium">
+                  <Label htmlFor="company" className="text-gray-700 font-normal">
                     Company <span className="text-gray-400 font-normal">(Optional)</span>
                   </Label>
                   <Input
@@ -161,7 +161,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Password */}
                 <div>
-                  <Label htmlFor="password" className="text-gray-700 font-medium">
+                  <Label htmlFor="password" className="text-gray-700 font-normal">
                     Password
                   </Label>
                   <div className="relative mt-1">
@@ -190,7 +190,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Confirm Password */}
                 <div>
-                  <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">
+                  <Label htmlFor="confirmPassword" className="text-gray-700 font-normal">
                     Confirm Password
                   </Label>
                   <div className="relative mt-1">
@@ -224,7 +224,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                 <Button
                   type="submit"
                   disabled={!isFormValid || isLoading}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-normal disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
@@ -290,7 +290,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
               <div className="mt-8 text-center">
                 <p className="text-sm text-gray-600">
                   Already have an account?{" "}
-                  <button className="text-purple-600 hover:text-purple-700 font-medium">
+                  <button className="text-purple-600 hover:text-purple-700 font-normal">
                     Sign in
                   </button>
                 </p>
