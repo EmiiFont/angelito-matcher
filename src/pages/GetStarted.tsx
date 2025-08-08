@@ -52,13 +52,13 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                      formData.password === formData.confirmPassword;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm border-b border-sky-200">
+      <nav className="bg-white/90 backdrop-blur-sm border-b border-purple-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Gift className="h-8 w-8 text-sky-600" />
+              <Gift className="h-8 w-8 text-purple-600" />
               <span className="ml-2 text-xl font-bold text-gray-900">Angelito Matcher</span>
             </div>
             
@@ -66,7 +66,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
               <Button 
                 variant="ghost" 
                 onClick={onBack}
-                className="text-gray-700 hover:text-sky-600"
+                className="text-gray-700 hover:text-purple-600"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Home
@@ -81,7 +81,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-sky-600 rounded-full flex items-center justify-center mb-4">
+            <div className="mx-auto w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-4">
               <Gift className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-normal text-slate-900 mb-2">
@@ -93,7 +93,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
           </div>
 
           {/* Sign Up Form */}
-          <Card className="shadow-xl border-sky-200">
+          <Card className="shadow-xl border-purple-200">
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Fields */}
@@ -107,7 +107,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className="mt-1 border-sky-200 focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 border-purple-200 focus:border-purple-500 focus:ring-purple-500"
                       placeholder="John"
                       required
                     />
@@ -121,7 +121,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                       type="text"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className="mt-1 border-sky-200 focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 border-purple-200 focus:border-purple-500 focus:ring-purple-500"
                       placeholder="Doe"
                       required
                     />
@@ -138,7 +138,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="mt-1 border-sky-200 focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 border-purple-200 focus:border-purple-500 focus:ring-purple-500"
                     placeholder="john@example.com"
                     required
                   />
@@ -154,7 +154,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                     type="text"
                     value={formData.company}
                     onChange={(e) => handleInputChange("company", e.target.value)}
-                    className="mt-1 border-sky-200 focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 border-purple-200 focus:border-purple-500 focus:ring-purple-500"
                     placeholder="Acme Inc."
                   />
                 </div>
@@ -170,7 +170,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                       type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={(e) => handleInputChange("password", e.target.value)}
-                      className="border-sky-200 focus:border-sky-500 focus:ring-sky-500 pr-10"
+                      className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 pr-10"
                       placeholder="••••••••"
                       required
                     />
@@ -199,7 +199,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                       type={showConfirmPassword ? "text" : "password"}
                       value={formData.confirmPassword}
                       onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                      className="border-sky-200 focus:border-sky-500 focus:ring-sky-500 pr-10"
+                      className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 pr-10"
                       placeholder="••••••••"
                       required
                     />
@@ -224,7 +224,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                 <Button
                   type="submit"
                   disabled={!isFormValid || isLoading}
-                  className="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
@@ -251,7 +251,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-sky-200 hover:bg-sky-50 text-gray-700"
+                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -265,7 +265,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-sky-200 hover:bg-sky-50 text-gray-700"
+                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -276,7 +276,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-sky-200 hover:bg-sky-50 text-gray-700"
+                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -290,7 +290,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
               <div className="mt-8 text-center">
                 <p className="text-sm text-gray-600">
                   Already have an account?{" "}
-                  <button className="text-sky-600 hover:text-sky-700 font-medium">
+                  <button className="text-purple-600 hover:text-purple-700 font-medium">
                     Sign in
                   </button>
                 </p>
@@ -301,15 +301,15 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
           {/* Features Preview */}
           <div className="mt-8 grid grid-cols-3 gap-4 text-center">
             <div>
-              <CheckCircle className="h-6 w-6 text-sky-600 mx-auto mb-2" />
+              <CheckCircle className="h-6 w-6 text-purple-600 mx-auto mb-2" />
               <p className="text-xs text-gray-600">Smart Matching</p>
             </div>
             <div>
-              <CheckCircle className="h-6 w-6 text-sky-600 mx-auto mb-2" />
+              <CheckCircle className="h-6 w-6 text-purple-600 mx-auto mb-2" />
               <p className="text-xs text-gray-600">Auto Notifications</p>
             </div>
             <div>
-              <CheckCircle className="h-6 w-6 text-sky-600 mx-auto mb-2" />
+              <CheckCircle className="h-6 w-6 text-purple-600 mx-auto mb-2" />
               <p className="text-xs text-gray-600">Complete Privacy</p>
             </div>
           </div>
