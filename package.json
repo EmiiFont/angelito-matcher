@@ -6,7 +6,7 @@
   "main": "src/index.tsx",
   "module": "src/index.tsx",
   "scripts": {
-    "dev": "bun run build && bun --hot src/dev-server.tsx",
+    "dev": "bun src/dev-server.tsx",
     "dev:old": "bun --hot src/index.tsx",
     "dev:worker": "wrangler dev",
     "start": "NODE_ENV=production bun src/index.tsx",

@@ -3,7 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Gift, Users, Mail, Shield, CheckCircle, Star } from "lucide-react";
 
-export function HomePage() {
+interface HomePageProps {
+    onGetStarted?: () => void;
+}
+
+export function HomePage({ onGetStarted }: HomePageProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const scrollToSection = (sectionId: string) => {
@@ -46,7 +50,10 @@ export function HomePage() {
                                 >
                                     Pricing
                                 </button>
-                                <Button className="bg-sky-600 hover:bg-sky-700 text-white">
+                                <Button
+                                    className="bg-sky-600 hover:bg-sky-700 text-white"
+                                    onClick={onGetStarted}
+                                >
                                     Get Started
                                 </Button>
                             </div>
@@ -87,7 +94,10 @@ export function HomePage() {
                                 >
                                     Pricing
                                 </button>
-                                <Button className="bg-sky-600 hover:bg-sky-700 text-white w-full mt-2">
+                                <Button
+                                    className="bg-sky-600 hover:bg-sky-700 text-white w-full mt-2"
+                                    onClick={onGetStarted}
+                                >
                                     Get Started
                                 </Button>
                             </div>
@@ -103,10 +113,10 @@ export function HomePage() {
                         <h1 className="mx-auto max-w-4xl font-display text-5xl font-normal tracking-tight text-slate-900 sm:text-7xl mb-6">
                             Simplify your{" "}
                             <span className="relative whitespace-nowrap text-blue-600">
-                                <svg 
-                                    aria-hidden="true" 
-                                    viewBox="0 0 418 42" 
-                                    className="absolute top-2/3 left-0 h-[0.58em] w-full fill-red-300/70" 
+                                <svg
+                                    aria-hidden="true"
+                                    viewBox="0 0 418 42"
+                                    className="absolute top-2/3 left-0 h-[0.58em] w-full fill-red-300/70"
                                     preserveAspectRatio="none"
                                 >
                                     <path d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z"></path>
@@ -120,7 +130,11 @@ export function HomePage() {
                             automated notifications, and complete privacy management.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Button size="lg" className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 text-lg">
+                            <Button
+                                size="lg"
+                                className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 text-lg"
+                                onClick={onGetStarted}
+                            >
                                 Start Your Event
                             </Button>
                             <Button variant="outline" size="lg" className="border-sky-300 text-sky-700 hover:bg-sky-50 px-8 py-3 text-lg">
@@ -311,24 +325,24 @@ export function HomePage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                        {/* Per Event */}
-                        <Card className="border-sky-200 hover:shadow-lg transition-shadow">
-                            <CardContent className="p-6">
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Per Event</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        {/* Free */}
+                        <Card className="border-sky-200 hover:shadow-lg transition-shadow h-full">
+                            <CardContent className="p-6 h-full flex flex-col">
+                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Free</h3>
                                 <div className="mb-4">
-                                    <span className="text-3xl font-bold text-sky-600">$3</span>
-                                    <span className="text-gray-600">/event</span>
+                                    <span className="text-3xl font-bold text-sky-600">$0</span>
+                                    <span className="text-gray-600">/forever</span>
                                 </div>
-                                <p className="text-gray-600 mb-6">Perfect for one-time events and small groups</p>
-                                <ul className="space-y-2 mb-6">
+                                <p className="text-gray-600 mb-6">Perfect for small family and friend groups</p>
+                                <ul className="space-y-2 mb-6 flex-grow">
                                     <li className="flex items-center">
                                         <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">Up to 50 participants</span>
+                                        <span className="text-sm text-gray-600">Up to 7 participants</span>
                                     </li>
                                     <li className="flex items-center">
                                         <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">Email & SMS notifications</span>
+                                        <span className="text-sm text-gray-600">Email notifications only</span>
                                     </li>
                                     <li className="flex items-center">
                                         <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
@@ -336,30 +350,69 @@ export function HomePage() {
                                     </li>
                                     <li className="flex items-center">
                                         <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
+                                        <span className="text-sm text-gray-600">Community support</span>
+                                    </li>
+                                </ul>
+                                <Button
+                                    className="w-full bg-sky-600 hover:bg-sky-700 text-white mt-auto"
+                                    onClick={onGetStarted}
+                                >
+                                    Get Started Free
+                                </Button>
+                            </CardContent>
+                        </Card>
+
+                        {/* Per Event */}
+                        <Card className="border-sky-500 hover:shadow-lg transition-shadow ring-2 ring-sky-500 relative h-full">
+                            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                <span className="bg-sky-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                                    Most Popular
+                                </span>
+                            </div>
+                            <CardContent className="p-6 h-full flex flex-col">
+                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Per Event</h3>
+                                <div className="mb-4">
+                                    <span className="text-3xl font-bold text-sky-600">$4.99</span>
+                                    <span className="text-gray-600">/event</span>
+                                </div>
+                                <p className="text-gray-600 mb-6">Perfect for one-time events and larger groups</p>
+                                <ul className="space-y-2 mb-6 flex-grow">
+                                    <li className="flex items-center">
+                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
+                                        <span className="text-sm text-gray-600">Up to 30 participants</span>
+                                    </li>
+                                    <li className="flex items-center">
+                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
+                                        <span className="text-sm text-gray-600">Email, SMS & WhatsApp</span>
+                                    </li>
+                                    <li className="flex items-center">
+                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
+                                        <span className="text-sm text-gray-600">Advanced restrictions</span>
+                                    </li>
+                                    <li className="flex items-center">
+                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
                                         <span className="text-sm text-gray-600">24/7 support</span>
                                     </li>
                                 </ul>
-                                <Button className="w-full bg-sky-600 hover:bg-sky-700 text-white">
+                                <Button
+                                    className="w-full bg-sky-600 hover:bg-sky-700 text-white mt-auto"
+                                    onClick={onGetStarted}
+                                >
                                     Start Event
                                 </Button>
                             </CardContent>
                         </Card>
 
                         {/* Business */}
-                        <Card className="border-sky-500 hover:shadow-lg transition-shadow ring-2 ring-sky-500 relative">
-                            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                <span className="bg-sky-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                                    Most Popular
-                                </span>
-                            </div>
-                            <CardContent className="p-6">
+                        <Card className="border-sky-200 hover:shadow-lg transition-shadow h-full">
+                            <CardContent className="p-6 h-full flex flex-col">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Business</h3>
                                 <div className="mb-4">
-                                    <span className="text-3xl font-bold text-sky-600">$99</span>
-                                    <span className="text-gray-600">/year</span>
+                                    <span className="text-3xl font-bold text-sky-600">$12.99</span>
+                                    <span className="text-gray-600">/month</span>
                                 </div>
                                 <p className="text-gray-600 mb-6">Ideal for companies with multiple events</p>
-                                <ul className="space-y-2 mb-6">
+                                <ul className="space-y-2 mb-6 flex-grow">
                                     <li className="flex items-center">
                                         <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
                                         <span className="text-sm text-gray-600">Unlimited participants</span>
@@ -381,43 +434,15 @@ export function HomePage() {
                                         <span className="text-sm text-gray-600">Priority support</span>
                                     </li>
                                 </ul>
-                                <Button className="w-full bg-sky-600 hover:bg-sky-700 text-white">
+                                <Button
+                                    className="w-full bg-sky-600 hover:bg-sky-700 text-white mt-auto"
+                                    onClick={onGetStarted}
+                                >
                                     Start Free Trial
                                 </Button>
                             </CardContent>
                         </Card>
 
-                        {/* Enterprise */}
-                        <Card className="border-sky-200 hover:shadow-lg transition-shadow">
-                            <CardContent className="p-6">
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Enterprise</h3>
-                                <div className="mb-4">
-                                    <span className="text-3xl font-bold text-sky-600">Custom</span>
-                                </div>
-                                <p className="text-gray-600 mb-6">For large organizations with specific needs</p>
-                                <ul className="space-y-2 mb-6">
-                                    <li className="flex items-center">
-                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">Custom integrations</span>
-                                    </li>
-                                    <li className="flex items-center">
-                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">White-label solution</span>
-                                    </li>
-                                    <li className="flex items-center">
-                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">Dedicated support</span>
-                                    </li>
-                                    <li className="flex items-center">
-                                        <CheckCircle className="h-4 w-4 text-sky-600 mr-2" />
-                                        <span className="text-sm text-gray-600">SLA guarantee</span>
-                                    </li>
-                                </ul>
-                                <Button variant="outline" className="w-full border-sky-300 text-sky-700 hover:bg-sky-50">
-                                    Contact Sales
-                                </Button>
-                            </CardContent>
-                        </Card>
                     </div>
                 </div>
             </section>

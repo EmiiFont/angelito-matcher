@@ -4,6 +4,8 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { Resend } from 'resend';
 import path from 'path';
+import { watch } from 'fs';
+import { build } from 'bun';
 
 const app = new Hono();
 
@@ -107,8 +109,51 @@ app.get('*', async (c) => {
   }
 });
 
+// Build function
+async function buildApp() {
+  console.log('🔨 Building app...');
+  try {
+    const proc = Bun.spawn(['bun', 'run', 'build.ts'], {
+      stdio: ['inherit', 'inherit', 'inherit'],
+    });
+    await proc.exited;
+    console.log('✅ Build completed');
+  } catch (error) {
+    console.error('❌ Build failed:', error);
+  }
+}
+
+// Watch for file changes
+let isBuilding = false;
+const srcWatcher = watch('./src', { recursive: true }, async (eventType, filename) => {
+  if (isBuilding || !filename) return;
+  
+  // Only rebuild for relevant file types
+  if (filename.match(/\.(tsx?|css|html)$/)) {
+    console.log(`📁 File changed: ${filename}`);
+    isBuilding = true;
+    await buildApp();
+    isBuilding = false;
+  }
+});
+
+const stylesWatcher = watch('./styles', { recursive: true }, async (eventType, filename) => {
+  if (isBuilding || !filename) return;
+  
+  if (filename.match(/\.css$/)) {
+    console.log(`🎨 Style changed: ${filename}`);
+    isBuilding = true;
+    await buildApp();
+    isBuilding = false;
+  }
+});
+
+// Initial build
+await buildApp();
+
 const port = 3001;
 console.log(`🚀 Development server running at http://localhost:${port}`);
+console.log(`👀 Watching for changes...`);
 
 serve({
   fetch: app.fetch,
