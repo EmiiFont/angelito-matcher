@@ -2,18 +2,16 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Sidebar } from '@/components/dashboard/Sidebar';
+import { Header } from '@/components/dashboard/Header';
+import { JoinedParticipants } from '@/components/dashboard/JoinedParticipants';
+import { RestrictionModal } from '@/components/dashboard/RestrictionModal';
 import {
     Gift,
     Users,
     Mail,
     Settings,
-    Home,
     Plus,
-    Calendar,
-    BarChart3,
-    LogOut,
-    Menu,
-    X,
     MessageSquare,
     Phone,
     Trash2,
@@ -21,9 +19,7 @@ import {
     Copy,
     CheckCircle,
     Lightbulb,
-    Loader2,
-    UserCheck,
-    ArrowLeft
+    Loader2
 } from "lucide-react";
 
 const LOCAL_STORAGE_KEY = "giftMatcherData";
@@ -295,93 +291,17 @@ export function Dashboard({ onLogout }: DashboardProps) {
         alert("Couldn't generate a valid match with current restrictions.");
     };
 
-    const sidebarItems = [
-        { icon: Home, label: "Dashboard", active: true },
-        { icon: Gift, label: "Events", active: false },
-        { icon: Users, label: "Participants", active: false },
-        { icon: Calendar, label: "Calendar", active: false },
-        { icon: BarChart3, label: "Analytics", active: false },
-        { icon: Settings, label: "Settings", active: false },
-    ];
-
     return (
         <div className="flex h-screen bg-gray-50">
-            {/* Sidebar */}
-            <div className={`bg-white border-r border-purple-200 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-64 hidden lg:block'
-                }`}>
-                <div className="flex items-center justify-between p-6 border-b border-purple-200">
-                    <div className="flex items-center">
-                        <Gift className="h-8 w-8 text-purple-600" />
-                        <span className="ml-3 text-xl font-bold text-gray-900">Angelito</span>
-                    </div>
-                    <button
-                        className="lg:hidden"
-                        onClick={() => setIsSidebarOpen(false)}
-                    >
-                        <X className="h-6 w-6 text-gray-500" />
-                    </button>
-                </div>
-
-                <nav className="mt-6">
-                    {sidebarItems.map((item, index) => (
-                        <a
-                            key={index}
-                            href="#"
-                            className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${item.active
-                                ? 'text-purple-600 bg-purple-50 border-r-2 border-purple-600'
-                                : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
-                                }`}
-                        >
-                            <item.icon className="h-5 w-5 mr-3" />
-                            {item.label}
-                        </a>
-                    ))}
-                </nav>
-
-                <div className="absolute bottom-0 w-64 p-6 border-t border-purple-200">
-                    <button
-                        onClick={onLogout}
-                        className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                    >
-                        <LogOut className="h-5 w-5 mr-3" />
-                        Sign Out
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile sidebar overlay */}
-            {isSidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-                    onClick={() => setIsSidebarOpen(false)}
-                />
-            )}
+            <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+                onLogout={onLogout}
+            />
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Header */}
-                <header className="bg-white border-b border-purple-200 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <button
-                                className="lg:hidden mr-4"
-                                onClick={() => setIsSidebarOpen(true)}
-                            >
-                                <Menu className="h-6 w-6 text-gray-500" />
-                            </button>
-                            <h1 className="text-2xl font-normal text-gray-900">Create New Event</h1>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="flex items-center">
-                                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-                                    <span className="text-white text-sm font-medium">JD</span>
-                                </div>
-                                <span className="ml-3 text-sm font-medium text-gray-700">John Doe</span>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
+                <Header onMenuClick={() => setIsSidebarOpen(true)} />
                 {/* Main Content Area */}
                 <main className="flex-1 overflow-y-auto p-6">
                     <div className={`mx-auto ${participantLink && joinedParticipants.length > 0 ? 'max-w-7xl' : 'max-w-4xl'}`}>
@@ -755,117 +675,25 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                 )}
                             </div>
 
-                            {/* Joined Participants Widget */}
-                            {participantLink && joinedParticipants.length > 0 && (
-                                <div className="lg:col-span-1">
-                                    <Card className="bg-white border border-gray-200 sticky top-6">
-                                        <CardContent className="p-0">
-                                            <div className="border-b border-gray-100 p-4">
-                                                <div className="flex items-center">
-                                                    <UserCheck className="h-5 w-5 text-green-600 mr-2" />
-                                                    <h3 className="text-sm font-medium text-gray-900">Joined Participants</h3>
-                                                    <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                                        {joinedParticipants.length}
-                                                    </span>
-                                                </div>
-                                                <p className="text-xs text-gray-500 mt-1">
-                                                    Select participants to add them to your event
-                                                </p>
-                                            </div>
-                                            <div className="p-4 max-h-96 overflow-y-auto">
-                                                <div className="space-y-3">
-                                                    {joinedParticipants.map((participant, index) => (
-                                                        <div key={index} className="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors">
-                                                            <div className="flex items-start justify-between">
-                                                                <div className="flex-1 min-w-0">
-                                                                    <div className="flex items-center mb-1">
-                                                                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                                                                            <span className="text-green-600 text-xs font-medium">
-                                                                                {participant.name.charAt(0).toUpperCase()}
-                                                                            </span>
-                                                                        </div>
-                                                                        <p className="text-sm font-medium text-gray-900 truncate">
-                                                                            {participant.name}
-                                                                        </p>
-                                                                    </div>
-                                                                    <p className="text-xs text-gray-500 truncate mb-1">
-                                                                        {participant.email}
-                                                                    </p>
-                                                                    {participant.phone && (
-                                                                        <p className="text-xs text-gray-500 truncate">
-                                                                            {participant.phone}
-                                                                        </p>
-                                                                    )}
-                                                                </div>
-                                                                <Button
-                                                                    size="sm"
-                                                                    onClick={() => selectJoinedParticipant(participant, index)}
-                                                                    className="ml-2 bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 h-7"
-                                                                >
-                                                                    <ArrowLeft className="h-3 w-3 mr-1" />
-                                                                    Select
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            )}
+                            <JoinedParticipants
+                                participantLink={participantLink}
+                                joinedParticipants={joinedParticipants}
+                                selectJoinedParticipant={selectJoinedParticipant}
+                            />
                         </div>
                     </div>
                 </main>
             </div>
 
-            {/* Restriction Modal */}
             {restrictionIndex !== null && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-y-auto">
-                        <h2 className="font-bold text-lg text-gray-900 mb-4">
-                            {persons[restrictionIndex].name || `Person ${restrictionIndex + 1}`} can't match with
-                        </h2>
-                        <div className="space-y-3 mb-6">
-                            {persons.map((p, idx) =>
-                                idx === restrictionIndex ? null : (
-                                    <label key={idx} className="flex items-center gap-3">
-                                        <input
-                                            type="checkbox"
-                                            checked={tempRestrictions.includes(idx)}
-                                            onChange={e => {
-                                                setTempRestrictions(prev =>
-                                                    e.target.checked
-                                                        ? [...prev, idx]
-                                                        : prev.filter(i => i !== idx),
-                                                );
-                                            }}
-                                            className="w-4 h-4 text-purple-600 border-purple-300 rounded focus:ring-purple-500"
-                                        />
-                                        <span className="text-gray-700">
-                                            {p.name || `Person ${idx + 1}`}
-                                        </span>
-                                    </label>
-                                ),
-                            )}
-                        </div>
-                        <div className="flex justify-end gap-3">
-                            <Button
-                                variant="outline"
-                                onClick={() => setRestrictionIndex(null)}
-                                className="border-purple-300 text-purple-700 hover:bg-purple-50"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                onClick={() => saveRestriction(tempRestrictions)}
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
-                            >
-                                Save Restrictions
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <RestrictionModal
+                    persons={persons}
+                    restrictionIndex={restrictionIndex}
+                    tempRestrictions={tempRestrictions}
+                    setTempRestrictions={setTempRestrictions}
+                    onSave={saveRestriction}
+                    onClose={() => setRestrictionIndex(null)}
+                />
             )}
         </div>
     );
