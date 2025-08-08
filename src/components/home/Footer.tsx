@@ -7,7 +7,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center mb-4 md:mb-0">
             <Gift className="h-8 w-8 text-purple-400" />
-            <span className="ml-2 text-xl font-bold">My Angelito</span>
+            <span className="ml-2 text-xl font-normal">My Angelito</span>
           </div>
           <div className="text-sm text-gray-400">
             © 2024 Angelito. All rights reserved.

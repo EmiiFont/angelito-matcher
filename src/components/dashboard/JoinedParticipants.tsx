@@ -24,7 +24,7 @@ export function JoinedParticipants({ participantLink, joinedParticipants, select
           <div className="border-b border-gray-100 p-4">
             <div className="flex items-center">
               <UserCheck className="h-5 w-5 text-green-600 mr-2" />
-              <h3 className="text-sm font-medium text-gray-900">Joined Participants</h3>
+              <h3 className="text-sm font-normal text-gray-900">Joined Participants</h3>
               <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
                 {joinedParticipants.length}
               </span>
@@ -39,11 +39,11 @@ export function JoinedParticipants({ participantLink, joinedParticipants, select
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center mb-1">
                         <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                          <span className="text-green-600 text-xs font-medium">
+                          <span className="text-green-600 text-xs font-normal">
                             {participant.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
-                        <p className="text-sm font-medium text-gray-900 truncate">{participant.name}</p>
+                        <p className="text-sm font-normal text-gray-900 truncate">{participant.name}</p>
                       </div>
                       <p className="text-xs text-gray-500 truncate mb-1">{participant.email}</p>
                       {participant.phone && (

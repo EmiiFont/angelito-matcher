@@ -108,7 +108,7 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
 
   return (
     <div className="container mx-auto p-8 relative z-10">
-      <h1 className="text-3xl font-bold mb-6 text-center">Angelito Matcher</h1>
+      <h1 className="text-3xl font-normal mb-6 text-center">Angelito Matcher</h1>
       {onBack && (
         <button className="underline mb-4 text-sm" onClick={onBack}>
           ← Back to Home
@@ -161,7 +161,7 @@ export function GiftMatcher({ onBack }: { onBack?: () => void } = {}) {
       {restrictionIndex !== null && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
           <div className="bg-card text-card-foreground p-6 rounded-md space-y-4 w-80">
-            <h2 className="font-bold text-lg">
+            <h2 className="font-normal text-lg">
               {persons[restrictionIndex].name || `Person ${restrictionIndex + 1}`} can't match with
             </h2>
             <div className="space-y-2">

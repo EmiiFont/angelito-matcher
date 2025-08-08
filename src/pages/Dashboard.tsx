@@ -318,7 +318,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 <Gift className="h-5 w-5 text-purple-600" />
                                             </div>
                                             <div>
-                                                <h2 className="text-lg font-medium text-gray-900">Gift Exchange Setup</h2>
+                                                <h2 className="text-lg font-normal text-gray-900">Gift Exchange Setup</h2>
                                                 <p className="text-sm text-gray-500 mt-0.5">Configure your event details and participants</p>
                                             </div>
                                         </div>
@@ -327,7 +327,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                     <div className="p-6 space-y-8">
                                         {/* Participant Count */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Number of Participants</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Number of Participants</label>
                                             <div className="flex items-center space-x-6">
                                                 <div className="flex-1 max-w-md">
                                                     <input
@@ -366,7 +366,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Budget */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Budget Amount</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Budget Amount</label>
                                             <Input
                                                 type="number"
                                                 placeholder="Enter gift budget amount"
@@ -378,7 +378,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Notification Channel Selection */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Notification Method</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Notification Method</label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
@@ -467,7 +467,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         <Lightbulb className="h-5 w-5 text-green-600 mt-0.5" />
                                                     </div>
                                                     <div className="ml-3 flex-1">
-                                                        <h3 className="text-sm font-medium text-green-800">
+                                                        <h3 className="text-sm font-normal text-green-800">
                                                             Want to avoid typing each participant yourself?
                                                         </h3>
                                                         <p className="mt-1 text-sm text-green-700">
@@ -520,7 +520,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
                                                     </div>
                                                     <div className="ml-3 flex-1">
-                                                        <h3 className="text-sm font-medium text-purple-800">
+                                                        <h3 className="text-sm font-normal text-purple-800">
                                                             Participant Registration Link Generated
                                                         </h3>
                                                         <p className="mt-1 text-sm text-purple-700">
@@ -562,7 +562,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                         {/* Participants */}
                                         <div>
                                             <div className="flex items-center justify-between mb-4">
-                                                <label className="block text-sm font-medium text-gray-900">Participants</label>
+                                                <label className="block text-sm font-normal text-gray-900">Participants</label>
                                                 <span className="text-sm text-gray-500">{participantCount} participant{participantCount !== 1 ? 's' : ''}</span>
                                             </div>
                                             <div className="space-y-3">
@@ -637,7 +637,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 <Button
                                                     size="lg"
                                                     onClick={handleMatch}
-                                                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 h-12 font-medium"
+                                                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 h-12 font-normal"
                                                 >
                                                     <Gift className="h-5 w-5 mr-2" />
                                                     Generate Matches & Send Notifications
@@ -653,7 +653,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Gift className="h-8 w-8 text-green-600" />
                                             </div>
-                                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Matches Generated Successfully!</h2>
+                                            <h2 className="text-2xl font-normal text-gray-900 mb-2">Matches Generated Successfully!</h2>
                                             <p className="text-gray-600 mb-6">
                                                 All participants have been matched and notifications have been sent via {notificationChannel === "all" ? "all available methods" : notificationChannel}.
                                             </p>

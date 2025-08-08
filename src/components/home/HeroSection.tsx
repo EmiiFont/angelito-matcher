@@ -50,7 +50,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             <CardContent className="p-8">
               <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-8 text-white">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold">Christmas Party 2024</h3>
+                  <h3 className="text-2xl font-normal">Christmas Party 2024</h3>
                   <div className="flex items-center space-x-2">
                     <Users className="h-5 w-5" />
                     <span>24 participants</span>
@@ -59,17 +59,17 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-white/20 rounded-lg p-4">
                     <Gift className="h-8 w-8 mb-2" />
-                    <p className="font-semibold">Matches Generated</p>
+                    <p className="font-normal">Matches Generated</p>
                     <p className="text-sm opacity-90">All participants matched</p>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4">
                     <Mail className="h-8 w-8 mb-2" />
-                    <p className="font-semibold">Notifications Sent</p>
+                    <p className="font-normal">Notifications Sent</p>
                     <p className="text-sm opacity-90">Via email & SMS</p>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4">
                     <Shield className="h-8 w-8 mb-2" />
-                    <p className="font-semibold">Privacy Protected</p>
+                    <p className="font-normal">Privacy Protected</p>
                     <p className="text-sm opacity-90">Complete anonymity</p>
                   </div>
                 </div>

@@ -26,7 +26,7 @@ export function RestrictionModal({
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-y-auto">
-        <h2 className="font-bold text-lg text-gray-900 mb-4">
+        <h2 className="font-normal text-lg text-gray-900 mb-4">
           {persons[restrictionIndex].name || `Person ${restrictionIndex + 1}`} can't match with
         </h2>
         <div className="space-y-3 mb-6">
