@@ -311,8 +311,8 @@ export function Dashboard({ onLogout }: DashboardProps) {
                 }`}>
                 <div className="flex items-center justify-between p-6 border-b border-purple-200">
                     <div className="flex items-center">
-                        <Gift className="h-8 w-8 text-purple-600" />
-                        <span className="ml-3 text-xl font-bold text-gray-900">Angelito</span>
+                        <Gift className="h-8 w-8 text-purple-400" />
+                        <span className="ml-3 text-xl font-normal text-gray-900">Angelito</span>
                     </div>
                     <button
                         className="lg:hidden"
@@ -327,9 +327,9 @@ export function Dashboard({ onLogout }: DashboardProps) {
                         <a
                             key={index}
                             href="#"
-                            className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${item.active
-                                ? 'text-purple-600 bg-purple-50 border-r-2 border-purple-600'
-                                : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
+                            className={`flex items-center px-6 py-3 text-sm font-normal transition-colors ${item.active
+                                ? 'text-purple-400 bg-purple-50 border-r-2 border-purple-400'
+                                : 'text-gray-600 hover:text-purple-400 hover:bg-purple-50'
                                 }`}
                         >
                             <item.icon className="h-5 w-5 mr-3" />
@@ -341,7 +341,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                 <div className="absolute bottom-0 w-64 p-6 border-t border-purple-200">
                     <button
                         onClick={onLogout}
-                        className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                        className="flex items-center w-full px-3 py-2 text-sm font-normal text-gray-600 hover:text-purple-400 hover:bg-purple-50 rounded-lg transition-colors"
                     >
                         <LogOut className="h-5 w-5 mr-3" />
                         Sign Out
@@ -373,10 +373,10 @@ export function Dashboard({ onLogout }: DashboardProps) {
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
-                                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-                                    <span className="text-white text-sm font-medium">JD</span>
+                                <div className="w-8 h-8 bg-purple-400 rounded-full flex items-center justify-center">
+                                    <span className="text-white text-sm font-normal">JD</span>
                                 </div>
-                                <span className="ml-3 text-sm font-medium text-gray-700">John Doe</span>
+                                <span className="ml-3 text-sm font-normal text-gray-700">John Doe</span>
                             </div>
                         </div>
                     </div>
@@ -395,10 +395,10 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                     <div className="border-b border-gray-100 p-6">
                                         <div className="flex items-center">
                                             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center mr-4">
-                                                <Gift className="h-5 w-5 text-purple-600" />
+                                                <Gift className="h-5 w-5 text-purple-400" />
                                             </div>
                                             <div>
-                                                <h2 className="text-lg font-medium text-gray-900">Gift Exchange Setup</h2>
+                                                <h2 className="text-lg font-normal text-gray-900">Gift Exchange Setup</h2>
                                                 <p className="text-sm text-gray-500 mt-0.5">Configure your event details and participants</p>
                                             </div>
                                         </div>
@@ -407,7 +407,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                     <div className="p-6 space-y-8">
                                         {/* Participant Count */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Number of Participants</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Number of Participants</label>
                                             <div className="flex items-center space-x-6">
                                                 <div className="flex-1 max-w-md">
                                                     <input
@@ -437,7 +437,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                             const value = parseInt(e.target.value) || 1;
                                                             updateParticipantCount(value);
                                                         }}
-                                                        className="w-20 text-center border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                                                        className="w-20 text-center border-gray-300 focus:border-purple-300 focus:ring-purple-300/20"
                                                     />
                                                     <Users className="h-5 w-5 text-gray-400" />
                                                 </div>
@@ -446,19 +446,19 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Budget */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Budget Amount</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Budget Amount</label>
                                             <Input
                                                 type="number"
                                                 placeholder="Enter gift budget amount"
                                                 value={amount}
                                                 onChange={e => setAmount(e.target.value)}
-                                                className="w-full sm:w-64 border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                                                className="w-full sm:w-64 border-gray-300 focus:border-purple-300 focus:ring-purple-300/20"
                                             />
                                         </div>
 
                                         {/* Notification Channel Selection */}
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-900 mb-3">Notification Method</label>
+                                            <label className="block text-sm font-normal text-gray-900 mb-3">Notification Method</label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
                                                     <input
@@ -467,14 +467,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         value="email"
                                                         checked={notificationChannel === "email"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
+                                                        className="w-4 h-4 text-purple-400 border-gray-300 focus:ring-purple-300/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Mail className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">Email</span>
                                                     </div>
                                                     {notificationChannel === "email" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-300 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                                 <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
@@ -484,14 +484,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         value="sms"
                                                         checked={notificationChannel === "sms"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
+                                                        className="w-4 h-4 text-purple-400 border-gray-300 focus:ring-purple-300/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <MessageSquare className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">SMS</span>
                                                     </div>
                                                     {notificationChannel === "sms" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-300 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                                 <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
@@ -501,14 +501,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         value="whatsapp"
                                                         checked={notificationChannel === "whatsapp"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
+                                                        className="w-4 h-4 text-purple-400 border-gray-300 focus:ring-purple-300/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Phone className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">WhatsApp</span>
                                                     </div>
                                                     {notificationChannel === "whatsapp" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-300 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                                 <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
@@ -518,20 +518,20 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         value="all"
                                                         checked={notificationChannel === "all"}
                                                         onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                                        className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
+                                                        className="w-4 h-4 text-purple-400 border-gray-300 focus:ring-purple-300/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
                                                         <Users className="h-4 w-4 text-gray-500 mr-2" />
                                                         <span className="text-sm text-gray-900">All Methods</span>
                                                     </div>
                                                     {notificationChannel === "all" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-300 bg-purple-50/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                             </div>
                                             {requiresPhoneNumber() && (
                                                 <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                                                    <p className="text-sm text-purple-700 flex items-center">
+                                                    <p className="text-sm text-purple-500 flex items-center">
                                                         <Phone className="h-4 w-4 mr-2" />
                                                         Phone numbers will be required for all participants
                                                     </p>
@@ -547,7 +547,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         <Lightbulb className="h-5 w-5 text-green-600 mt-0.5" />
                                                     </div>
                                                     <div className="ml-3 flex-1">
-                                                        <h3 className="text-sm font-medium text-green-800">
+                                                        <h3 className="text-sm font-normal text-green-800">
                                                             Want to avoid typing each participant yourself?
                                                         </h3>
                                                         <p className="mt-1 text-sm text-green-700">
@@ -597,17 +597,17 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                             <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                                                 <div className="flex items-start">
                                                     <div className="flex-shrink-0">
-                                                        <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                                                        <CheckCircle className="h-5 w-5 text-purple-400 mt-0.5" />
                                                     </div>
                                                     <div className="ml-3 flex-1">
-                                                        <h3 className="text-sm font-medium text-purple-800">
+                                                        <h3 className="text-sm font-normal text-purple-800">
                                                             Participant Registration Link Generated
                                                         </h3>
-                                                        <p className="mt-1 text-sm text-purple-700">
+                                                        <p className="mt-1 text-sm text-purple-500">
                                                             Share this link with participants. They'll be automatically added here when they register.
                                                         </p>
                                                         <div className="mt-3 flex items-center gap-2 p-2 bg-white rounded border border-purple-200">
-                                                            <Link className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                                                            <Link className="h-4 w-4 text-purple-400 flex-shrink-0" />
                                                             <code className="flex-1 text-sm text-purple-800 bg-transparent break-all">
                                                                 {participantLink}
                                                             </code>
@@ -615,7 +615,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={copyLinkToClipboard}
-                                                                className="flex-shrink-0 border-purple-300 text-purple-700 hover:bg-purple-50"
+                                                                className="flex-shrink-0 border-purple-300 text-purple-500 hover:bg-purple-50"
                                                             >
                                                                 {linkCopied ? (
                                                                     <>
@@ -630,7 +630,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                 )}
                                                             </Button>
                                                         </div>
-                                                        <div className="mt-3 flex items-center text-sm text-purple-600">
+                                                        <div className="mt-3 flex items-center text-sm text-purple-400">
                                                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                                             Waiting for participants to register...
                                                         </div>
@@ -642,7 +642,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                         {/* Participants */}
                                         <div>
                                             <div className="flex items-center justify-between mb-4">
-                                                <label className="block text-sm font-medium text-gray-900">Participants</label>
+                                                <label className="block text-sm font-normal text-gray-900">Participants</label>
                                                 <span className="text-sm text-gray-500">{participantCount} participant{participantCount !== 1 ? 's' : ''}</span>
                                             </div>
                                             <div className="space-y-3">
@@ -654,7 +654,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Full name"
                                                                     value={p.name}
                                                                     onChange={e => updatePerson(idx, "name", e.target.value)}
-                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                                                                    className="border-gray-300 focus:border-purple-300 focus:ring-purple-300/20"
                                                                 />
                                                             </div>
                                                             <div>
@@ -663,7 +663,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Email address"
                                                                     value={p.email}
                                                                     onChange={e => updatePerson(idx, "email", e.target.value)}
-                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                                                                    className="border-gray-300 focus:border-purple-300 focus:ring-purple-300/20"
                                                                 />
                                                             </div>
                                                             <div className="flex gap-2">
@@ -693,7 +693,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     placeholder="Phone number"
                                                                     value={p.phone || ""}
                                                                     onChange={e => updatePerson(idx, "phone", e.target.value)}
-                                                                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20"
+                                                                    className="border-gray-300 focus:border-purple-300 focus:ring-purple-300/20"
                                                                 />
                                                             </div>
                                                         )}
@@ -717,7 +717,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 <Button
                                                     size="lg"
                                                     onClick={handleMatch}
-                                                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 h-12 font-medium"
+                                                    className="bg-purple-400 hover:bg-purple-500 text-white px-8 h-12 font-normal"
                                                 >
                                                     <Gift className="h-5 w-5 mr-2" />
                                                     Generate Matches & Send Notifications
@@ -733,7 +733,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Gift className="h-8 w-8 text-green-600" />
                                             </div>
-                                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Matches Generated Successfully!</h2>
+                                            <h2 className="text-2xl font-normal text-gray-900 mb-2">Matches Generated Successfully!</h2>
                                             <p className="text-gray-600 mb-6">
                                                 All participants have been matched and notifications have been sent via {notificationChannel === "all" ? "all available methods" : notificationChannel}.
                                             </p>
@@ -746,7 +746,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                     setRestrictions({});
                                                     setNotificationChannel("email");
                                                 }}
-                                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                                className="bg-purple-400 hover:bg-purple-500 text-white"
                                             >
                                                 Create New Event
                                             </Button>
@@ -763,7 +763,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                             <div className="border-b border-gray-100 p-4">
                                                 <div className="flex items-center">
                                                     <UserCheck className="h-5 w-5 text-green-600 mr-2" />
-                                                    <h3 className="text-sm font-medium text-gray-900">Joined Participants</h3>
+                                                    <h3 className="text-sm font-normal text-gray-900">Joined Participants</h3>
                                                     <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
                                                         {joinedParticipants.length}
                                                     </span>
@@ -780,11 +780,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                 <div className="flex-1 min-w-0">
                                                                     <div className="flex items-center mb-1">
                                                                         <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                                                                            <span className="text-green-600 text-xs font-medium">
+                                                                            <span className="text-green-600 text-xs font-normal">
                                                                                 {participant.name.charAt(0).toUpperCase()}
                                                                             </span>
                                                                         </div>
-                                                                        <p className="text-sm font-medium text-gray-900 truncate">
+                                                                        <p className="text-sm font-normal text-gray-900 truncate">
                                                                             {participant.name}
                                                                         </p>
                                                                     </div>
@@ -823,7 +823,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
             {restrictionIndex !== null && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-y-auto">
-                        <h2 className="font-bold text-lg text-gray-900 mb-4">
+                        <h2 className="font-normal text-lg text-gray-900 mb-4">
                             {persons[restrictionIndex].name || `Person ${restrictionIndex + 1}`} can't match with
                         </h2>
                         <div className="space-y-3 mb-6">
@@ -840,7 +840,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         : prev.filter(i => i !== idx),
                                                 );
                                             }}
-                                            className="w-4 h-4 text-purple-600 border-purple-300 rounded focus:ring-purple-500"
+                                            className="w-4 h-4 text-purple-400 border-purple-300 rounded focus:ring-purple-300"
                                         />
                                         <span className="text-gray-700">
                                             {p.name || `Person ${idx + 1}`}
@@ -853,13 +853,13 @@ export function Dashboard({ onLogout }: DashboardProps) {
                             <Button
                                 variant="outline"
                                 onClick={() => setRestrictionIndex(null)}
-                                className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                                className="border-purple-300 text-purple-500 hover:bg-purple-50"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 onClick={() => saveRestriction(tempRestrictions)}
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                className="bg-purple-400 hover:bg-purple-500 text-white"
                             >
                                 Save Restrictions
                             </Button>
