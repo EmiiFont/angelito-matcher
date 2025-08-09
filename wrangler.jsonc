@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "angelito",
+  "name": "myangelito",
   "compatibility_date": "2025-08-03",
   "main": "./src/index.tsx",
   "d1_databases": [
