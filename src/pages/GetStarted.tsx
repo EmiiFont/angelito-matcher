@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Gift, ArrowLeft, CheckCircle, Eye, EyeOff } from "lucide-react";
 
 interface GetStartedProps {
@@ -52,26 +53,29 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                      formData.password === formData.confirmPassword;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm border-b border-purple-200">
+      <nav className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-purple-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Gift className="h-8 w-8 text-purple-600" />
-              <span className="ml-2 text-xl font-normal text-gray-900">Angelito Matcher</span>
+              <Gift className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              <span className="ml-2 text-xl font-normal text-gray-900 dark:text-white">Angelito Matcher</span>
             </div>
             
-            {onBack && (
-              <Button 
-                variant="ghost" 
-                onClick={onBack}
-                className="text-gray-700 hover:text-purple-600"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            )}
+            <div className="flex items-center space-x-3">
+              <ThemeToggle />
+              {onBack && (
+                <Button 
+                  variant="ghost" 
+                  onClick={onBack}
+                  className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -84,22 +88,22 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
             <div className="mx-auto w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-4">
               <Gift className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-3xl font-normal text-slate-900 mb-2">
+            <h1 className="text-3xl font-normal text-slate-900 dark:text-white mb-2">
               Get Started
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Create your account to start organizing amazing gift exchanges
             </p>
           </div>
 
           {/* Sign Up Form */}
-          <Card className="shadow-xl border-purple-200">
+          <Card className="shadow-xl border-purple-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName" className="text-gray-700 font-normal">
+                    <Label htmlFor="firstName" className="text-gray-700 dark:text-gray-300 font-normal">
                       First Name
                     </Label>
                     <Input
@@ -113,7 +117,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-gray-700 font-normal">
+                    <Label htmlFor="lastName" className="text-gray-700 dark:text-gray-300 font-normal">
                       Last Name
                     </Label>
                     <Input
@@ -130,7 +134,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Email */}
                 <div>
-                  <Label htmlFor="email" className="text-gray-700 font-normal">
+                  <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-normal">
                     Email Address
                   </Label>
                   <Input
@@ -146,8 +150,8 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Company (Optional) */}
                 <div>
-                  <Label htmlFor="company" className="text-gray-700 font-normal">
-                    Company <span className="text-gray-400 font-normal">(Optional)</span>
+                  <Label htmlFor="company" className="text-gray-700 dark:text-gray-300 font-normal">
+                    Company <span className="text-gray-400 dark:text-gray-500 font-normal">(Optional)</span>
                   </Label>
                   <Input
                     id="company"
@@ -161,7 +165,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Password */}
                 <div>
-                  <Label htmlFor="password" className="text-gray-700 font-normal">
+                  <Label htmlFor="password" className="text-gray-700 dark:text-gray-300 font-normal">
                     Password
                   </Label>
                   <div className="relative mt-1">
@@ -190,7 +194,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
                 {/* Confirm Password */}
                 <div>
-                  <Label htmlFor="confirmPassword" className="text-gray-700 font-normal">
+                  <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300 font-normal">
                     Confirm Password
                   </Label>
                   <div className="relative mt-1">
@@ -224,7 +228,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                 <Button
                   type="submit"
                   disabled={!isFormValid || isLoading}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-normal disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white py-3 text-lg font-normal disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition-all duration-200"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
@@ -242,7 +246,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                     <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
                   </div>
                 </div>
 
@@ -251,7 +255,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
+                    className="w-full border-purple-200 dark:border-gray-600 hover:bg-purple-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -265,7 +269,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
+                    className="w-full border-purple-200 dark:border-gray-600 hover:bg-purple-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -276,7 +280,7 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full border-purple-200 hover:bg-purple-50 text-gray-700"
+                    className="w-full border-purple-200 dark:border-gray-600 hover:bg-purple-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                       <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -288,9 +292,9 @@ export function GetStarted({ onBack, onSignUpSuccess }: GetStartedProps) {
 
               {/* Footer */}
               <div className="mt-8 text-center">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Already have an account?{" "}
-                  <button className="text-purple-600 hover:text-purple-700 font-normal">
+                  <button className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-normal">
                     Sign in
                   </button>
                 </p>

@@ -11,9 +11,9 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
     <section className="pt-16 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="mx-auto max-w-4xl font-display text-5xl font-normal tracking-tight text-slate-900 sm:text-7xl mb-6">
+          <h1 className="mx-auto max-w-4xl font-display text-5xl font-normal tracking-tight text-slate-900 dark:text-white sm:text-7xl mb-6">
             Simplify your{' '}
-            <span className="relative whitespace-nowrap text-purple-600">
+            <span className="relative whitespace-nowrap text-purple-600 dark:text-purple-400">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 418 42"
@@ -26,19 +26,19 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             </span>{' '}
             events
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
             Automate Secret Santa and White Elephant gift exchanges with intelligent matching,
             automated notifications, and complete privacy management.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
-              className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg"
+              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white px-8 py-3 text-lg shadow-lg transition-all duration-200"
               onClick={onGetStarted}
             >
               Start Your Event
             </Button>
-            <Button variant="outline" size="lg" className="border-purple-300 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg">
+            <Button variant="outline" size="lg" className="border-purple-300 dark:border-purple-500 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 bg-white dark:bg-gray-800 px-8 py-3 text-lg">
               Watch Demo
             </Button>
           </div>
@@ -46,9 +46,9 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
 
         {/* Hero Image/Mockup */}
         <div className="mt-16 flex justify-center">
-          <Card className="w-full max-w-4xl shadow-2xl border-purple-200">
+          <Card className="w-full max-w-4xl shadow-2xl border-purple-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <CardContent className="p-8">
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-8 text-white">
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-lg p-8 text-white">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-normal">Christmas Party 2024</h3>
                   <div className="flex items-center space-x-2">

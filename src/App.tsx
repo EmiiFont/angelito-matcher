@@ -2,6 +2,7 @@ import { useState } from "react";
 import { HomePage } from "./pages/Home";
 import { GetStarted } from "./pages/GetStarted";
 import { Dashboard } from "./pages/Dashboard";
+import { ThemeProvider } from "./hooks/useTheme";
 import "./index.css";
 
 type Page = "home" | "get-started" | "dashboard";
@@ -13,23 +14,23 @@ export function App() {
     setCurrentPage(page);
   };
 
-  if (currentPage === "dashboard") {
-    return (
-      <Dashboard onLogout={() => navigateTo("home")} />
-    );
-  }
-
-  if (currentPage === "get-started") {
-    return (
-      <GetStarted 
-        onBack={() => navigateTo("home")}
-        onSignUpSuccess={() => navigateTo("dashboard")}
-      />
-    );
-  }
-
   return (
-    <HomePage onGetStarted={() => navigateTo("get-started")} />
+    <ThemeProvider>
+      {currentPage === "dashboard" && (
+        <Dashboard onLogout={() => navigateTo("home")} />
+      )}
+      
+      {currentPage === "get-started" && (
+        <GetStarted 
+          onBack={() => navigateTo("home")}
+          onSignUpSuccess={() => navigateTo("dashboard")}
+        />
+      )}
+      
+      {currentPage === "home" && (
+        <HomePage onGetStarted={() => navigateTo("get-started")} />
+      )}
+    </ThemeProvider>
   );
 }
 

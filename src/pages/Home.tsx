@@ -11,7 +11,7 @@ interface HomePageProps {
 
 export function HomePage({ onGetStarted }: HomePageProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation onGetStarted={onGetStarted} />
       <HeroSection onGetStarted={onGetStarted} />
       <FeaturesSection />

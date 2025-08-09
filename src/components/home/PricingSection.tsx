@@ -8,47 +8,43 @@ interface PricingSectionProps {
 
 export function PricingSection({ onGetStarted }: PricingSectionProps) {
   return (
-    <section id="pricing" className="py-24 bg-white">
+    <section id="pricing" className="py-24 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-4">
-            Simple, Transparent Pricing
+          <h2 className="text-3xl md:text-4xl font-normal text-gray-900 dark:text-white mb-4">
+            Simple, Bundle Pricing
           </h2>
-          <p className="text-xl text-gray-600">
-            Pay only for what you use, when you use it
+          <p className="text-xl text-gray-600 dark:text-gray-300">
+            Save more with bundles - perfect for holiday seasons and birthdays
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {/* Free */}
-          <Card className="border-purple-200 hover:shadow-lg transition-shadow h-full">
-            <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-normal text-gray-900 mb-2">Free</h3>
-              <div className="mb-4">
-                <span className="text-3xl font-normal text-purple-600">$0</span>
-                <span className="text-gray-600">/forever</span>
+          <Card className="border-purple-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-800/50 transition-shadow h-full bg-white dark:bg-gray-800">
+            <CardContent className="p-5 h-full flex flex-col">
+              <h3 className="text-lg font-normal text-gray-900 dark:text-white mb-2">Free</h3>
+              <div className="mb-3">
+                <span className="text-2xl font-normal text-purple-600 dark:text-purple-400">$0</span>
+                <span className="text-gray-600 dark:text-gray-400 text-sm">/forever</span>
               </div>
-              <p className="text-gray-600 mb-6">Perfect for small family and friend groups</p>
-              <ul className="space-y-2 mb-6 flex-grow">
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">Perfect for small groups</p>
+              <ul className="space-y-2 mb-4 flex-grow">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Up to 7 participants</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">7 participants</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Email notifications only</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Email only</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Basic restrictions</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Community support</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Basic features</span>
                 </li>
               </ul>
               <Button
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white mt-auto"
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white mt-auto text-sm py-2 shadow-lg transition-all duration-200"
                 onClick={onGetStarted}
               >
                 Get Started Free
@@ -56,83 +52,121 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
             </CardContent>
           </Card>
 
-          {/* Per Event */}
-          <Card className="border-purple-500 hover:shadow-lg transition-shadow ring-2 ring-purple-500 relative h-full">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-normal">
-                Most Popular
-              </span>
-            </div>
-            <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-normal text-gray-900 mb-2">Per Event</h3>
-              <div className="mb-4">
-                <span className="text-3xl font-normal text-purple-600">$4.99</span>
-                <span className="text-gray-600">/event</span>
+          {/* Single Event */}
+          <Card className="border-purple-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-800/50 transition-shadow h-full bg-white dark:bg-gray-800">
+            <CardContent className="p-5 h-full flex flex-col">
+              <h3 className="text-lg font-normal text-gray-900 dark:text-white mb-2">Single Event</h3>
+              <div className="mb-3">
+                <span className="text-2xl font-normal text-purple-600">$1.99</span>
+                <span className="text-gray-600 text-sm">/event</span>
               </div>
-              <p className="text-gray-600 mb-6">Perfect for one-time events and larger groups</p>
-              <ul className="space-y-2 mb-6 flex-grow">
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">For one-time users</p>
+              <ul className="space-y-2 mb-4 flex-grow">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Up to 30 participants</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">30 participants</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Email, SMS & WhatsApp</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">All notifications</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Advanced restrictions</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">24/7 support</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Full features</span>
                 </li>
               </ul>
               <Button
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white mt-auto"
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white mt-auto text-sm py-2 shadow-lg transition-all duration-200"
                 onClick={onGetStarted}
               >
-                Start Event
+                Buy Single Event
               </Button>
             </CardContent>
           </Card>
 
-          {/* Business */}
-          <Card className="border-purple-200 hover:shadow-lg transition-shadow h-full">
-            <CardContent className="p-6 h-full flex flex-col">
-              <h3 className="text-xl font-normal text-gray-900 mb-2">Business</h3>
-              <div className="mb-4">
-                <span className="text-3xl font-normal text-purple-600">$12.99</span>
-                <span className="text-gray-600">/month</span>
+          {/* Value Pack - Most Popular */}
+          <Card className="border-purple-500 dark:border-purple-400 hover:shadow-lg dark:hover:shadow-gray-800/50 transition-shadow ring-2 ring-purple-500 dark:ring-purple-400 relative h-full bg-white dark:bg-gray-800">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <span className="bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 text-white px-4 py-1 rounded-full text-sm font-normal shadow-lg">
+                Most Popular
+              </span>
+            </div>
+            <CardContent className="p-5 h-full flex flex-col">
+              <h3 className="text-lg font-normal text-gray-900 dark:text-white mb-2">Value Pack</h3>
+              <div className="mb-3">
+                <span className="text-2xl font-normal text-purple-600">$2.99</span>
+                <span className="text-gray-600 text-sm">/3 events</span>
               </div>
-              <p className="text-gray-600 mb-6">Ideal for companies with multiple events</p>
-              <ul className="space-y-2 mb-6 flex-grow">
+              <div className="mb-3">
+                <span className="text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">
+                  Only $1 per event vs $1.99 each
+                </span>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">Perfect for holiday season + birthdays</p>
+              <ul className="space-y-2 mb-4 flex-grow">
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Unlimited participants</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">3 events included</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">WhatsApp integration</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">30 participants each</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Advanced restrictions</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">All notifications</span>
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Admin dashboard</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="text-sm text-gray-600">Priority support</span>
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Save $3.98</span>
                 </li>
               </ul>
               <Button
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white mt-auto"
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white mt-auto text-sm py-2 shadow-lg transition-all duration-200"
                 onClick={onGetStarted}
               >
-                Start Free Trial
+                Get Value Pack ⭐
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Annual Pack */}
+          <Card className="border-purple-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-800/50 transition-shadow h-full bg-white dark:bg-gray-800">
+            <CardContent className="p-5 h-full flex flex-col">
+              <h3 className="text-lg font-normal text-gray-900 dark:text-white mb-2">Annual Pack</h3>
+              <div className="mb-3">
+                <span className="text-2xl font-normal text-purple-600">$7.99</span>
+                <span className="text-gray-600 text-sm">/10 events</span>
+              </div>
+              <div className="mb-3">
+                <span className="text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">
+                  Only $0.80 per event
+                </span>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">For families & organizers</p>
+              <ul className="space-y-2 mb-4 flex-grow">
+                <li className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">10 events included</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">50 participants each</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">All notifications</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Save $11.91</span>
+                </li>
+              </ul>
+              <Button
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white mt-auto text-sm py-2 shadow-lg transition-all duration-200"
+                onClick={onGetStarted}
+              >
+                Get Annual Pack
               </Button>
             </CardContent>
           </Card>

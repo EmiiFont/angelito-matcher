@@ -292,7 +292,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
     };
 
     return (
-        <div className="flex h-screen bg-gray-50">
+        <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
             <Sidebar
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
@@ -309,17 +309,17 @@ export function Dashboard({ onLogout }: DashboardProps) {
                             {/* Main Form */}
                             <div className={`${participantLink && joinedParticipants.length > 0 ? 'lg:col-span-2' : ''}`}>
                                 {!matches ? (
-                                    <Card className="bg-white border border-gray-200">
+                                    <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                                 <CardContent className="p-0">
                                     {/* Header */}
-                                    <div className="border-b border-gray-100 p-6">
+                                    <div className="border-b border-gray-100 dark:border-gray-700 p-6">
                                         <div className="flex items-center">
-                                            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center mr-4">
-                                                <Gift className="h-5 w-5 text-purple-600" />
+                                            <div className="w-10 h-10 bg-purple-50 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-4">
+                                                <Gift className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                             </div>
                                             <div>
-                                                <h2 className="text-lg font-normal text-gray-900">Gift Exchange Setup</h2>
-                                                <p className="text-sm text-gray-500 mt-0.5">Configure your event details and participants</p>
+                                                <h2 className="text-lg font-normal text-gray-900 dark:text-white">Gift Exchange Setup</h2>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Configure your event details and participants</p>
                                             </div>
                                         </div>
                                     </div>
@@ -327,7 +327,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                     <div className="p-6 space-y-8">
                                         {/* Participant Count */}
                                         <div>
-                                            <label className="block text-sm font-normal text-gray-900 mb-3">Number of Participants</label>
+                                            <label className="block text-sm font-normal text-gray-900 dark:text-gray-100 mb-3">Number of Participants</label>
                                             <div className="flex items-center space-x-6">
                                                 <div className="flex-1 max-w-md">
                                                     <input
@@ -338,7 +338,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         onChange={e => updateParticipantCount(parseInt(e.target.value))}
                                                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                                                         style={{
-                                                            background: `linear-gradient(to right, rgb(14 165 233) 0%, rgb(14 165 233) ${((participantCount - 1) / 49) * 100}%, rgb(229 231 235) ${((participantCount - 1) / 49) * 100}%, rgb(229 231 235) 100%)`
+                                                            background: `linear-gradient(to right, rgb(139 92 246) 0%, rgb(139 92 246) ${((participantCount - 1) / 49) * 100}%, rgb(229 231 235) ${((participantCount - 1) / 49) * 100}%, rgb(229 231 235) 100%)`
                                                         }}
                                                     />
                                                     <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -366,7 +366,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Budget */}
                                         <div>
-                                            <label className="block text-sm font-normal text-gray-900 mb-3">Budget Amount</label>
+                                            <label className="block text-sm font-normal text-gray-900 dark:text-gray-100 mb-3">Budget Amount</label>
                                             <Input
                                                 type="number"
                                                 placeholder="Enter gift budget amount"
@@ -378,9 +378,9 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
                                         {/* Notification Channel Selection */}
                                         <div>
-                                            <label className="block text-sm font-normal text-gray-900 mb-3">Notification Method</label>
+                                            <label className="block text-sm font-normal text-gray-900 dark:text-gray-100 mb-3">Notification Method</label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors bg-white dark:bg-gray-700">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
@@ -390,14 +390,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
-                                                        <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                                                        <span className="text-sm text-gray-900">Email</span>
+                                                        <Mail className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                                                        <span className="text-sm text-gray-900 dark:text-gray-100">Email</span>
                                                     </div>
                                                     {notificationChannel === "email" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-400 bg-gradient-to-r from-purple-50/30 to-purple-100/40 dark:from-purple-500/20 dark:to-purple-400/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors bg-white dark:bg-gray-700">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
@@ -407,14 +407,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
-                                                        <MessageSquare className="h-4 w-4 text-gray-500 mr-2" />
-                                                        <span className="text-sm text-gray-900">SMS</span>
+                                                        <MessageSquare className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                                                        <span className="text-sm text-gray-900 dark:text-gray-100">SMS</span>
                                                     </div>
                                                     {notificationChannel === "sms" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-400 bg-gradient-to-r from-purple-50/30 to-purple-100/40 dark:from-purple-500/20 dark:to-purple-400/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors bg-white dark:bg-gray-700">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
@@ -424,14 +424,14 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
-                                                        <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                                                        <span className="text-sm text-gray-900">WhatsApp</span>
+                                                        <Phone className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                                                        <span className="text-sm text-gray-900 dark:text-gray-100">WhatsApp</span>
                                                     </div>
                                                     {notificationChannel === "whatsapp" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-400 bg-gradient-to-r from-purple-50/30 to-purple-100/40 dark:from-purple-500/20 dark:to-purple-400/30 rounded-lg"></div>
                                                     )}
                                                 </label>
-                                                <label className="relative flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
+                                                <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors bg-white dark:bg-gray-700">
                                                     <input
                                                         type="radio"
                                                         name="notificationChannel"
@@ -441,17 +441,17 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                         className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500/20"
                                                     />
                                                     <div className="ml-3 flex items-center">
-                                                        <Users className="h-4 w-4 text-gray-500 mr-2" />
-                                                        <span className="text-sm text-gray-900">All Methods</span>
+                                                        <Users className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                                                        <span className="text-sm text-gray-900 dark:text-gray-100">All Methods</span>
                                                     </div>
                                                     {notificationChannel === "all" && (
-                                                        <div className="absolute inset-0 border border-purple-500 bg-purple-50/30 rounded-lg"></div>
+                                                        <div className="absolute inset-0 border border-purple-400 bg-gradient-to-r from-purple-50/30 to-purple-100/40 dark:from-purple-500/20 dark:to-purple-400/30 rounded-lg"></div>
                                                     )}
                                                 </label>
                                             </div>
                                             {requiresPhoneNumber() && (
-                                                <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                                                    <p className="text-sm text-purple-700 flex items-center">
+                                                <div className="mt-3 p-3 bg-gradient-to-r from-purple-50 to-purple-100/60 dark:from-purple-500/20 dark:to-purple-400/30 border border-purple-200 dark:border-purple-500/50 rounded-lg">
+                                                    <p className="text-sm text-purple-700 dark:text-purple-300 flex items-center">
                                                         <Phone className="h-4 w-4 mr-2" />
                                                         Phone numbers will be required for all participants
                                                     </p>
@@ -562,12 +562,12 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                         {/* Participants */}
                                         <div>
                                             <div className="flex items-center justify-between mb-4">
-                                                <label className="block text-sm font-normal text-gray-900">Participants</label>
-                                                <span className="text-sm text-gray-500">{participantCount} participant{participantCount !== 1 ? 's' : ''}</span>
+                                                <label className="block text-sm font-normal text-gray-900 dark:text-gray-100">Participants</label>
+                                                <span className="text-sm text-gray-500 dark:text-gray-400">{participantCount} participant{participantCount !== 1 ? 's' : ''}</span>
                                             </div>
                                             <div className="space-y-3">
                                                 {persons.map((p, idx) => (
-                                                    <div key={idx} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                                                    <div key={idx} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4 bg-white dark:bg-gray-700">
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
                                                             <div>
                                                                 <Input
@@ -591,7 +591,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                                     variant="outline"
                                                                     size="sm"
                                                                     onClick={() => setRestrictionIndex(idx)}
-                                                                    className="border-gray-300 text-gray-700 hover:bg-gray-50 h-10 flex-1"
+                                                                    className="border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 h-10 flex-1 bg-white dark:bg-gray-600"
                                                                 >
                                                                     <Settings className="h-4 w-4 mr-2" />
                                                                     Restrictions
@@ -623,7 +623,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                 <Button
                                                     variant="outline"
                                                     onClick={addPerson}
-                                                    className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 h-11"
+                                                    className="w-full border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 h-11 bg-white dark:bg-gray-600"
                                                 >
                                                     <Plus className="h-4 w-4 mr-2" />
                                                     Add Participant
@@ -632,12 +632,12 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                         </div>
 
                                         {/* Generate Matches */}
-                                        <div className="border-t border-gray-100 pt-6">
+                                        <div className="border-t border-gray-100 dark:border-gray-700 pt-6">
                                             <div className="flex justify-end">
                                                 <Button
                                                     size="lg"
                                                     onClick={handleMatch}
-                                                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 h-12 font-normal"
+                                                    className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white px-8 h-12 font-normal shadow-lg transition-all duration-200"
                                                 >
                                                     <Gift className="h-5 w-5 mr-2" />
                                                     Generate Matches & Send Notifications
@@ -648,13 +648,13 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                 </CardContent>
                                 </Card>
                                 ) : (
-                                    <Card className="bg-white shadow-sm border-purple-200">
+                                    <Card className="bg-white dark:bg-gray-800 shadow-sm border-purple-200 dark:border-gray-700">
                                         <CardContent className="p-8 text-center">
                                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Gift className="h-8 w-8 text-green-600" />
                                             </div>
-                                            <h2 className="text-2xl font-normal text-gray-900 mb-2">Matches Generated Successfully!</h2>
-                                            <p className="text-gray-600 mb-6">
+                                            <h2 className="text-2xl font-normal text-gray-900 dark:text-white mb-2">Matches Generated Successfully!</h2>
+                                            <p className="text-gray-600 dark:text-gray-400 mb-6">
                                                 All participants have been matched and notifications have been sent via {notificationChannel === "all" ? "all available methods" : notificationChannel}.
                                             </p>
                                             <Button
@@ -666,7 +666,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                                                     setRestrictions({});
                                                     setNotificationChannel("email");
                                                 }}
-                                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-400 dark:to-purple-500 dark:hover:from-purple-500 dark:hover:to-purple-600 text-white shadow-lg transition-all duration-200"
                                             >
                                                 Create New Event
                                             </Button>

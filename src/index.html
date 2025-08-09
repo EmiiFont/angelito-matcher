@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,32 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <script>
+      // Apply theme immediately to prevent flash
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+          } else {
+            // Check system preference
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (systemPrefersDark) {
+              document.documentElement.classList.add('dark');
+              localStorage.setItem('theme', 'dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+              localStorage.setItem('theme', 'light');
+            }
+          }
+        } catch (e) {
+          // Fallback to light theme
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
     <script type="module" src="./frontend.tsx" async></script>
   </head>
   <body>
