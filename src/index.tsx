@@ -2,13 +2,14 @@ import { Hono } from 'hono'
 import { renderer } from './renderer'
 import { drizzle } from 'drizzle-orm/d1';
 import { items } from './schema';
+import { HomePage } from './components/HomePage';
 
 const app = new Hono<{ Bindings: { DB: D1Database } }>()
 
 app.use(renderer)
 
 app.get('/', (c) => {
-  return c.render(<h1>Hello!</h1>)
+  return c.render(<HomePage />)
 })
 
 app.get('/api/items', async (c) => {
