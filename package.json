@@ -1,0 +1,25 @@
+{
+  "name": "angelito",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "$npm_execpath run build && vite preview",
+    "deploy": "$npm_execpath run build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply angelito-db --local"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.4",
+    "hono": "^4.9.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.2.3",
+    "@types/node": "^24.2.1",
+    "drizzle-kit": "^0.31.4",
+    "vite": "^6.3.5",
+    "vite-ssr-components": "^0.3.0",
+    "wrangler": "^4.28.1"
+  }
+}
