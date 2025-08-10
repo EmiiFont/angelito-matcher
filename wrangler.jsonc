@@ -1,13 +1,9 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "angelito",
-  "compatibility_date": "2025-08-03",
-  "main": "./src/index.tsx",
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "angelito-db",
-      "database_id": "0d089ac3-bcd3-4b7b-a9c5-5fa8bba6108e"
-    }
-  ]
+  "name": "cloudflare-vite-tutorial",
+  "compatibility_date": "2025-04-03",
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "directory": "./public"
+  },
+  "main": "./worker/index.ts"
 }
