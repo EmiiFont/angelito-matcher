@@ -3,13 +3,20 @@
   "main": "./worker/index.ts",
   "compatibility_date": "2025-04-03",
   "assets": {
-    "directory": "./src/assets",
+    "directory": "dist",
     "not_found_handling": "single-page-application"
   },
   "routes": [
     {
       "pattern": "myangelito.com/*",
       "zone_name": "myangelito.com"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "angelito-db",
+      "database_id": "0d089ac3-bcd3-4b7b-a9c5-5fa8bba6108e"
     }
   ]
 }
