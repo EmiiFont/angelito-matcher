@@ -1,17 +1,19 @@
+import Footer from "./home/Footer"
+
 export function HomePage() {
   return (
-    <div style={{ 
+    <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      <div style={{ 
+      <div style={{
         maxWidth: '800px',
         margin: '0 auto',
         padding: '60px 20px'
       }}>
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h1 style={{ 
+          <h1 style={{
             fontSize: '48px',
             fontWeight: '700',
             color: 'white',
@@ -20,7 +22,7 @@ export function HomePage() {
           }}>
             Angelito
           </h1>
-          <p style={{ 
+          <p style={{
             fontSize: '20px',
             color: 'rgba(255,255,255,0.9)',
             maxWidth: '600px',
@@ -30,14 +32,14 @@ export function HomePage() {
           </p>
         </div>
 
-        <div style={{ 
+        <div style={{
           backgroundColor: 'white',
           borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
           padding: '40px',
           marginBottom: '30px'
         }}>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: '24px',
             fontWeight: '600',
             color: '#333',
@@ -45,17 +47,17 @@ export function HomePage() {
           }}>
             Your Items
           </h2>
-          
-          <form id="add-item-form" style={{ 
+
+          <form id="add-item-form" style={{
             display: 'flex',
             gap: '12px',
             marginBottom: '30px'
           }}>
-            <input 
-              type="text" 
-              name="name" 
+            <input
+              type="text"
+              name="name"
               placeholder="Add a new item..."
-              style={{ 
+              style={{
                 flex: '1',
                 padding: '14px 18px',
                 border: '2px solid #e1e5e9',
@@ -65,9 +67,9 @@ export function HomePage() {
                 transition: 'border-color 0.2s'
               }}
             />
-            <button 
+            <button
               type="submit"
-              style={{ 
+              style={{
                 padding: '14px 24px',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
@@ -92,7 +94,7 @@ export function HomePage() {
           </form>
 
           <div>
-            <ul id="items-list" style={{ 
+            <ul id="items-list" style={{
               listStyle: 'none',
               padding: '0',
               margin: '0'
@@ -101,14 +103,18 @@ export function HomePage() {
           </div>
         </div>
 
-        <div style={{ 
+        <div style={{
           textAlign: 'center',
           color: 'rgba(255,255,255,0.8)',
           fontSize: '14px'
         }}>
+
+          <Footer />
           Made with ❤️ using Hono & Cloudflare Workers
         </div>
       </div>
+
     </div>
+
   )
 }
