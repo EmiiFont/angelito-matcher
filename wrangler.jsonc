@@ -2,8 +2,11 @@
   "name": "myangelito",
   "main": "./worker/index.ts",
   "compatibility_date": "2025-04-03",
+  "build": {
+    "command": "npm run build"
+  },
   "assets": {
-    "directory": "dist",
+    "directory": "dist/client",
     "not_found_handling": "single-page-application"
   },
   "routes": [
