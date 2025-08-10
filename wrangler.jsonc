@@ -1,9 +1,9 @@
 {
-  "name": "cloudflare-vite-tutorial",
+  "name": "myangelito",
   "compatibility_date": "2025-04-03",
   "assets": {
     "not_found_handling": "single-page-application",
-    "directory": "./public"
+    "directory": "./src/assets/"
   },
   "main": "./worker/index.ts"
 }
