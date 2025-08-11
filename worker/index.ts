@@ -28,7 +28,7 @@ export default {
                         return Response.json({ error: "Name is required" }, { status: 400 });
                     }
 
-                    const newItem: NewItem = {
+                    const newItem = {
                         name: body.name,
                     };
 
