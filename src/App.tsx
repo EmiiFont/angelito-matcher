@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { useSession, signIn, signUp, signOut } from "./lib/auth-client";
+import { useSession, signOut } from "./lib/auth-client";
+import { SignInForm } from "./components/auth/SignInForm";
+import { SignUpForm } from "./components/auth/SignUpForm";
+import { Dashboard } from "./components/Dashboard";
 import { APP_CONFIG } from "./constants";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
@@ -7,7 +10,7 @@ import { FeaturesSection } from "./components/FeaturesSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
 import { PricingSection } from "./components/PricingSection";
 import { Footer } from "./components/Footer";
-import { Plus, RefreshCw, Database } from "lucide-react";
+import { Database, Plus, RefreshCw } from "lucide-react";
 
 interface Item {
   id: number;
@@ -24,9 +27,6 @@ function App() {
   const [name, setName] = useState("unknown");
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const { data: session, isPending } = useSession();
 
@@ -69,52 +69,21 @@ function App() {
     }
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      await signIn.email({
-        email,
-        password,
-      });
-      setEmail("");
-      setPassword("");
-      setShowAuthModal(false);
-      setShowLandingPage(false);
-    } catch (error) {
-      console.error("Sign in failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      await signUp.email({
-        email,
-        password,
-        name: displayName,
-      });
-      setEmail("");
-      setPassword("");
-      setDisplayName("");
-      setShowAuthModal(false);
-      setShowLandingPage(false);
-    } catch (error) {
-      console.error("Sign up failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSignOut = async () => {
     try {
       await signOut();
     } catch (error) {
       console.error("Sign out failed:", error);
     }
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    setShowLandingPage(false);
+  };
+
+  const handleToggleAuthMode = () => {
+    setIsSignUp((prev) => !prev);
   };
 
   const handleGetStarted = () => {
@@ -180,69 +149,11 @@ function App() {
                 </button>
               </div>
               
-              <form onSubmit={isSignUp ? handleSignUp : handleSignIn} className="space-y-4">
-                {isSignUp && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your name"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                    />
-                  </div>
-                )}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <button 
-                  type="submit" 
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white px-4 py-3 rounded-lg transition-all duration-200 font-semibold"
-                >
-                  {loading ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
-                </button>
-              </form>
-              
-              <div className="mt-6 text-center">
-                <p className="text-gray-600 dark:text-gray-400">
-                  {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-                  <button 
-                    type="button" 
-                    onClick={() => setIsSignUp(!isSignUp)}
-                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold"
-                  >
-                    {isSignUp ? "Sign In" : "Sign Up"}
-                  </button>
-                </p>
-              </div>
+              {isSignUp ? (
+                <SignUpForm onSuccess={handleAuthSuccess} onToggleMode={handleToggleAuthMode} />
+              ) : (
+                <SignInForm onSuccess={handleAuthSuccess} onToggleMode={handleToggleAuthMode} />
+              )}
             </div>
           </div>
         )}
@@ -250,7 +161,20 @@ function App() {
     );
   }
 
-  // Show admin dashboard for authenticated users
+  // Show dashboard for authenticated users
+  if (session && !showLandingPage) {
+    return (
+      <Dashboard 
+        onSignOut={() => {
+          handleSignOut();
+          setShowLandingPage(true);
+        }}
+        onBackToLanding={() => setShowLandingPage(true)}
+      />
+    );
+  }
+
+  // Show admin dashboard (old implementation - fallback)
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation 
