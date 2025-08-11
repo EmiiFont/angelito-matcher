@@ -9,11 +9,22 @@ export default {
         const auth = createAuth(db);
 
         if (url.pathname.startsWith("/api/auth")) {
-
+            console.log("Auth request URL:", url.pathname);
+            console.log("Auth request method:", request.method);
+            
+            // Clone the request to read the body without consuming it
+            const clonedRequest = request.clone();
+            try {
+                const body = await clonedRequest.text();
+                console.log("Auth request body:", body);
+            } catch (e) {
+                console.log("Could not read body:", e);
+            }
+            
             try {
                 return auth.handler(request);
             } catch (error) {
-                console.log(error)
+                console.log("Auth error:", error)
                 return Response.json({ error: "Authentication error" }, { status: 500 });
             }
 
