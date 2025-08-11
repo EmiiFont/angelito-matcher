@@ -1,10 +1,16 @@
 import { createDB } from './db/client';
 import { items } from './db/schema';
+import { createAuth } from './lib/auth';
 
 export default {
     async fetch(request: Request, env: any) {
         const url = new URL(request.url);
         const db = createDB(env.DB);
+        const auth = createAuth(db);
+
+        if (url.pathname.startsWith("/api/auth")) {
+            return auth.handler(request);
+        }
 
         if (url.pathname === "/api/items") {
             console.log("Handling /api/items request");
