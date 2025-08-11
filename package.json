@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply angelito-db --local",
-    "db:migrate:prod": "wrangler d1 migrations apply angelito-db",
+    "db:migrate:prod": "wrangler d1 migrations apply angelito-db --remote",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
