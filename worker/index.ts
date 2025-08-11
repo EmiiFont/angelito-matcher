@@ -1,14 +1,9 @@
-import { D1Database, ExportedHandler } from '@cloudflare/workers-types';
 import { createDB } from './db/client';
 import { items } from './db/schema';
 import type { NewItem } from './db/schema';
 
-interface Env {
-    DB: D1Database;
-}
-
 export default {
-    async fetch(request: Request, env: Env): Promise<Response> {
+    async fetch(request: Request, env: any) {
         const url = new URL(request.url);
         const db = createDB(env.DB);
 
@@ -43,7 +38,7 @@ export default {
                     return Response.json(result[0], { status: 201 });
                 } catch (error) {
                     console.error(error);
-                    return Response.json({ error: "Failed to create item", error }, { status: 500 });
+                    return Response.json({ error: "Failed to create item" }, { status: 500 });
                 }
             }
         }
@@ -56,4 +51,4 @@ export default {
 
         return new Response(null, { status: 404 });
     },
-} satisfies ExportedHandler<Env>;
+};
