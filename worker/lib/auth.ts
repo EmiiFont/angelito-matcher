@@ -25,14 +25,6 @@ export function createAuth(db: ReturnType<typeof createDB>) {
         maxAge: 60 * 5, // 5 minutes
       },
     },
-    user: {
-      additionalFields: {
-        name: {
-          type: "string",
-          required: true,
-        },
-      },
-    },
     trustedOrigins: ["http://localhost:5173", "https://myangelito.com"],
   });
 }
