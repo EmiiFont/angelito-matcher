@@ -71,19 +71,6 @@ export const eventParticipantMatches = sqliteTable(
     })
 );
 
-export const eventRelations = relations(events, ({ many }) => ({
-    deliveryMethods: many(eventDeliveryMethods),
-    matches: many(eventParticipantMatches),
-    restrictions: many(participantRestrictions),
-}));
-
-export const participantRelations = relations(participants, ({ many }) => ({
-    restrictions: many(participantRestrictions),
-    matches: many(eventParticipantMatches),
-}));
-
-
-
 export const user = sqliteTable("user", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
@@ -99,6 +86,20 @@ export const user = sqliteTable("user", {
         .$defaultFn(() => new Date())
         .notNull(),
 });
+
+export const userParticipants = sqliteTable(
+    "user_participants",
+    {
+        id: text("id").primaryKey(),
+        userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+        participantId: text("participant_id").notNull().references(() => participants.id, { onDelete: "cascade" }),
+        createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+    },
+    (t) => ({
+        // prevent a user from adding the same participant twice
+        uniqUserParticipant: uniqueIndex("uniq_user_participant").on(t.userId, t.participantId),
+    })
+);
 
 export const session = sqliteTable("session", {
     id: text("id").primaryKey(),
@@ -148,5 +149,38 @@ export const verification = sqliteTable("verification", {
     ),
 });
 
+export const eventRelations = relations(events, ({ many }) => ({
+    deliveryMethods: many(eventDeliveryMethods),
+    matches: many(eventParticipantMatches),
+    restrictions: many(participantRestrictions),
+}));
+
+export const participantRelations = relations(participants, ({ many }) => ({
+    restrictions: many(participantRestrictions),
+    matches: many(eventParticipantMatches),
+    userParticipants: many(userParticipants),
+}));
+
+export const userRelations = relations(user, ({ many }) => ({
+    userParticipants: many(userParticipants),
+}));
+
+export const userParticipantRelations = relations(userParticipants, ({ one }) => ({
+    user: one(user, {
+        fields: [userParticipants.userId],
+        references: [user.id],
+    }),
+    participant: one(participants, {
+        fields: [userParticipants.participantId],
+        references: [participants.id],
+    }),
+}));
+
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
+
+export type Participant = typeof participants.$inferSelect;
+export type NewParticipant = typeof participants.$inferInsert;
+
+export type UserParticipant = typeof userParticipants.$inferSelect;
+export type NewUserParticipant = typeof userParticipants.$inferInsert;

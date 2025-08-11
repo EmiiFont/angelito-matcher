@@ -12,6 +12,7 @@ interface DashboardProps {
 export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState<DashboardView | 'create-event'>('events');
+  const [eventsRefreshTrigger, setEventsRefreshTrigger] = useState(0);
 
   const handleViewChange = (view: DashboardView) => {
     setActiveView(view);
@@ -23,6 +24,7 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
 
   const handleEventCreated = () => {
     setActiveView('events');
+    setEventsRefreshTrigger(prev => prev + 1); // Trigger refresh of events
   };
 
   const renderContent = () => {
@@ -50,7 +52,7 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
       case 'events':
         return (
           <div className="p-6">
-            <EventsTable onCreateEvent={handleCreateEvent} />
+            <EventsTable onCreateEvent={handleCreateEvent} refreshTrigger={eventsRefreshTrigger} />
           </div>
         );
       case 'create-event':
@@ -104,7 +106,7 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
       default:
         return (
           <div className="p-6">
-            <EventsTable onCreateEvent={handleCreateEvent} />
+            <EventsTable onCreateEvent={handleCreateEvent} refreshTrigger={eventsRefreshTrigger} />
           </div>
         );
     }

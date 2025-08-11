@@ -25,7 +25,7 @@
       "binding": "DB",
       "database_name": "angelito-db",
       "database_id": "0d089ac3-bcd3-4b7b-a9c5-5fa8bba6108e",
-      "migrations_dir": "worker/db/migrations"
+      "migrations_dir": "./worker/db/migrations"
     }
   ]
 }

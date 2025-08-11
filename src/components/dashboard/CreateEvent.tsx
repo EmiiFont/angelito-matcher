@@ -35,6 +35,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [persons, setPersons] = useState<Person[]>([{ name: "", email: "" }]);
     const [restrictions, setRestrictions] = useState<Record<number, number[]>>({});
     const [amount, setAmount] = useState("");
+    const [location, setLocation] = useState("");
     const [notificationChannel, setNotificationChannel] = useState<NotificationChannel>("email");
     const [showTipBanner, setShowTipBanner] = useState(true);
     const [participantLink, setParticipantLink] = useState<string | null>(null);
@@ -53,6 +54,10 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
             }
             if (parseFloat(amount) <= 0 || !amount) {
                 alert("Please enter a positive budget amount.");
+                return;
+            }
+            if (!location.trim()) {
+                alert("Please enter an event location.");
                 return;
             }
         }
@@ -79,10 +84,10 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
     const removePerson = (index: number) => {
         if (persons.length <= 1) return;
-        
+
         const newPersons = persons.filter((_, idx) => idx !== index);
         setPersons(newPersons);
-        
+
         const updatedRestrictions: Record<number, number[]> = {};
         Object.keys(restrictions).forEach((key) => {
             const personIndex = parseInt(key);
@@ -109,18 +114,18 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
     const generateParticipantLink = async () => {
         setIsGeneratingLink(true);
-        
+
         // Simulate API call to generate link
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         // Generate a random link ID
         const linkId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         const generatedLink = `${window.location.origin}/join/${linkId}`;
-        
+
         setParticipantLink(generatedLink);
         setIsGeneratingLink(false);
         setShowTipBanner(false);
-        
+
         // Simulate some participants joining via the link after a delay
         setTimeout(() => {
             setJoinedParticipants([
@@ -150,7 +155,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const selectJoinedParticipant = (joinedParticipant: Person, joinedIndex: number) => {
         // Find the first empty participant slot
         const emptySlotIndex = persons.findIndex(p => !p.name && !p.email);
-        
+
         if (emptySlotIndex !== -1) {
             // Fill the empty slot
             const newPersons = [...persons];
@@ -162,14 +167,43 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                 setPersons([...persons, { ...joinedParticipant }]);
             }
         }
-        
+
         // Remove from joined participants
         setJoinedParticipants(prev => prev.filter((_, index) => index !== joinedIndex));
     };
 
     const handleMatch = async () => {
-        // ... (handleMatch logic from previous implementation)
-        onEventCreated();
+        try {
+            const eventData = {
+                name: eventName,
+                date: new Date().toISOString(), // Send ISO string instead of timestamp
+                numberOfParticipants: persons.length,
+                budget: parseInt(amount),
+                location: location
+            };
+
+            const response = await fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(eventData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create event');
+            }
+
+            const createdEvent = await response.json();
+            console.log('Event created:', createdEvent);
+
+            // TODO: Here you would also create participants and restrictions
+            // For now, just navigate back to the events list
+            onEventCreated();
+        } catch (error) {
+            console.error('Error creating event:', error);
+            alert('Failed to create event. Please try again.');
+        }
     };
 
     const renderStep1 = () => (
@@ -193,6 +227,16 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                         placeholder="Enter gift budget amount"
                         value={amount}
                         onChange={e => setAmount(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Event Location</label>
+                    <input
+                        type="text"
+                        placeholder="e.g., Office, Home, Community Center"
+                        value={location}
+                        onChange={e => setLocation(e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
                     />
                 </div>
@@ -343,41 +387,41 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                         {persons.map((p, idx) => (
                             <div key={idx} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4 bg-white dark:bg-gray-700">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Full name"
-                                                    value={p.name}
-                                                    onChange={e => updatePerson(idx, "name", e.target.value)}
-                                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
-                                                />
-                                            </div>
-                                            <div>
-                                                <input
-                                                    type="email"
-                                                    placeholder="Email address"
-                                                    value={p.email}
-                                                    onChange={e => updatePerson(idx, "email", e.target.value)}
-                                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => {}}
-                                                className="border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600/80 h-10 flex-1 bg-white dark:bg-gray-700 px-3 py-2 rounded-lg font-medium flex items-center justify-center"
-                                            >
-                                                <Settings className="h-4 w-4 mr-2" />
-                                                Restrictions
-                                            </button>
-                                            <button
-                                                onClick={() => removePerson(idx)}
-                                                disabled={persons.length <= 1}
-                                                className="border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 h-10 px-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400 disabled:hover:bg-transparent disabled:hover:border-gray-200 rounded-lg font-medium flex items-center justify-center"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </button>
-                                        </div>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder="Full name"
+                                            value={p.name}
+                                            onChange={e => updatePerson(idx, "name", e.target.value)}
+                                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                        />
+                                    </div>
+                                    <div>
+                                        <input
+                                            type="email"
+                                            placeholder="Email address"
+                                            value={p.email}
+                                            onChange={e => updatePerson(idx, "email", e.target.value)}
+                                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => { }}
+                                        className="border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600/80 h-10 flex-1 bg-white dark:bg-gray-700 px-3 py-2 rounded-lg font-medium flex items-center justify-center"
+                                    >
+                                        <Settings className="h-4 w-4 mr-2" />
+                                        Restrictions
+                                    </button>
+                                    <button
+                                        onClick={() => removePerson(idx)}
+                                        disabled={persons.length <= 1}
+                                        className="border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 h-10 px-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400 disabled:hover:bg-transparent disabled:hover:border-gray-200 rounded-lg font-medium flex items-center justify-center"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </div>
                             </div>
                         ))}
                         <button
@@ -408,6 +452,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                     <h3 className="text-lg font-medium mb-2">Event Details</h3>
                     <p><strong>Event Name:</strong> {eventName}</p>
                     <p><strong>Budget:</strong> ${amount}</p>
+                    <p><strong>Location:</strong> {location}</p>
                     <p><strong>Notification Method:</strong> {notificationChannel}</p>
                 </div>
                 <div>
@@ -458,7 +503,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
                     <div className="flex justify-between mt-8">
                         {step > 1 && <button onClick={prevStep} className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl transition-colors flex items-center font-medium"><ArrowLeft className="h-4 w-4 mr-2" />Back</button>}
-                        <div/>
+                        <div />
                         {step < 3 && <button onClick={handleNext} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1 flex items-center">Next<ArrowRight className="h-4 w-4 ml-2" /></button>}
                         {step === 3 && <button onClick={handleMatch} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1 flex items-center">Generate Matches</button>}
                     </div>

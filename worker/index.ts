@@ -1,12 +1,29 @@
 import { createDB } from './db/client';
 import { items } from './db/schema';
 import { createAuth } from './lib/auth';
+import { EventsAPI } from './api/events';
+import { ParticipantsAPI } from './api/participants';
 
 export default {
     async fetch(request: Request, env: any) {
         const url = new URL(request.url);
         const db = createDB(env.DB);
         const auth = createAuth(db);
+        const eventsAPI = new EventsAPI(db);
+        const participantsAPI = new ParticipantsAPI(db);
+
+        // Helper function to extract user ID from session
+        const getUserIdFromRequest = async (request: Request): Promise<string | null> => {
+            try {
+                const session = await auth.api.getSession({ 
+                    headers: request.headers 
+                });
+                return session?.user?.id || null;
+            } catch (error) {
+                console.error('Failed to get session:', error);
+                return null;
+            }
+        };
 
         if (url.pathname.startsWith("/api/auth")) {
             console.log("Auth request URL:", url.pathname);
@@ -28,6 +45,19 @@ export default {
                 return Response.json({ error: "Authentication error" }, { status: 500 });
             }
 
+        }
+
+        if (url.pathname.startsWith("/api/events")) {
+            console.log("Events request URL:", url.pathname);
+            console.log("Events request method:", request.method);
+            return eventsAPI.handleRequest(request, url.pathname);
+        }
+
+        if (url.pathname.startsWith("/api/participants")) {
+            console.log("Participants request URL:", url.pathname);
+            console.log("Participants request method:", request.method);
+            const userId = await getUserIdFromRequest(request);
+            return participantsAPI.handleRequest(request, url.pathname, userId || undefined);
         }
 
         if (url.pathname === "/api/items") {

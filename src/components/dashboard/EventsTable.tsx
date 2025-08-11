@@ -76,9 +76,10 @@ const mockEvents: any[] = [
 
 interface EventsTableProps {
   onCreateEvent: () => void;
+  refreshTrigger?: number; // Add this to trigger refresh when events are created
 }
 
-export function EventsTable({ onCreateEvent }: EventsTableProps) {
+export function EventsTable({ onCreateEvent, refreshTrigger }: EventsTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,20 +89,41 @@ export function EventsTable({ onCreateEvent }: EventsTableProps) {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setEvents(mockEvents as Event[]);
+        setError(null);
+        
+        const response = await fetch('/api/events');
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch events: ${response.statusText}`);
+        }
+        
+        const eventsData = await response.json();
+        
+        // Map the API response to match the expected Event interface
+        const formattedEvents = eventsData.map((event: any) => ({
+          ...event,
+          status: 'active', // You might want to determine this based on event.endedAt
+          createdAt: new Date(event.createdAt).toISOString(),
+          updatedAt: new Date(event.updatedAt).toISOString(),
+          date: new Date(event.date).toISOString(),
+        }));
+        
+        setEvents(formattedEvents);
       } catch (err) {
         console.error('Error fetching events:', err);
         setError('Failed to fetch events');
-        setEvents(mockEvents as Event[]);
+        // Fallback to mock data in case of error
+        setEvents(mockEvents.map(event => ({
+          ...event,
+          status: event.status as Event['status']
+        })));
       } finally {
         setLoading(false);
       }
     };
 
     fetchEvents();
-  }, []);
+  }, [refreshTrigger]);
 
   const getStatusBadge = (status: Event['status']) => {
     const styles = {

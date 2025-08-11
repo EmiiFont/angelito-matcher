@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Gift, Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { APP_CONFIG } from "../constants";
 
 interface NavigationProps {
@@ -23,9 +23,11 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
-              <Gift className="w-6 h-6 text-white" />
-            </div>
+            <img
+              src="/src/assets/little_angel.png"
+              alt="Angelito Logo"
+              className="w-12 h-12 rounded-xl object-cover"
+            />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               {APP_CONFIG.name}
             </span>
@@ -112,7 +114,7 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
               >
                 Pricing
               </a>
-              
+
               {session ? (
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 mb-3">
