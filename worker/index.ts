@@ -1,6 +1,5 @@
 import { createDB } from './db/client';
 import { items } from './db/schema';
-import type { NewItem } from './db/schema';
 
 export default {
     async fetch(request: Request, env: any) {
