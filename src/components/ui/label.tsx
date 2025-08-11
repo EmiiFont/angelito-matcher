@@ -1,1 +1,0 @@
-export function Label(props: any) { return <label {...props} />; }

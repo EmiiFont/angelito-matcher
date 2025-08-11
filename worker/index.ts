@@ -9,6 +9,7 @@ export default {
         const auth = createAuth(db);
 
         if (url.pathname.startsWith("/api/auth")) {
+            console.log("Handling /api/auth request");
             return auth.handler(request);
         }
 

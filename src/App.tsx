@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSession, signOut } from "./lib/auth-client";
 import { SignInForm } from "./components/auth/SignInForm";
 import { SignUpForm } from "./components/auth/SignUpForm";
+import { Dashboard } from "./components/Dashboard";
 import { APP_CONFIG } from "./constants";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
@@ -9,7 +10,7 @@ import { FeaturesSection } from "./components/FeaturesSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
 import { PricingSection } from "./components/PricingSection";
 import { Footer } from "./components/Footer";
-import { Plus, RefreshCw, Database } from "lucide-react";
+import { Database, Plus, RefreshCw } from "lucide-react";
 
 interface Item {
   id: number;
@@ -160,7 +161,20 @@ function App() {
     );
   }
 
-  // Show admin dashboard for authenticated users
+  // Show dashboard for authenticated users
+  if (session && !showLandingPage) {
+    return (
+      <Dashboard 
+        onSignOut={() => {
+          handleSignOut();
+          setShowLandingPage(true);
+        }}
+        onBackToLanding={() => setShowLandingPage(true)}
+      />
+    );
+  }
+
+  // Show admin dashboard (old implementation - fallback)
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation 
