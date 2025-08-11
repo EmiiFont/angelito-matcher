@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { JoinedParticipants } from './JoinedParticipants';
+import { RestrictionsModal } from './RestrictionsModal';
 import {
     Mail,
     Settings,
@@ -42,6 +43,8 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [isGeneratingLink, setIsGeneratingLink] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
     const [joinedParticipants, setJoinedParticipants] = useState<Person[]>([]);
+    const [restrictionsModalOpen, setRestrictionsModalOpen] = useState(false);
+    const [selectedParticipantIndex, setSelectedParticipantIndex] = useState<number>(0);
 
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
@@ -170,6 +173,18 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
         // Remove from joined participants
         setJoinedParticipants(prev => prev.filter((_, index) => index !== joinedIndex));
+    };
+
+    const openRestrictionsModal = (participantIndex: number) => {
+        setSelectedParticipantIndex(participantIndex);
+        setRestrictionsModalOpen(true);
+    };
+
+    const handleSaveRestrictions = (participantIndex: number, restrictedIndices: number[]) => {
+        setRestrictions(prev => ({
+            ...prev,
+            [participantIndex]: restrictedIndices
+        }));
     };
 
     const handleMatch = async () => {
@@ -408,11 +423,16 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                                 </div>
                                 <div className="flex gap-2">
                                     <button
-                                        onClick={() => { }}
+                                        onClick={() => openRestrictionsModal(idx)}
                                         className="border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600/80 h-10 flex-1 bg-white dark:bg-gray-700 px-3 py-2 rounded-lg font-medium flex items-center justify-center"
                                     >
                                         <Settings className="h-4 w-4 mr-2" />
                                         Restrictions
+                                        {restrictions[idx] && restrictions[idx].length > 0 && (
+                                            <span className="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                                {restrictions[idx].length}
+                                            </span>
+                                        )}
                                     </button>
                                     <button
                                         onClick={() => removePerson(idx)}
@@ -509,6 +529,17 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Restrictions Modal */}
+            <RestrictionsModal
+                isOpen={restrictionsModalOpen}
+                onClose={() => setRestrictionsModalOpen(false)}
+                currentParticipant={persons[selectedParticipantIndex]}
+                currentParticipantIndex={selectedParticipantIndex}
+                allParticipants={persons}
+                currentRestrictions={restrictions[selectedParticipantIndex] || []}
+                onSaveRestrictions={handleSaveRestrictions}
+            />
         </div>
     );
 }
