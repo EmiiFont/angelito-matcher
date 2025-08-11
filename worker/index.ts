@@ -9,16 +9,12 @@ export default {
         const auth = createAuth(db);
 
         if (url.pathname.startsWith("/api/auth")) {
-<<<<<<< Updated upstream
-            return auth.handler(request);
-=======
             try {
                 return auth.handler(request);
             } catch (error) {
                 console.log(error)
                 return Response.json({ error: "Authentication error" }, { status: 500 });
             }
->>>>>>> Stashed changes
         }
 
         if (url.pathname === "/api/items") {
