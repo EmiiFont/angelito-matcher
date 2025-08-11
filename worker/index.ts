@@ -30,7 +30,6 @@ export default {
 
                     const newItem: NewItem = {
                         name: body.name,
-                        description: body.description || null,
                     };
 
                     console.log("Inserting new item:", newItem);
