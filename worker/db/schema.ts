@@ -9,12 +9,15 @@ export const items = sqliteTable('items', {
 
 export const participants = sqliteTable("participants", {
     id: text("id").primaryKey(),
+    eventId: text("event_id").references(() => events.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
-    email: text("email").notNull().unique(),
+    email: text("email").notNull(),
     phoneNumber: text("phone_number").notNull(),
     createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
     updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-});
+}, (t) => ({
+    uniqEvent: uniqueIndex("uniq_participant_per_event").on(t.eventId, t.email),
+}));
 
 export const events = sqliteTable("events", {
     id: text("id").primaryKey(),
@@ -101,6 +104,20 @@ export const userParticipants = sqliteTable(
     })
 );
 
+export const participantMatchViews = sqliteTable(
+    "participant_match_views",
+    {
+        id: text("id").primaryKey(),
+        participantId: text("participant_id").notNull().references(() => participants.id, { onDelete: "cascade" }),
+        eventId: text("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+        viewedAt: integer("viewed_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+    },
+    (t) => ({
+        // prevent duplicate views per participant per event
+        uniqParticipantView: uniqueIndex("uniq_participant_event_view").on(t.participantId, t.eventId),
+    })
+);
+
 export const session = sqliteTable("session", {
     id: text("id").primaryKey(),
     expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
@@ -184,3 +201,6 @@ export type NewParticipant = typeof participants.$inferInsert;
 
 export type UserParticipant = typeof userParticipants.$inferSelect;
 export type NewUserParticipant = typeof userParticipants.$inferInsert;
+
+export type ParticipantMatchView = typeof participantMatchViews.$inferSelect;
+export type NewParticipantMatchView = typeof participantMatchViews.$inferInsert;

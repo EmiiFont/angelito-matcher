@@ -76,10 +76,11 @@ const mockEvents: any[] = [
 
 interface EventsTableProps {
   onCreateEvent: () => void;
+  onViewEvent: (eventId: string) => void;
   refreshTrigger?: number; // Add this to trigger refresh when events are created
 }
 
-export function EventsTable({ onCreateEvent, refreshTrigger }: EventsTableProps) {
+export function EventsTable({ onCreateEvent, onViewEvent, refreshTrigger }: EventsTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -369,7 +370,11 @@ export function EventsTable({ onCreateEvent, refreshTrigger }: EventsTableProps)
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center justify-end space-x-2">
-                      <button className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                      <button 
+                        onClick={() => onViewEvent(event.id)}
+                        className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        title="View event details"
+                      >
                         <Eye className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                       </button>
                       <button className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
