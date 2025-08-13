@@ -25,9 +25,31 @@ export interface CreateEventRequest {
 export class EventsAPI {
     constructor(private db: DrizzleD1Database) { }
 
-    async getAll(): Promise<Event[]> {
+    async getAll(userId?: string): Promise<Event[]> {
         try {
-            return await this.db.select().from(events);
+            if (!userId) {
+                // If no userId provided, return all events (admin behavior)
+                throw new Error('unauthorized');
+            }
+
+            const userEvents = await this.db
+                .selectDistinct({
+                    id: events.id,
+                    name: events.name,
+                    date: events.date,
+                    numberOfParticipants: events.numberOfParticipants,
+                    budget: events.budget,
+                    location: events.location,
+                    endedAt: events.endedAt,
+                    createdAt: events.createdAt,
+                    updatedAt: events.updatedAt,
+                })
+                .from(events)
+                .innerJoin(participants, eq(participants.eventId, events.id))
+                .innerJoin(userParticipants, eq(userParticipants.participantId, participants.id))
+                .where(eq(userParticipants.userId, userId));
+
+            return userEvents;
         } catch (error) {
             console.error('Failed to fetch events:', error);
             throw new Error('Failed to fetch events');
@@ -127,127 +149,152 @@ export class EventsAPI {
         try {
             console.log('Creating event with data:', eventData);
 
-            // Start transaction-like operation
-            const eventId = crypto.randomUUID();
-            const now = new Date();
+            // Use database transaction to ensure atomicity
+            return await this.db.transaction(async (tx) => {
+                const eventId = crypto.randomUUID();
+                const now = new Date();
 
-            // Create the event
-            const newEvent: typeof events.$inferInsert = {
-                id: eventId,
-                name: eventData.name,
-                date: new Date(eventData.date),
-                numberOfParticipants: eventData.participants.length,
-                budget: eventData.budget,
-                location: eventData.location,
-                createdAt: now,
-                updatedAt: now,
-            };
-
-            const [createdEvent] = await this.db
-                .insert(events)
-                .values(newEvent)
-                .returning();
-
-            // Handle participants - find existing or create new ones
-            const participantMap = new Map<string, string>(); // email -> participantId
-
-            for (const participant of eventData.participants) {
-                const participantId = crypto.randomUUID();
-                participantMap.set(participant.email, participantId);
-
-                await this.db.insert(participants).values({
-                    id: participantId,
-                    eventId: eventId,
-                    name: participant.name,
-                    email: participant.email,
-                    phoneNumber: participant.phoneNumber,
+                // Create the event
+                const newEvent: typeof events.$inferInsert = {
+                    id: eventId,
+                    name: eventData.name,
+                    date: new Date(eventData.date),
+                    numberOfParticipants: eventData.participants.length,
+                    budget: eventData.budget,
+                    location: eventData.location,
                     createdAt: now,
                     updatedAt: now,
-                });
-            }
+                };
 
-            // Insert user-participant associations if userId provided
-            if (eventData.userId) {
-                for (const [email, participantId] of participantMap) {
-                    // Check if this user-participant association already exists
-                    const existingAssociation = await this.db
-                        .select()
-                        .from(userParticipants)
-                        .where(and(
-                            eq(userParticipants.userId, eventData.userId),
-                            eq(userParticipants.participantId, participantId)
-                        ))
-                        .limit(1);
+                const [createdEvent] = await tx
+                    .insert(events)
+                    .values(newEvent)
+                    .returning();
 
-                    if (existingAssociation.length === 0) {
-                        // Only insert if association doesn't exist
-                        await this.db.insert(userParticipants).values({
-                            id: crypto.randomUUID(),
-                            userId: eventData.userId,
-                            participantId: participantId,
-                            createdAt: now,
-                        });
-                    }
+                // Handle participants - create new ones
+                const participantMap = new Map<string, string>(); // email -> participantId
+                const participantInserts: typeof participants.$inferInsert[] = [];
+
+                for (const participant of eventData.participants) {
+                    const participantId = crypto.randomUUID();
+                    participantMap.set(participant.email, participantId);
+
+                    participantInserts.push({
+                        id: participantId,
+                        eventId: eventId,
+                        name: participant.name,
+                        email: participant.email,
+                        phoneNumber: participant.phoneNumber,
+                        createdAt: now,
+                        updatedAt: now,
+                    });
                 }
-            }
 
-            // Build restrictions map for matching algorithm
-            const restrictionsMap: Record<string, string[]> = {};
-            const restrictionInserts: typeof participantRestrictions.$inferInsert[] = [];
+                // Insert all participants in batch
+                if (participantInserts.length > 0) {
+                    await tx.insert(participants).values(participantInserts);
+                }
 
-            for (const participant of eventData.participants) {
-                if (participant.restrictions && participant.restrictions.length > 0) {
-                    restrictionsMap[participant.email] = participant.restrictions;
+                // Insert user-participant associations if userId provided
+                if (eventData.userId) {
+                    const userParticipantInserts: typeof userParticipants.$inferInsert[] = [];
 
-                    // Insert restrictions into database
-                    for (const restrictedEmail of participant.restrictions) {
-                        if (participantMap.has(restrictedEmail)) {
-                            restrictionInserts.push({
+                    for (const [email, participantId] of participantMap) {
+                        // Check if this user-participant association already exists
+                        const existingAssociation = await tx
+                            .select()
+                            .from(userParticipants)
+                            .where(and(
+                                eq(userParticipants.userId, eventData.userId),
+                                eq(userParticipants.participantId, participantId)
+                            ))
+                            .limit(1);
+
+                        if (existingAssociation.length === 0) {
+                            // Only insert if association doesn't exist
+                            userParticipantInserts.push({
                                 id: crypto.randomUUID(),
-                                eventId: eventId,
-                                participantId: participantMap.get(participant.email)!,
-                                restrictedParticipantId: participantMap.get(restrictedEmail)!,
+                                userId: eventData.userId,
+                                participantId: participantId,
+                                createdAt: now,
                             });
                         }
                     }
-                }
-            }
 
-            if (restrictionInserts.length > 0) {
-                await this.db.insert(participantRestrictions).values(restrictionInserts);
-            }
-
-            // Generate matches using the matching algorithm
-            const participantEmails = eventData.participants.map(p => p.email);
-            const matches = Matching.matchParticipants(participantEmails, restrictionsMap);
-
-            console.log(matches)
-            // Insert matches into database
-            if (matches.length > 0) {
-                const matchInserts: typeof eventParticipantMatches.$inferInsert[] = [];
-
-                for (const [giverEmail, receiverEmail] of matches) {
-                    const giverId = participantMap.get(giverEmail);
-                    const receiverId = participantMap.get(receiverEmail);
-
-                    if (giverId && receiverId) {
-                        matchInserts.push({
-                            id: crypto.randomUUID(),
-                            eventId: eventId,
-                            participantId: giverId,
-                            matchedWithParticipantId: receiverId,
-                            createdAt: now,
-                        });
+                    // Insert all user-participant associations in batch
+                    if (userParticipantInserts.length > 0) {
+                        await tx.insert(userParticipants).values(userParticipantInserts);
                     }
                 }
 
-                await this.db.insert(eventParticipantMatches).values(matchInserts);
-            }
+                // Build restrictions map for matching algorithm and prepare restriction inserts
+                const restrictionsMap: Record<string, string[]> = {};
+                const restrictionInserts: typeof participantRestrictions.$inferInsert[] = [];
 
-            return createdEvent;
+                for (const participant of eventData.participants) {
+                    if (participant.restrictions && participant.restrictions.length > 0) {
+                        // Filter out invalid restriction emails (only include emails of actual participants)
+                        const validRestrictions = participant.restrictions.filter(email =>
+                            participantMap.has(email)
+                        );
+
+                        if (validRestrictions.length > 0) {
+                            restrictionsMap[participant.email] = validRestrictions;
+
+                            // Prepare restrictions for database insertion
+                            for (const restrictedEmail of validRestrictions) {
+                                restrictionInserts.push({
+                                    id: crypto.randomUUID(),
+                                    eventId: eventId,
+                                    participantId: participantMap.get(participant.email)!,
+                                    restrictedParticipantId: participantMap.get(restrictedEmail)!,
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // Insert all restrictions in batch
+                if (restrictionInserts.length > 0) {
+                    await tx.insert(participantRestrictions).values(restrictionInserts);
+                }
+
+                // Generate matches using the matching algorithm
+                const participantEmails = eventData.participants.map(p => p.email);
+                const matches = Matching.matchParticipants(participantEmails, restrictionsMap);
+
+                console.log('Generated matches:', matches);
+
+                // Prepare and insert matches into database
+                if (matches.length > 0) {
+                    const matchInserts: typeof eventParticipantMatches.$inferInsert[] = [];
+
+                    for (const [giverEmail, receiverEmail] of matches) {
+                        const giverId = participantMap.get(giverEmail);
+                        const receiverId = participantMap.get(receiverEmail);
+
+                        if (giverId && receiverId) {
+                            matchInserts.push({
+                                id: crypto.randomUUID(),
+                                eventId: eventId,
+                                participantId: giverId,
+                                matchedWithParticipantId: receiverId,
+                                createdAt: now,
+                            });
+                        }
+                    }
+
+                    // Insert all matches in batch
+                    await tx.insert(eventParticipantMatches).values(matchInserts);
+                }
+
+                console.log(`Event created successfully with ${matches.length} matches`);
+                return createdEvent;
+            });
         } catch (error) {
             console.error('Failed to create event:', error);
-            throw new Error('Failed to create event');
+            // Transaction will automatically rollback on error
+            throw new Error('Failed to create event: ' + (error instanceof Error ? error.message : 'Unknown error'));
         }
     }
 
@@ -285,7 +332,7 @@ export class EventsAPI {
         }
     }
 
-    async handleRequest(request: Request, pathname: string): Promise<Response> {
+    async handleRequest(request: Request, pathname: string, userId?: string): Promise<Response> {
         const method = request.method;
         const pathParts = pathname.split('/');
 
@@ -293,7 +340,7 @@ export class EventsAPI {
         if (pathParts.length === 3) {
             if (method === 'GET') {
                 try {
-                    const allEvents = await this.getAll();
+                    const allEvents = await this.getAll(userId);
                     return Response.json(allEvents);
                 } catch (error) {
                     return Response.json(

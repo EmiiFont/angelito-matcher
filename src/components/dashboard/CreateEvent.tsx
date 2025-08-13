@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 
-type NotificationChannel = "email" | "sms" | "whatsapp" | "all";
+type NotificationChannel = "email" | "sms" | "whatsapp";
 
 interface Person {
     name: string;
@@ -40,8 +40,24 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [restrictions, setRestrictions] = useState<Record<number, number[]>>({});
     const [amount, setAmount] = useState("");
     const [location, setLocation] = useState("");
-    const [notificationChannel, setNotificationChannel] = useState<NotificationChannel>("email");
+    const [notificationChannels, setNotificationChannels] = useState<NotificationChannel[]>(["email"]);
     const [showTipBanner, setShowTipBanner] = useState(true);
+
+    // Helper functions for notification channels
+    const toggleNotificationChannel = (channel: NotificationChannel) => {
+        setNotificationChannels(prev => {
+            if (prev.includes(channel)) {
+                // Don't allow removing all channels
+                if (prev.length === 1) return prev;
+                return prev.filter(c => c !== channel);
+            } else {
+                return [...prev, channel];
+            }
+        });
+    };
+
+    const requiresPhoneNumber = notificationChannels.includes("sms") || notificationChannels.includes("whatsapp");
+    const requiresEmail = notificationChannels.includes("email");
     const [participantLink, setParticipantLink] = useState<string | null>(null);
     const [isGeneratingLink, setIsGeneratingLink] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
@@ -73,8 +89,16 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                 return;
             }
             for (const person of persons) {
-                if (!person.name.trim() || !person.email.trim() || !person.phone?.trim()) {
-                    alert("Please fill in the name, email, and phone number for all participants.");
+                if (!person.name.trim()) {
+                    alert("Please fill in the name for all participants.");
+                    return;
+                }
+                if (requiresEmail && !person.email.trim()) {
+                    alert("Please fill in the email address for all participants.");
+                    return;
+                }
+                if (requiresPhoneNumber && !person.phone?.trim()) {
+                    alert("Please fill in the phone number for all participants when SMS or WhatsApp is selected.");
                     return;
                 }
             }
@@ -228,6 +252,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                 budget: parseInt(amount),
                 location: location,
                 userId: userId,
+                notificationChannels: notificationChannels,
                 participants: participantsData
             };
 
@@ -291,60 +316,65 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notification Method</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notification Methods</label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Select how participants will receive their match information. You can choose multiple methods.</p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-500 transition-colors bg-white dark:bg-gray-700">
                             <input
-                                type="radio"
-                                name="notificationChannel"
-                                value="email"
-                                checked={notificationChannel === "email"}
-                                onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20"
+                                type="checkbox"
+                                checked={notificationChannels.includes("email")}
+                                onChange={() => toggleNotificationChannel("email")}
+                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20 rounded"
                             />
                             <div className="ml-3 flex items-center">
                                 <Mail className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
                                 <span className="text-sm text-gray-900 dark:text-gray-100">Email</span>
                             </div>
-                            {notificationChannel === "email" && (
+                            {notificationChannels.includes("email") && (
                                 <div className="absolute inset-0 border-2 border-emerald-500 dark:border-emerald-400 rounded-xl"></div>
                             )}
                         </label>
                         <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-500 transition-colors bg-white dark:bg-gray-700">
                             <input
-                                type="radio"
-                                name="notificationChannel"
-                                value="sms"
-                                checked={notificationChannel === "sms"}
-                                onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20"
+                                type="checkbox"
+                                checked={notificationChannels.includes("sms")}
+                                onChange={() => toggleNotificationChannel("sms")}
+                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20 rounded"
                             />
                             <div className="ml-3 flex items-center">
                                 <MessageSquare className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
                                 <span className="text-sm text-gray-900 dark:text-gray-100">SMS</span>
                             </div>
-                            {notificationChannel === "sms" && (
+                            {notificationChannels.includes("sms") && (
                                 <div className="absolute inset-0 border-2 border-emerald-500 dark:border-emerald-400 rounded-xl"></div>
                             )}
                         </label>
                         <label className="relative flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-500 transition-colors bg-white dark:bg-gray-700">
                             <input
-                                type="radio"
-                                name="notificationChannel"
-                                value="whatsapp"
-                                checked={notificationChannel === "whatsapp"}
-                                onChange={e => setNotificationChannel(e.target.value as NotificationChannel)}
-                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20"
+                                type="checkbox"
+                                checked={notificationChannels.includes("whatsapp")}
+                                onChange={() => toggleNotificationChannel("whatsapp")}
+                                className="w-4 h-4 text-emerald-600 dark:text-emerald-500 border-gray-300 focus:ring-emerald-500/20 rounded"
                             />
                             <div className="ml-3 flex items-center">
                                 <Phone className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
                                 <span className="text-sm text-gray-900 dark:text-gray-100">WhatsApp</span>
                             </div>
-                            {notificationChannel === "whatsapp" && (
+                            {notificationChannels.includes("whatsapp") && (
                                 <div className="absolute inset-0 border-2 border-emerald-500 dark:border-emerald-400 rounded-xl"></div>
                             )}
                         </label>
                     </div>
+                    {notificationChannels.length > 0 && (
+                        <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                            <p className="text-xs text-gray-600 dark:text-gray-300">
+                                <strong>Required fields for participants:</strong>
+                                {" Name (always required)"}
+                                {requiresEmail && ", Email"}
+                                {requiresPhoneNumber && ", Phone number"}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -453,34 +483,38 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                     <div className="space-y-3">
                         {persons.map((p, idx) => (
                             <div key={idx} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4 bg-white dark:bg-gray-700">
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
+                                <div className={`grid gap-4 items-start ${requiresEmail && requiresPhoneNumber ? 'grid-cols-1 sm:grid-cols-3' : requiresEmail || requiresPhoneNumber ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
                                     <div>
                                         <input
                                             type="text"
-                                            placeholder="Full name"
+                                            placeholder="Full name *"
                                             value={p.name}
                                             onChange={e => updatePerson(idx, "name", e.target.value)}
                                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition-colors"
                                         />
                                     </div>
-                                    <div>
-                                        <input
-                                            type="email"
-                                            placeholder="Email address"
-                                            value={p.email}
-                                            onChange={e => updatePerson(idx, "email", e.target.value)}
-                                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition-colors"
-                                        />
-                                    </div>
-                                    <div>
-                                        <input
-                                            type="tel"
-                                            placeholder="Phone number"
-                                            value={p.phone || ''}
-                                            onChange={e => updatePerson(idx, "phone", e.target.value)}
-                                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition-colors"
-                                        />
-                                    </div>
+                                    {requiresEmail && (
+                                        <div>
+                                            <input
+                                                type="email"
+                                                placeholder="Email address *"
+                                                value={p.email}
+                                                onChange={e => updatePerson(idx, "email", e.target.value)}
+                                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                            />
+                                        </div>
+                                    )}
+                                    {requiresPhoneNumber && (
+                                        <div>
+                                            <input
+                                                type="tel"
+                                                placeholder="Phone number *"
+                                                value={p.phone || ''}
+                                                onChange={e => updatePerson(idx, "phone", e.target.value)}
+                                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex gap-2">
                                     <button
@@ -534,7 +568,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                     <p className="text-gray-800 dark:text-gray-200"><strong className="text-gray-900 dark:text-gray-100">Event Name:</strong> {eventName}</p>
                     <p className="text-gray-800 dark:text-gray-200"><strong className="text-gray-900 dark:text-gray-100">Budget:</strong> ${amount}</p>
                     <p className="text-gray-800 dark:text-gray-200"><strong className="text-gray-900 dark:text-gray-100">Location:</strong> {location}</p>
-                    <p className="text-gray-800 dark:text-gray-200"><strong className="text-gray-900 dark:text-gray-100">Notification Method:</strong> {notificationChannel}</p>
+                    <p className="text-gray-800 dark:text-gray-200"><strong className="text-gray-900 dark:text-gray-100">Notification Methods:</strong> {notificationChannels.join(", ")}</p>
                 </div>
                 <div>
                     <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100">Participants</h3>
