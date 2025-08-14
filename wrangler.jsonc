@@ -7,7 +7,7 @@
   },
   "assets": {
     "directory": "dist/client",
-    "not_found_handling": "single-page-application"
+    // "not_found_handling": "single-page-application"
   },
   "routes": [
     {
@@ -20,12 +20,15 @@
       "enabled": true
     }
   },
+  "vars": {
+    "ENVIRONMENT": "development"
+  },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "angelito-db",
       "database_id": "0d089ac3-bcd3-4b7b-a9c5-5fa8bba6108e",
-      "migrations_dir": "worker/db/migrations"
+      "migrations_dir": "./worker/db/migrations"
     }
   ]
 }

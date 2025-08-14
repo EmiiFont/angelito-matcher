@@ -9,12 +9,15 @@ export const items = sqliteTable('items', {
 
 export const participants = sqliteTable("participants", {
     id: text("id").primaryKey(),
+    eventId: text("event_id").references(() => events.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
-    email: text("email").notNull().unique(),
+    email: text("email").notNull(),
     phoneNumber: text("phone_number").notNull(),
     createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
     updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-});
+}, (t) => ({
+    uniqEvent: uniqueIndex("uniq_participant_per_event").on(t.eventId, t.email),
+}));
 
 export const events = sqliteTable("events", {
     id: text("id").primaryKey(),
@@ -71,19 +74,6 @@ export const eventParticipantMatches = sqliteTable(
     })
 );
 
-export const eventRelations = relations(events, ({ many }) => ({
-    deliveryMethods: many(eventDeliveryMethods),
-    matches: many(eventParticipantMatches),
-    restrictions: many(participantRestrictions),
-}));
-
-export const participantRelations = relations(participants, ({ many }) => ({
-    restrictions: many(participantRestrictions),
-    matches: many(eventParticipantMatches),
-}));
-
-
-
 export const user = sqliteTable("user", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
@@ -99,6 +89,34 @@ export const user = sqliteTable("user", {
         .$defaultFn(() => new Date())
         .notNull(),
 });
+
+export const userParticipants = sqliteTable(
+    "user_participants",
+    {
+        id: text("id").primaryKey(),
+        userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+        participantId: text("participant_id").notNull().references(() => participants.id, { onDelete: "cascade" }),
+        createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+    },
+    (t) => ({
+        // prevent a user from adding the same participant twice
+        uniqUserParticipant: uniqueIndex("uniq_user_participant").on(t.userId, t.participantId),
+    })
+);
+
+export const participantMatchViews = sqliteTable(
+    "participant_match_views",
+    {
+        id: text("id").primaryKey(),
+        participantId: text("participant_id").notNull().references(() => participants.id, { onDelete: "cascade" }),
+        eventId: text("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+        viewedAt: integer("viewed_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+    },
+    (t) => ({
+        // prevent duplicate views per participant per event
+        uniqParticipantView: uniqueIndex("uniq_participant_event_view").on(t.participantId, t.eventId),
+    })
+);
 
 export const session = sqliteTable("session", {
     id: text("id").primaryKey(),
@@ -148,5 +166,41 @@ export const verification = sqliteTable("verification", {
     ),
 });
 
+export const eventRelations = relations(events, ({ many }) => ({
+    deliveryMethods: many(eventDeliveryMethods),
+    matches: many(eventParticipantMatches),
+    restrictions: many(participantRestrictions),
+}));
+
+export const participantRelations = relations(participants, ({ many }) => ({
+    restrictions: many(participantRestrictions),
+    matches: many(eventParticipantMatches),
+    userParticipants: many(userParticipants),
+}));
+
+export const userRelations = relations(user, ({ many }) => ({
+    userParticipants: many(userParticipants),
+}));
+
+export const userParticipantRelations = relations(userParticipants, ({ one }) => ({
+    user: one(user, {
+        fields: [userParticipants.userId],
+        references: [user.id],
+    }),
+    participant: one(participants, {
+        fields: [userParticipants.participantId],
+        references: [participants.id],
+    }),
+}));
+
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
+
+export type Participant = typeof participants.$inferSelect;
+export type NewParticipant = typeof participants.$inferInsert;
+
+export type UserParticipant = typeof userParticipants.$inferSelect;
+export type NewUserParticipant = typeof userParticipants.$inferInsert;
+
+export type ParticipantMatchView = typeof participantMatchViews.$inferSelect;
+export type NewParticipantMatchView = typeof participantMatchViews.$inferInsert;

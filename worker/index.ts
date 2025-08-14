@@ -1,17 +1,36 @@
 import { createDB } from './db/client';
 import { items } from './db/schema';
 import { createAuth } from './lib/auth';
+import { EventsAPI } from './api/events';
+import { ParticipantsAPI } from './api/participants';
 
 export default {
     async fetch(request: Request, env: any) {
         const url = new URL(request.url);
         const db = createDB(env.DB);
-        const auth = createAuth(db);
+        const auth = createAuth(db, env);
+        const eventsAPI = new EventsAPI(db);
+        const participantsAPI = new ParticipantsAPI(db);
+
+        console.log("request URL:", url.pathname);
+
+        // Helper function to extract user ID from session
+        const getUserIdFromRequest = async (request: Request): Promise<string | null> => {
+            try {
+                const session = await auth.api.getSession({
+                    headers: request.headers
+                });
+                return session?.user?.id || null;
+            } catch (error) {
+                console.error('Failed to get session:', error);
+                return null;
+            }
+        };
 
         if (url.pathname.startsWith("/api/auth")) {
             console.log("Auth request URL:", url.pathname);
-            console.log("Auth request method:", request.method);
-            
+            console.log("Auth request:", request);
+
             // Clone the request to read the body without consuming it
             const clonedRequest = request.clone();
             try {
@@ -20,14 +39,31 @@ export default {
             } catch (e) {
                 console.log("Could not read body:", e);
             }
-            
+
             try {
-                return auth.handler(request);
+                const result = await auth.handler(request);
+                console.log("Auth handler result:");
+
+                return result
             } catch (error) {
                 console.log("Auth error:", error)
                 return Response.json({ error: "Authentication error" }, { status: 500 });
             }
 
+        }
+
+        if (url.pathname.startsWith("/api/events")) {
+            console.log("Events request URL:", url.pathname);
+            console.log("Events request method:", request.method);
+            const userId = await getUserIdFromRequest(request);
+            return eventsAPI.handleRequest(request, url.pathname, userId || undefined);
+        }
+
+        if (url.pathname.startsWith("/api/participants")) {
+            console.log("Participants request URL:", url.pathname);
+            console.log("Participants request method:", request.method);
+            const userId = await getUserIdFromRequest(request);
+            return participantsAPI.handleRequest(request, url.pathname, userId || undefined);
         }
 
         if (url.pathname === "/api/items") {

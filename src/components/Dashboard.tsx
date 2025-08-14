@@ -3,6 +3,7 @@ import { Header } from './dashboard/Header';
 import { Sidebar, type DashboardView } from './dashboard/Sidebar';
 import { EventsTable } from './dashboard/EventsTable';
 import { CreateEvent } from './dashboard/CreateEvent';
+import { EventView } from './dashboard/EventView';
 
 interface DashboardProps {
   onSignOut: () => void;
@@ -11,7 +12,9 @@ interface DashboardProps {
 
 export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeView, setActiveView] = useState<DashboardView | 'create-event'>('events');
+  const [activeView, setActiveView] = useState<DashboardView | 'create-event' | 'view-event'>('events');
+  const [eventsRefreshTrigger, setEventsRefreshTrigger] = useState(0);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const handleViewChange = (view: DashboardView) => {
     setActiveView(view);
@@ -22,6 +25,17 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
   };
 
   const handleEventCreated = () => {
+    setActiveView('events');
+    setEventsRefreshTrigger(prev => prev + 1); // Trigger refresh of events
+  };
+
+  const handleViewEvent = (eventId: string) => {
+    setSelectedEventId(eventId);
+    setActiveView('view-event');
+  };
+
+  const handleBackFromEventView = () => {
+    setSelectedEventId(null);
     setActiveView('events');
   };
 
@@ -50,13 +64,28 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
       case 'events':
         return (
           <div className="p-6">
-            <EventsTable onCreateEvent={handleCreateEvent} />
+            <EventsTable 
+              onCreateEvent={handleCreateEvent} 
+              onViewEvent={handleViewEvent}
+              refreshTrigger={eventsRefreshTrigger} 
+            />
           </div>
         );
       case 'create-event':
         return (
           <div className="p-6">
             <CreateEvent onEventCreated={handleEventCreated} />
+          </div>
+        );
+      case 'view-event':
+        return (
+          <div className="p-6">
+            {selectedEventId && (
+              <EventView 
+                eventId={selectedEventId} 
+                onBack={handleBackFromEventView} 
+              />
+            )}
           </div>
         );
       case 'participants':
@@ -104,7 +133,11 @@ export function Dashboard({ onSignOut, onBackToLanding }: DashboardProps) {
       default:
         return (
           <div className="p-6">
-            <EventsTable onCreateEvent={handleCreateEvent} />
+            <EventsTable 
+              onCreateEvent={handleCreateEvent} 
+              onViewEvent={handleViewEvent}
+              refreshTrigger={eventsRefreshTrigger} 
+            />
           </div>
         );
     }
