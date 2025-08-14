@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { APP_CONFIG } from "../constants";
+import { useTheme } from "../hooks/useTheme";
 
 interface NavigationProps {
   session?: {
@@ -16,6 +17,15 @@ interface NavigationProps {
 
 export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isDark = useTheme();
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
@@ -24,7 +34,7 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
-              src="/src/assets/little_angel.png"
+              src={isDark ? "/src/assets/little_angel.dark.png" : "/src/assets/little_angel.png"}
               alt="Angelito Logo"
               className="w-12 h-12 rounded-xl object-cover"
             />
@@ -35,15 +45,15 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            <button onClick={() => scrollToSection('features')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
               Features
-            </a>
-            <a href="#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('how-it-works')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
               How it Works
-            </a>
-            <a href="#pricing" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('pricing')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
               Pricing
-            </a>
+            </button>
           </div>
 
           {/* Auth Section */}
@@ -93,27 +103,24 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col gap-4">
-              <a
-                href="#features"
-                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+              <button
+                onClick={() => scrollToSection('features')}
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-left"
               >
                 Features
-              </a>
-              <a
-                href="#how-it-works"
-                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+              </button>
+              <button
+                onClick={() => scrollToSection('how-it-works')}
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-left"
               >
                 How it Works
-              </a>
-              <a
-                href="#pricing"
-                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+              </button>
+              <button
+                onClick={() => scrollToSection('pricing')}
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-left"
               >
                 Pricing
-              </a>
+              </button>
 
               {session ? (
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
