@@ -50,6 +50,20 @@
       "when": 1754968059399,
       "tag": "0006_nosy_ronan",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1755142548502,
+      "tag": "0007_public_dakota_north",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1755143483306,
+      "tag": "0008_cloudy_marten_broadcloak",
+      "breakpoints": true
     }
   ]
 }

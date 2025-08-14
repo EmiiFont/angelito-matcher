@@ -3,6 +3,7 @@ import { items } from './db/schema';
 import { createAuth } from './lib/auth';
 import { EventsAPI } from './api/events';
 import { ParticipantsAPI } from './api/participants';
+import { RegistrationAPI } from './api/registration';
 
 export default {
     async fetch(request: Request, env: any) {
@@ -11,6 +12,7 @@ export default {
         const auth = createAuth(db, env);
         const eventsAPI = new EventsAPI(db);
         const participantsAPI = new ParticipantsAPI(db);
+        const registrationAPI = new RegistrationAPI(db);
 
         console.log("request URL:", url.pathname);
 
@@ -64,6 +66,12 @@ export default {
             console.log("Participants request method:", request.method);
             const userId = await getUserIdFromRequest(request);
             return participantsAPI.handleRequest(request, url.pathname, userId || undefined);
+        }
+
+        if (url.pathname.startsWith("/api/register")) {
+            console.log("Registration request URL:", url.pathname);
+            console.log("Registration request method:", request.method);
+            return registrationAPI.handleRequest(request, url.pathname);
         }
 
         if (url.pathname === "/api/items") {

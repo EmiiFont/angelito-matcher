@@ -1,5 +1,5 @@
 import { eq, and } from 'drizzle-orm';
-import { events, participants, userParticipants, eventParticipantMatches, participantRestrictions, participantMatchViews } from '../db/schema';
+import { events, participants, userParticipants, eventParticipantMatches, participantRestrictions, participantMatchViews, eventRegistrationLinks, preRegisteredParticipants } from '../db/schema';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import { Matching } from '../lib/matching';
 
@@ -332,6 +332,137 @@ export class EventsAPI {
         }
     }
 
+    async createRegistrationLink(eventName: string, organizerName: string, notificationChannels: string[]): Promise<{ linkId: string; link: string }> {
+        try {
+            const linkId = crypto.randomUUID().replace(/-/g, '').substring(0, 12);
+            const registrationLink: typeof eventRegistrationLinks.$inferInsert = {
+                id: crypto.randomUUID(),
+                eventId: null, // Event doesn't exist yet
+                linkId,
+                eventName,
+                organizerName,
+                notificationChannels: JSON.stringify(notificationChannels),
+                isActive: true,
+                createdAt: new Date(),
+                expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+            };
+
+            await this.db.insert(eventRegistrationLinks).values(registrationLink);
+
+            return {
+                linkId,
+                link: linkId
+            };
+        } catch (error) {
+            console.error('Failed to create registration link:', error);
+            throw new Error('Failed to create registration link');
+        }
+    }
+
+    async getRegistrationLink(linkId: string): Promise<any> {
+        try {
+            const result = await this.db
+                .select()
+                .from(eventRegistrationLinks)
+                .where(and(
+                    eq(eventRegistrationLinks.linkId, linkId),
+                    eq(eventRegistrationLinks.isActive, true)
+                ))
+                .limit(1);
+
+            if (result.length === 0) {
+                return null;
+            }
+
+            const link = result[0];
+            
+            // Check if link has expired
+            if (link.expiresAt && new Date() > link.expiresAt) {
+                return null;
+            }
+
+            return {
+                ...link,
+                notificationChannels: JSON.parse(link.notificationChannels)
+            };
+        } catch (error) {
+            console.error('Failed to get registration link:', error);
+            throw new Error('Failed to get registration link');
+        }
+    }
+
+    async registerParticipant(linkId: string, participantData: { name: string; email: string; phone?: string }): Promise<{ success: boolean; message: string }> {
+        try {
+            // Get registration link details
+            const linkDetails = await this.getRegistrationLink(linkId);
+            if (!linkDetails) {
+                return { success: false, message: 'Invalid or expired registration link' };
+            }
+
+            const notificationChannels = linkDetails.notificationChannels;
+            const requiresPhone = notificationChannels.includes('sms') || notificationChannels.includes('whatsapp');
+
+            // Validate required fields
+            if (!participantData.name || !participantData.email) {
+                return { success: false, message: 'Name and email are required' };
+            }
+
+            if (requiresPhone && !participantData.phone) {
+                return { success: false, message: 'Phone number is required for this event' };
+            }
+
+            // Check if participant already registered for this link
+            const existingParticipant = await this.db
+                .select()
+                .from(preRegisteredParticipants)
+                .where(and(
+                    eq(preRegisteredParticipants.linkId, linkId),
+                    eq(preRegisteredParticipants.email, participantData.email)
+                ))
+                .limit(1);
+
+            if (existingParticipant.length > 0) {
+                return { success: false, message: 'You have already registered for this event' };
+            }
+
+            // Register the participant
+            const participantId = crypto.randomUUID();
+            const now = new Date();
+
+            await this.db.insert(preRegisteredParticipants).values({
+                id: participantId,
+                linkId: linkId,
+                name: participantData.name,
+                email: participantData.email,
+                phoneNumber: participantData.phone || '',
+                createdAt: now,
+            });
+
+            return { success: true, message: 'Successfully registered for the event!' };
+        } catch (error) {
+            console.error('Failed to register participant:', error);
+            return { success: false, message: 'Failed to register. Please try again.' };
+        }
+    }
+
+    async getPreRegisteredParticipants(linkId: string): Promise<any[]> {
+        try {
+            const participants = await this.db
+                .select()
+                .from(preRegisteredParticipants)
+                .where(eq(preRegisteredParticipants.linkId, linkId));
+
+            return participants.map(p => ({
+                name: p.name,
+                email: p.email,
+                phone: p.phoneNumber
+            }));
+        } catch (error) {
+            console.error('Failed to get pre-registered participants:', error);
+            return [];
+        }
+    }
+
     async handleRequest(request: Request, pathname: string, userId?: string): Promise<Response> {
         const method = request.method;
         const pathParts = pathname.split('/');
@@ -460,6 +591,47 @@ export class EventsAPI {
                 } catch (error) {
                     return Response.json(
                         { error: error instanceof Error ? error.message : 'Failed to fetch event details' },
+                        { status: 500 }
+                    );
+                }
+            }
+        }
+
+        // Handle /api/events/registration-link
+        if (pathParts.length === 4 && pathParts[3] === 'registration-link') {
+            if (method === 'POST') {
+                try {
+                    const body = await request.json() as { eventName: string; organizerName: string; notificationChannels: string[] };
+                    
+                    if (!body.eventName || !body.organizerName || !body.notificationChannels) {
+                        return Response.json(
+                            { error: 'Missing required fields: eventName, organizerName, notificationChannels' },
+                            { status: 400 }
+                        );
+                    }
+
+                    const result = await this.createRegistrationLink(body.eventName, body.organizerName, body.notificationChannels);
+                    return Response.json(result, { status: 201 });
+                } catch (error) {
+                    return Response.json(
+                        { error: error instanceof Error ? error.message : 'Failed to create registration link' },
+                        { status: 500 }
+                    );
+                }
+            }
+        }
+
+        // Handle /api/events/participants/:linkId
+        if (pathParts.length === 5 && pathParts[3] === 'participants') {
+            const linkId = pathParts[4];
+
+            if (method === 'GET') {
+                try {
+                    const participants = await this.getPreRegisteredParticipants(linkId);
+                    return Response.json(participants);
+                } catch (error) {
+                    return Response.json(
+                        { error: error instanceof Error ? error.message : 'Failed to get participants' },
                         { status: 500 }
                     );
                 }

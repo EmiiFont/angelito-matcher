@@ -118,6 +118,29 @@ export const participantMatchViews = sqliteTable(
     })
 );
 
+export const eventRegistrationLinks = sqliteTable("event_registration_links", {
+    id: text("id").primaryKey(),
+    eventId: text("event_id"), // Made optional since event might not exist yet
+    linkId: text("link_id").notNull().unique(),
+    eventName: text("event_name").notNull(),
+    organizerName: text("organizer_name").notNull(),
+    notificationChannels: text("notification_channels").notNull(), // JSON array stored as text
+    isActive: integer("is_active", { mode: "boolean" }).$defaultFn(() => true).notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+    expiresAt: integer("expires_at", { mode: "timestamp" }),
+});
+
+export const preRegisteredParticipants = sqliteTable("pre_registered_participants", {
+    id: text("id").primaryKey(),
+    linkId: text("link_id").notNull().references(() => eventRegistrationLinks.linkId, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phoneNumber: text("phone_number").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
+}, (t) => ({
+    uniqEmailPerLink: uniqueIndex("uniq_email_per_link").on(t.linkId, t.email),
+}));
+
 export const session = sqliteTable("session", {
     id: text("id").primaryKey(),
     expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
@@ -204,3 +227,9 @@ export type NewUserParticipant = typeof userParticipants.$inferInsert;
 
 export type ParticipantMatchView = typeof participantMatchViews.$inferSelect;
 export type NewParticipantMatchView = typeof participantMatchViews.$inferInsert;
+
+export type EventRegistrationLink = typeof eventRegistrationLinks.$inferSelect;
+export type NewEventRegistrationLink = typeof eventRegistrationLinks.$inferInsert;
+
+export type PreRegisteredParticipant = typeof preRegisteredParticipants.$inferSelect;
+export type NewPreRegisteredParticipant = typeof preRegisteredParticipants.$inferInsert;

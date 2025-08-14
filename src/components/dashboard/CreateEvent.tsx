@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { JoinedParticipants } from './JoinedParticipants';
 import { RestrictionsModal } from './RestrictionsModal';
 import { useSession, getSession } from '../../lib/auth-client';
@@ -64,9 +64,42 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [joinedParticipants, setJoinedParticipants] = useState<Person[]>([]);
     const [restrictionsModalOpen, setRestrictionsModalOpen] = useState(false);
     const [selectedParticipantIndex, setSelectedParticipantIndex] = useState<number>(0);
+    const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
+
+    // Cleanup polling on component unmount
+    useEffect(() => {
+        return () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+        };
+    }, [pollingInterval]);
+
+    const startPollingForParticipants = (linkId: string) => {
+        // Clear any existing interval
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+        }
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/events/participants/${linkId}`);
+                if (response.ok) {
+                    const participants = await response.json();
+                    if (participants && participants.length > 0) {
+                        setJoinedParticipants(participants);
+                    }
+                }
+            } catch (error) {
+                console.error('Error polling for participants:', error);
+            }
+        }, 3000); // Poll every 3 seconds
+
+        setPollingInterval(interval);
+    };
 
     const handleNext = () => {
         if (step === 1) {
@@ -144,26 +177,43 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
     const generateParticipantLink = async () => {
         setIsGeneratingLink(true);
-
-        // Simulate API call to generate link
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // Generate a random link ID
-        const linkId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        const generatedLink = `${window.location.origin}/join/${linkId}`;
-
-        setParticipantLink(generatedLink);
-        setIsGeneratingLink(false);
         setShowTipBanner(false);
 
-        // Simulate some participants joining via the link after a delay
-        setTimeout(() => {
-            setJoinedParticipants([
-                { name: "Sarah Johnson", email: "sarah.j@email.com", phone: "+1-555-0123" },
-                { name: "Mike Chen", email: "mike.chen@gmail.com", phone: "+1-555-0124" },
-                { name: "Ana Rodriguez", email: "ana.r@company.com", phone: "+1-555-0125" }
-            ]);
-        }, 3000);
+        try {
+            // Get current session to extract user information
+            const sessionData = await getSession();
+            const userName = sessionData?.data?.session?.user?.name || 'Event Organizer';
+
+            const response = await fetch(`/api/events/registration-link`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    eventName: eventName || 'Secret Santa Event',
+                    organizerName: userName,
+                    notificationChannels: notificationChannels
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate registration link');
+            }
+
+            const { linkId } = await response.json();
+            // Use query parameter format that will definitely work
+            const generatedLink = `${window.location.origin}/?join=${linkId}`;
+
+            setParticipantLink(generatedLink);
+
+            // Start polling for new participants
+            startPollingForParticipants(linkId);
+        } catch (error) {
+            console.error('Error generating link:', error);
+            alert('Failed to generate registration link. Please try again.');
+        } finally {
+            setIsGeneratingLink(false);
+        }
     };
 
     const copyLinkToClipboard = async () => {
