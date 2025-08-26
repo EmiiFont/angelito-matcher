@@ -62,12 +62,26 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [isGeneratingLink, setIsGeneratingLink] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
     const [joinedParticipants, setJoinedParticipants] = useState<Person[]>([]);
+    const [selectedParticipantEmails, setSelectedParticipantEmails] = useState<string[]>([]);
     const [restrictionsModalOpen, setRestrictionsModalOpen] = useState(false);
     const [selectedParticipantIndex, setSelectedParticipantIndex] = useState<number>(0);
     const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
+
+    // Store all participants from API (before filtering)
+    const [allParticipants, setAllParticipants] = useState<(Person & { alreadyAdded?: boolean })[]>([]);
+
+    // Update joined participants whenever selected emails change
+    useEffect(() => {
+        if (allParticipants.length > 0) {
+            const filteredParticipants = allParticipants.filter((p) => 
+                !p.alreadyAdded && !selectedParticipantEmails.includes(p.email)
+            );
+            setJoinedParticipants(filteredParticipants);
+        }
+    }, [selectedParticipantEmails, allParticipants]);
 
     // Cleanup polling on component unmount
     useEffect(() => {
@@ -89,9 +103,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
                 const response = await fetch(`/api/events/participants/${linkId}`);
                 if (response.ok) {
                     const participants = await response.json();
-                    if (participants && participants.length > 0) {
-                        setJoinedParticipants(participants);
-                    }
+                    setAllParticipants(participants || []);
                 }
             } catch (error) {
                 console.error('Error polling for participants:', error);
@@ -236,19 +248,33 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
         // Find the first empty participant slot
         const emptySlotIndex = persons.findIndex(p => !p.name && !p.email);
 
+        // Ensure participant has a phone number, default to empty pattern if missing
+        const participantWithPhone = {
+            ...joinedParticipant,
+            phone: joinedParticipant.phone || "000-000-0000"
+        };
+
         if (emptySlotIndex !== -1) {
             // Fill the empty slot
             const newPersons = [...persons];
-            newPersons[emptySlotIndex] = { ...joinedParticipant };
+            newPersons[emptySlotIndex] = participantWithPhone;
             setPersons(newPersons);
         } else {
             // Add as a new participant if no empty slots and under limit
             if (persons.length < 50) {
-                setPersons([...persons, { ...joinedParticipant }]);
+                setPersons([...persons, participantWithPhone]);
             }
         }
 
-        // Remove from joined participants
+        // Add to selected emails to prevent showing again
+        setSelectedParticipantEmails(prev => {
+            if (!prev.includes(joinedParticipant.email)) {
+                return [...prev, joinedParticipant.email];
+            }
+            return prev;
+        });
+
+        // Remove from joined participants immediately 
         setJoinedParticipants(prev => prev.filter((_, index) => index !== joinedIndex));
     };
 
@@ -323,6 +349,9 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
             const createdEvent = await response.json();
             console.log('Event created successfully:', createdEvent);
+
+            // Reset selected participants state since event is now created
+            setSelectedParticipantEmails([]);
 
             onEventCreated();
         } catch (error) {
