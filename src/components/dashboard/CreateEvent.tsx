@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { JoinedParticipants } from './JoinedParticipants';
 import { RestrictionsModal } from './RestrictionsModal';
 import { useSession, getSession } from '../../lib/auth-client';
@@ -62,11 +62,56 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
     const [isGeneratingLink, setIsGeneratingLink] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
     const [joinedParticipants, setJoinedParticipants] = useState<Person[]>([]);
+    const [selectedParticipantEmails, setSelectedParticipantEmails] = useState<string[]>([]);
     const [restrictionsModalOpen, setRestrictionsModalOpen] = useState(false);
     const [selectedParticipantIndex, setSelectedParticipantIndex] = useState<number>(0);
+    const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
+
+    // Store all participants from API (before filtering)
+    const [allParticipants, setAllParticipants] = useState<(Person & { alreadyAdded?: boolean })[]>([]);
+
+    // Update joined participants whenever selected emails change
+    useEffect(() => {
+        if (allParticipants.length > 0) {
+            const filteredParticipants = allParticipants.filter((p) => 
+                !p.alreadyAdded && !selectedParticipantEmails.includes(p.email)
+            );
+            setJoinedParticipants(filteredParticipants);
+        }
+    }, [selectedParticipantEmails, allParticipants]);
+
+    // Cleanup polling on component unmount
+    useEffect(() => {
+        return () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+        };
+    }, [pollingInterval]);
+
+    const startPollingForParticipants = (linkId: string) => {
+        // Clear any existing interval
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+        }
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/events/participants/${linkId}`);
+                if (response.ok) {
+                    const participants = await response.json();
+                    setAllParticipants(participants || []);
+                }
+            } catch (error) {
+                console.error('Error polling for participants:', error);
+            }
+        }, 3000); // Poll every 3 seconds
+
+        setPollingInterval(interval);
+    };
 
     const handleNext = () => {
         if (step === 1) {
@@ -144,26 +189,43 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
     const generateParticipantLink = async () => {
         setIsGeneratingLink(true);
-
-        // Simulate API call to generate link
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // Generate a random link ID
-        const linkId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        const generatedLink = `${window.location.origin}/join/${linkId}`;
-
-        setParticipantLink(generatedLink);
-        setIsGeneratingLink(false);
         setShowTipBanner(false);
 
-        // Simulate some participants joining via the link after a delay
-        setTimeout(() => {
-            setJoinedParticipants([
-                { name: "Sarah Johnson", email: "sarah.j@email.com", phone: "+1-555-0123" },
-                { name: "Mike Chen", email: "mike.chen@gmail.com", phone: "+1-555-0124" },
-                { name: "Ana Rodriguez", email: "ana.r@company.com", phone: "+1-555-0125" }
-            ]);
-        }, 3000);
+        try {
+            // Get current session to extract user information
+            const sessionData = await getSession();
+            const userName = sessionData?.data?.session?.user?.name || 'Event Organizer';
+
+            const response = await fetch(`/api/events/registration-link`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    eventName: eventName || 'Secret Santa Event',
+                    organizerName: userName,
+                    notificationChannels: notificationChannels
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate registration link');
+            }
+
+            const { linkId } = await response.json();
+            // Use query parameter format that will definitely work
+            const generatedLink = `${window.location.origin}/?join=${linkId}`;
+
+            setParticipantLink(generatedLink);
+
+            // Start polling for new participants
+            startPollingForParticipants(linkId);
+        } catch (error) {
+            console.error('Error generating link:', error);
+            alert('Failed to generate registration link. Please try again.');
+        } finally {
+            setIsGeneratingLink(false);
+        }
     };
 
     const copyLinkToClipboard = async () => {
@@ -186,19 +248,33 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
         // Find the first empty participant slot
         const emptySlotIndex = persons.findIndex(p => !p.name && !p.email);
 
+        // Ensure participant has a phone number, default to empty pattern if missing
+        const participantWithPhone = {
+            ...joinedParticipant,
+            phone: joinedParticipant.phone || "000-000-0000"
+        };
+
         if (emptySlotIndex !== -1) {
             // Fill the empty slot
             const newPersons = [...persons];
-            newPersons[emptySlotIndex] = { ...joinedParticipant };
+            newPersons[emptySlotIndex] = participantWithPhone;
             setPersons(newPersons);
         } else {
             // Add as a new participant if no empty slots and under limit
             if (persons.length < 50) {
-                setPersons([...persons, { ...joinedParticipant }]);
+                setPersons([...persons, participantWithPhone]);
             }
         }
 
-        // Remove from joined participants
+        // Add to selected emails to prevent showing again
+        setSelectedParticipantEmails(prev => {
+            if (!prev.includes(joinedParticipant.email)) {
+                return [...prev, joinedParticipant.email];
+            }
+            return prev;
+        });
+
+        // Remove from joined participants immediately 
         setJoinedParticipants(prev => prev.filter((_, index) => index !== joinedIndex));
     };
 
@@ -273,6 +349,9 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
 
             const createdEvent = await response.json();
             console.log('Event created successfully:', createdEvent);
+
+            // Reset selected participants state since event is now created
+            setSelectedParticipantEmails([]);
 
             onEventCreated();
         } catch (error) {

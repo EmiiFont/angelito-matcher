@@ -3,6 +3,7 @@ import { useSession, signOut } from "./lib/auth-client";
 import { SignInForm } from "./components/auth/SignInForm";
 import { SignUpForm } from "./components/auth/SignUpForm";
 import { Dashboard } from "./components/Dashboard";
+import { ParticipantRegistration } from "./components/ParticipantRegistration";
 import { APP_CONFIG } from "./constants";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
@@ -15,6 +16,7 @@ function App() {
     const [showLandingPage, setShowLandingPage] = useState(true);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
+    const [registrationLinkId, setRegistrationLinkId] = useState<string | null>(null);
     const { data: session, isPending } = useSession();
 
 
@@ -55,11 +57,55 @@ function App() {
         }
     }, [session]);
 
+    // Check for registration link in URL
+    useEffect(() => {
+        const path = window.location.pathname;
+        const hash = window.location.hash;
+        
+        // Check URL path first
+        const joinMatch = path.match(/^\/join\/([a-zA-Z0-9]+)$/);
+        if (joinMatch) {
+            setRegistrationLinkId(joinMatch[1]);
+            setShowLandingPage(false);
+            return;
+        }
+        
+        // Fallback: check URL hash for registration links
+        const hashMatch = hash.match(/^#\/join\/([a-zA-Z0-9]+)$/);
+        if (hashMatch) {
+            setRegistrationLinkId(hashMatch[1]);
+            setShowLandingPage(false);
+            return;
+        }
+        
+        // Also check for URL parameters as a workaround
+        const urlParams = new URLSearchParams(window.location.search);
+        const joinParam = urlParams.get('join');
+        if (joinParam) {
+            setRegistrationLinkId(joinParam);
+            setShowLandingPage(false);
+        }
+    }, []);
+
     if (isPending) {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
             </div>
+        );
+    }
+
+    // Show registration page if we have a registration link
+    if (registrationLinkId) {
+        return (
+            <ParticipantRegistration
+                linkId={registrationLinkId}
+                onBack={() => {
+                    setRegistrationLinkId(null);
+                    setShowLandingPage(true);
+                    window.history.pushState({}, '', '/');
+                }}
+            />
         );
     }
 
