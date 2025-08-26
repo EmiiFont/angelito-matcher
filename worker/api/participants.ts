@@ -1,9 +1,16 @@
 import { eq } from 'drizzle-orm';
 import { participants, userParticipants, eventParticipantMatches, participantRestrictions, type Participant, type NewParticipant, type NewUserParticipant } from '../db/schema';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
+import * as schema from '../db/schema';
+
+type Database = DrizzleD1Database<typeof schema>;
 
 export class ParticipantsAPI {
-    constructor(private db: DrizzleD1Database) { }
+    private db: Database;
+    
+    constructor(db: Database) {
+        this.db = db;
+    }
 
     async create(participantData: Omit<NewParticipant, 'id' | 'createdAt' | 'updatedAt'>, userId: string): Promise<Participant> {
         try {
@@ -77,6 +84,7 @@ export class ParticipantsAPI {
             const matchParticipants = await this.db
                 .select({
                     id: participants.id,
+                    eventId: participants.eventId,
                     name: participants.name,
                     email: participants.email,
                     phoneNumber: participants.phoneNumber,
@@ -91,6 +99,7 @@ export class ParticipantsAPI {
             const restrictionParticipants = await this.db
                 .select({
                     id: participants.id,
+                    eventId: participants.eventId,
                     name: participants.name,
                     email: participants.email,
                     phoneNumber: participants.phoneNumber,
@@ -105,6 +114,7 @@ export class ParticipantsAPI {
             const matchedRestrictionParticipants = await this.db
                 .select({
                     id: participants.id,
+                    eventId: participants.eventId,
                     name: participants.name,
                     email: participants.email,
                     phoneNumber: participants.phoneNumber,
@@ -142,6 +152,7 @@ export class ParticipantsAPI {
             const result = await this.db
                 .select({
                     id: participants.id,
+                    eventId: participants.eventId,
                     name: participants.name,
                     email: participants.email,
                     phoneNumber: participants.phoneNumber,

@@ -1,4 +1,4 @@
-import { Gift, Sparkles } from "lucide-react";
+import { Gift } from "lucide-react";
 import { APP_CONFIG } from "../constants";
 
 interface HeroSectionProps {

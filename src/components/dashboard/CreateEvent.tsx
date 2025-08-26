@@ -194,7 +194,7 @@ export function CreateEvent({ onEventCreated }: CreateEventProps) {
         try {
             // Get current session to extract user information
             const sessionData = await getSession();
-            const userName = sessionData?.data?.session?.user?.name || 'Event Organizer';
+            const userName = sessionData?.data?.user?.name || 'Event Organizer';
 
             const response = await fetch(`/api/events/registration-link`, {
                 method: 'POST',

@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from 'drizzle-orm/d1';
-import { user, session, account, verification } from "../auth-schema";
+import { user, session, account, verification } from "../../worker/db/schema";
 import type { D1Database } from '@cloudflare/workers-types';
 
 export function createAuth(database: D1Database) {

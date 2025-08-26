@@ -4,7 +4,6 @@ import { SignInForm } from "./components/auth/SignInForm";
 import { SignUpForm } from "./components/auth/SignUpForm";
 import { Dashboard } from "./components/Dashboard";
 import { ParticipantRegistration } from "./components/ParticipantRegistration";
-import { APP_CONFIG } from "./constants";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
 import { FeaturesSection } from "./components/FeaturesSection";

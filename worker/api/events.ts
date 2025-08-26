@@ -1,7 +1,10 @@
 import { eq, and } from 'drizzle-orm';
 import { events, participants, userParticipants, eventParticipantMatches, participantRestrictions, participantMatchViews, eventRegistrationLinks, preRegisteredParticipants } from '../db/schema';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
+import * as schema from '../db/schema';
 import { Matching } from '../lib/matching';
+
+type Database = DrizzleD1Database<typeof schema>;
 
 export type Event = typeof events.$inferSelect;
 export type NewEvent = typeof events.$inferInsert;
@@ -24,7 +27,11 @@ export interface CreateEventRequest {
 }
 
 export class EventsAPI {
-    constructor(private db: DrizzleD1Database) { }
+    private db: Database;
+    
+    constructor(db: Database) {
+        this.db = db;
+    }
 
     async getAll(userId?: string): Promise<Event[]> {
         try {
@@ -198,7 +205,7 @@ export class EventsAPI {
             if (eventData.userId) {
                 const userParticipantInserts: typeof userParticipants.$inferInsert[] = [];
 
-                for (const [email, participantId] of participantMap) {
+                for (const [, participantId] of participantMap) {
                     // Check if this user-participant association already exists
                     const existingAssociation = await this.db
                         .select()

@@ -7,7 +7,7 @@ interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
     onLogout?: () => void;
-    activeView: DashboardView | 'create-event';
+    activeView: DashboardView | 'create-event' | 'view-event';
     onViewChange: (view: DashboardView) => void;
 }
 

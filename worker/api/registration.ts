@@ -1,10 +1,13 @@
 import { EventsAPI } from './events';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
+import * as schema from '../db/schema';
+
+type Database = DrizzleD1Database<typeof schema>;
 
 export class RegistrationAPI {
     private eventsAPI: EventsAPI;
 
-    constructor(private db: DrizzleD1Database) {
+    constructor(db: Database) {
         this.eventsAPI = new EventsAPI(db);
     }
 

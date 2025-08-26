@@ -1,5 +1,4 @@
 import { Users, Settings, Brain, Send, CheckCircle } from "lucide-react";
-import { APP_CONFIG } from "../constants";
 
 const steps = [
     {
