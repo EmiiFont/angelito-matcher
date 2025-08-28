@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { APP_CONFIG } from "../constants";
 import { useTheme } from "../hooks/useTheme";
+import littleAngelLight from "../assets/little_angel.png";
+import littleAngelDark from "../assets/little_angel.dark.png";
 
 interface NavigationProps {
   session?: {
@@ -34,7 +36,7 @@ export function Navigation({ session, onSignOut, onSignIn }: NavigationProps) {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
-              src={isDark ? "/src/assets/little_angel.dark.png" : "/src/assets/little_angel.png"}
+              src={isDark ? littleAngelDark : littleAngelLight}
               alt="Angelito Logo"
               className="w-12 h-12 rounded-xl object-cover"
             />
