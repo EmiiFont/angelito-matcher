@@ -1,11 +1,15 @@
-import { Gift } from "lucide-react";
 import { APP_CONFIG } from "../constants";
+import littleAngelLight from "../assets/little_angel.png";
+import littleAngelDark from "../assets/little_angel.dark.png";
+import { useTheme } from "../hooks/useTheme";
+
 
 interface HeroSectionProps {
     onGetStarted: () => void;
 }
 
 export function HeroSection({ onGetStarted }: HeroSectionProps) {
+    const isDark = useTheme();
     return (
         <section className="pt-24 pb-24 bg-gradient-to-br from-blue-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,10 +40,10 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                             onClick={onGetStarted}
                             className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1"
                         >
-                            Start Your Event ✨
+                            Start Your Event
                         </button>
                         <button className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 bg-white dark:bg-gray-800 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-200">
-                            Watch Demo 📽️
+                            Watch Demo
                         </button>
                     </div>
 
@@ -50,7 +54,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                            <span>AI-Powered Matching</span>
+                            <span>Automated Matching</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
@@ -65,7 +69,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                             <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                        <Gift className="w-6 h-6 text-white" />
+                                        <img
+                                            src={isDark ? littleAngelDark : littleAngelLight}
+                                            alt="Angelito Logo"
+                                            className="w-12 h-12 rounded-xl object-cover"
+                                        />
+
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-semibold text-white">Holiday Gift Exchange 2024</h3>

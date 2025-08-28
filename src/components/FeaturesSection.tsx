@@ -4,8 +4,8 @@ import { APP_CONFIG } from "../constants";
 const features = [
     {
         icon: Brain,
-        title: "AI-Powered Matching",
-        description: "Smart algorithm considers preferences, restrictions, and constraints to create perfect gift pairings while maintaining complete secrecy.",
+        title: "Automated Matching",
+        description: "Smart algorithm considers preferences and restrictions to create perfect gift pairings while maintaining complete secrecy.",
         color: "from-blue-500 to-blue-600"
     },
     {
@@ -23,13 +23,13 @@ const features = [
     {
         icon: Settings,
         title: "Custom Restrictions",
-        description: "Set budget limits, exclude specific pairings, add preferences, and configure rules to match your group's needs perfectly.",
+        description: "Set budget limits, exclude specific pairings, and configure rules to match your group's needs perfectly.",
         color: "from-gray-500 to-gray-600"
     },
     {
         icon: Users,
-        title: "Easy Participant Management",
-        description: "Simple interface to add participants, manage their information, and track event status. No technical skills required.",
+        title: "Easy Management",
+        description: "Track event status, track if each participant know their match already, reveal participant matches for group organizer. No technical skills required.",
         color: "from-indigo-500 to-indigo-600"
     },
     {
@@ -52,7 +52,7 @@ export function FeaturesSection() {
                         </span>
                     </h2>
                     <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                        From AI-powered matching to automated delivery, {APP_CONFIG.name} handles every detail
+                        From automated matching to automated delivery, {APP_CONFIG.name} handles every detail
                         so you can focus on the joy of giving.
                     </p>
                 </div>
