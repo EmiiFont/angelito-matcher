@@ -60,6 +60,23 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
         }
     };
 
+    const handleAppleSignIn = async () => {
+        try {
+            setError('');
+            const data = await authClient.signIn.social({
+                provider: "apple"
+            });
+
+            if (data.error) {
+                setError(data.error.message || 'Failed to sign in with Apple');
+            } else {
+                onSuccess?.();
+            }
+        } catch (err) {
+            setError('An unexpected error occurred during Apple sign in');
+        }
+    };
+
     const isFormValid = email && password;
 
     return (
@@ -170,6 +187,7 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
 
                     <button
                         type="button"
+                        onClick={handleAppleSignIn}
                         className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 transition-colors"
                     >
                         <svg className="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24">
