@@ -8,7 +8,6 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const googleClientId = env.GOOGLE_CLIENT_ID;
     const googleClientSecret = env.GOOGLE_CLIENT_SECRET;
 
-
     const config: any = {
         database: drizzleAdapter(db, {
             provider: "sqlite",
@@ -30,7 +29,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
                 maxAge: 60 * 5, // 5 minutes
             },
         },
-        trustedOrigins: ["http://localhost:5173", "https://myangelito.com"],
+        trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"]
     };
 
     config.socialProviders = {
@@ -38,6 +37,10 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
             clientId: googleClientId,
             clientSecret: googleClientSecret,
         },
+         apple: { 
+            clientId: process.env.APPLE_CLIENT_ID as string, 
+            clientSecret: process.env.APPLE_CLIENT_SECRET as string, 
+        }, 
     };
 
     return betterAuth(config);
