@@ -3,6 +3,8 @@ import { events, participants, userParticipants, eventParticipantMatches, partic
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import * as schema from '../db/schema';
 import { Matching } from '../lib/matching';
+import { EmailService } from '../lib/email';
+import { MessagingService } from '../lib/messaging';
 
 type Database = DrizzleD1Database<typeof schema>;
 
@@ -28,9 +30,69 @@ export interface CreateEventRequest {
 
 export class EventsAPI {
     private db: Database;
+    private emailService?: EmailService;
+    private messagingService?: MessagingService;
     
-    constructor(db: Database) {
+    constructor(db: Database, emailService?: EmailService, messagingService?: MessagingService) {
         this.db = db;
+        this.emailService = emailService;
+        this.messagingService = messagingService;
+    }
+
+    private async sendNotifications(event: Event, participantMatches: Array<{ participant: any; match: any }>, notificationChannels: string[]): Promise<void> {
+        for (const { participant, match } of participantMatches) {
+            const message = `🎁 Your Secret Santa match for "${event.name}" is ${match.name}! Event details: ${event.location} on ${new Date(event.date).toLocaleDateString()}. Budget: $${event.budget}`;
+            
+            try {
+                for (const channel of notificationChannels) {
+                    switch (channel) {
+                        case 'email':
+                            if (this.emailService && participant.email) {
+                                await this.emailService.sendEmail({
+                                    to: participant.email,
+                                    toName: participant.name,
+                                    subject: `🎁 Your Secret Santa Match for ${event.name}`,
+                                    html: `
+                                        <h2>🎁 Your Secret Santa Match</h2>
+                                        <p>Hi ${participant.name},</p>
+                                        <p>Your Secret Santa match for <strong>${event.name}</strong> is:</p>
+                                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                                            <h3 style="margin: 0;">${match.name}</h3>
+                                        </div>
+                                        <p><strong>Event Details:</strong></p>
+                                        <ul>
+                                            <li>📍 Location: ${event.location}</li>
+                                            <li>📅 Date: ${new Date(event.date).toLocaleDateString()}</li>
+                                            <li>💰 Budget: $${event.budget}</li>
+                                        </ul>
+                                        <p>Happy gifting! 🎁</p>
+                                    `,
+                                    text: message
+                                });
+                            }
+                            break;
+                        case 'sms':
+                            if (this.messagingService && participant.phoneNumber) {
+                                await this.messagingService.sendSMS({
+                                    to: participant.phoneNumber,
+                                    body: message
+                                });
+                            }
+                            break;
+                        case 'whatsapp':
+                            if (this.messagingService && participant.phoneNumber) {
+                                await this.messagingService.sendWhatsApp({
+                                    to: participant.phoneNumber,
+                                    body: message
+                                });
+                            }
+                            break;
+                    }
+                }
+            } catch (error) {
+                console.error(`Failed to send notifications to ${participant.email}:`, error);
+            }
+        }
     }
 
     async getAll(userId?: string): Promise<Event[]> {
@@ -292,6 +354,19 @@ export class EventsAPI {
 
                 // Insert all matches in batch
                 await this.db.insert(eventParticipantMatches).values(matchInserts);
+
+                // Send notifications to participants with their matches
+                try {
+                    const participantMatches = matches.map(([giverEmail, receiverEmail]) => {
+                        const participant = eventData.participants.find(p => p.email === giverEmail);
+                        const match = eventData.participants.find(p => p.email === receiverEmail);
+                        return { participant, match };
+                    }).filter(pm => pm.participant && pm.match);
+
+                    await this.sendNotifications(createdEvent, participantMatches, eventData.notificationChannels);
+                } catch (notificationError) {
+                    console.error('Failed to send notifications:', notificationError);
+                }
             }
 
             console.log(`Event created successfully with ${matches.length} matches`);
