@@ -4,10 +4,6 @@ import { createDB } from "../db/client";
 import { user, session, account, verification } from "../db/schema";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
-    // Check for required environment variables
-    const googleClientId = env.GOOGLE_CLIENT_ID;
-    const googleClientSecret = env.GOOGLE_CLIENT_SECRET;
-
     const config: any = {
         database: drizzleAdapter(db, {
             provider: "sqlite",
@@ -29,19 +25,30 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
                 maxAge: 60 * 5, // 5 minutes
             },
         },
-        trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"]
+        trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
+        baseURL: env.NODE_ENV === 'production' ? "https://myangelito.com" : undefined
     };
 
-    config.socialProviders = {
-        google: {
-            clientId: googleClientId,
-            clientSecret: googleClientSecret,
-        },
-         apple: { 
-            clientId: process.env.APPLE_CLIENT_ID as string, 
-            clientSecret: process.env.APPLE_CLIENT_SECRET as string, 
-        }, 
-    };
+    // Add social providers only if environment variables are available
+    const socialProviders: any = {};
+    
+    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+        socialProviders.google = {
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+        };
+    }
+    
+    if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
+        socialProviders.apple = {
+            clientId: env.APPLE_CLIENT_ID,
+            clientSecret: env.APPLE_CLIENT_SECRET,
+        };
+    }
+
+    if (Object.keys(socialProviders).length > 0) {
+        config.socialProviders = socialProviders;
+    }
 
     return betterAuth(config);
 }
