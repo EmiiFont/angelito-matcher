@@ -2,7 +2,9 @@
   "name": "myangelito",
   "main": "./worker/index.ts",
   "compatibility_date": "2025-04-03",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "build": {
     "command": "npm run build"
   },
@@ -23,8 +25,8 @@
   },
   "vars": {
     "ENVIRONMENT": "development",
-    "GOOGLE_CLIENT_ID": "",
-    "APPLE_CLIENT_ID": ""
+    "GOOGLE_CLIENT_ID": "570586988178-o2kncn1e7ggnh2nrem1m0fhmidq0pjdk.apps.googleusercontent.com",
+    "APPLE_CLIENT_ID": "com.myangelito.angelito.si"
   },
   "d1_databases": [
     {
