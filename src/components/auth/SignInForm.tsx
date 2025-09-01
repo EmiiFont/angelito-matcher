@@ -41,19 +41,18 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
 
     const handleGoogleSignIn = async () => {
         try {
-
-            console.warn('Signing in with google:');
             setError('');
             const data = await authClient.signIn.social({
                 provider: "google"
             });
-            console.log(data)
 
             if (data.error) {
                 setError(data.error.message || 'Failed to sign in with Google');
             } else {
-                console.log('Google sign in successful:', data);
-                onSuccess?.();
+                // Force a small delay to ensure session is updated
+                setTimeout(() => {
+                    onSuccess?.();
+                }, 100);
             }
         } catch (err) {
             setError('An unexpected error occurred during Google sign in');
