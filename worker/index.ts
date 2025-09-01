@@ -49,6 +49,17 @@ export default {
         if (url.pathname.startsWith("/api/auth")) {
             console.log("Auth request URL:", url.pathname);
             console.log("Auth request:", request);
+// Preflight/health
+  if (request.method === "OPTIONS" || request.method === "HEAD") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS,HEAD",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization",
+      },
+    });
+  }
 
             // Clone the request to read the body without consuming it
             const clonedRequest = request.clone();
