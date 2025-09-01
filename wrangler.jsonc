@@ -2,6 +2,7 @@
   "name": "myangelito",
   "main": "./worker/index.ts",
   "compatibility_date": "2025-04-03",
+  "compatibility_flags": ["nodejs_compat"],
   "build": {
     "command": "npm run build"
   },

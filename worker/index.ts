@@ -5,6 +5,7 @@ import { EventsAPI } from './api/events';
 import { ParticipantsAPI } from './api/participants';
 import { RegistrationAPI } from './api/registration';
 import { createEmailService } from './lib/email';
+import { createMessagingService } from './lib/messaging';
 
 export default {
     async fetch(request: Request, env: any) {
@@ -13,17 +14,22 @@ export default {
         const auth = createAuth(db, env);
         
         // Initialize services
-        let emailService;
+        let emailService, messagingService;
         try {
             emailService = createEmailService(env);
         } catch (error) {
             console.warn('Email service not configured:', error);
         }
         
+        try {
+            messagingService = createMessagingService(env);
+        } catch (error) {
+            console.warn('Messaging service not configured:', error);
+        }
         
-        const eventsAPI = new EventsAPI(db, emailService);
+        const eventsAPI = new EventsAPI(db, emailService, messagingService);
         const participantsAPI = new ParticipantsAPI(db);
-        const registrationAPI = new RegistrationAPI(db, emailService);
+        const registrationAPI = new RegistrationAPI(db, emailService, messagingService);
 
         console.log("request URL:", url.pathname);
 
