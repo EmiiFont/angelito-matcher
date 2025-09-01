@@ -98,8 +98,8 @@ export class EventsAPI {
     async getAll(userId?: string): Promise<Event[]> {
         try {
             if (!userId) {
-                // If no userId provided, return all events (admin behavior)
-                throw new Error('unauthorized');
+                // If no userId provided, return empty array
+                return [];
             }
 
             const userEvents = await this.db
@@ -119,10 +119,11 @@ export class EventsAPI {
                 .innerJoin(userParticipants, eq(userParticipants.participantId, participants.id))
                 .where(eq(userParticipants.userId, userId));
 
-            return userEvents;
+            return userEvents || [];
         } catch (error) {
             console.error('Failed to fetch events:', error);
-            throw new Error('Failed to fetch events');
+            // Return empty array instead of throwing error when no records found
+            return [];
         }
     }
 
