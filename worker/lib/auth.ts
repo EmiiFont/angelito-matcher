@@ -5,6 +5,7 @@ import { user, session, account, verification } from "../db/schema";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const config: any = {
+
         database: drizzleAdapter(db, {
             provider: "sqlite",
             schema: {
@@ -23,10 +24,19 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
             cookieCache: {
                 enabled: true,
                 maxAge: 60 * 5, // 5 minutes
+
             },
+        cookie: {
+          // If everything is on myangelito.com:
+          domain: ".myangelito.com",
+          path: "/",
+          sameSite: "lax",
+          secure: true,
+         },
         },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
-        baseURL: env.NODE_ENV === 'production' ? "https://myangelito.com" : undefined
+        baseURL: env.NODE_ENV === "production" ? "https://myangelito.com" : "http://localhost:8787",
+        basePath: "/api/auth",
     };
 
     // Add social providers only if environment variables are available
