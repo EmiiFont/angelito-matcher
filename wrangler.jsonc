@@ -26,7 +26,8 @@
   "vars": {
     "ENVIRONMENT": "development",
     "GOOGLE_CLIENT_ID": "570586988178-o2kncn1e7ggnh2nrem1m0fhmidq0pjdk.apps.googleusercontent.com",
-    "APPLE_CLIENT_ID": "com.myangelito.angelito.si"
+    "APPLE_CLIENT_ID": "com.myangelito.angelito.si",
+    "TWILIO_PHONE_NUMBER": "+18555967694"
   },
   "d1_databases": [
     {
