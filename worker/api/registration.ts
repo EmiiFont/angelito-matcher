@@ -1,14 +1,16 @@
 import { EventsAPI } from './events';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import * as schema from '../db/schema';
+import { EmailService } from '../lib/email';
+import { MessagingService } from '../lib/messaging';
 
 type Database = DrizzleD1Database<typeof schema>;
 
 export class RegistrationAPI {
     private eventsAPI: EventsAPI;
 
-    constructor(db: Database) {
-        this.eventsAPI = new EventsAPI(db);
+    constructor(db: Database, emailService?: EmailService, messagingService?: MessagingService) {
+        this.eventsAPI = new EventsAPI(db, emailService, messagingService);
     }
 
     async handleRequest(request: Request, pathname: string): Promise<Response> {

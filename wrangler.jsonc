@@ -21,7 +21,9 @@
     }
   },
   "vars": {
-    "ENVIRONMENT": "development"
+    "ENVIRONMENT": "development",
+    "GOOGLE_CLIENT_ID": "",
+    "APPLE_CLIENT_ID": ""
   },
   "d1_databases": [
     {
