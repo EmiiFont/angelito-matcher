@@ -25,8 +25,14 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         advanced: {
             defaultCookieAttributes: {
                 httpOnly: true,
-                sameSite: "none",
+                secure: true,
+                sameSite: "lax" as const,
+                path: "/",
             },
+        },
+        logger: {
+            level: "debug",
+            disabled: false
         },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
         baseURL: "https://myangelito.com",
