@@ -36,6 +36,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
             frontendOrigin, 
             "https://appleid.apple.com",
             "https://accounts.google.com",
+            "https://myangelito.com",  // Always include production domain
             apiBaseURL !== frontendOrigin ? apiBaseURL : null
         ].filter(Boolean),
     };
