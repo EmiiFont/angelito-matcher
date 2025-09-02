@@ -57,6 +57,7 @@ export default {
                 const session = await auth.api.getSession({
                     headers: request.headers
                 });
+                console.log("Session data:", session);
                 return session?.user?.id || null;
             } catch (error) {
                 console.error('Failed to get session:', error);
@@ -70,6 +71,7 @@ export default {
             if (request.method === "OPTIONS" || request.method === "HEAD") {
                 return new Response(null, { status: 204, headers: cors(origin) });
             }
+            console.log(`Auth request URL: ${url.pathname}, method: ${request.method}`);
 
             // IMPORTANT: don’t read/consume the body here
             const res = await auth.handler(request);
@@ -159,11 +161,11 @@ export default {
             }
         }
 
-        if (url.pathname.startsWith("/api/")) {
-            return Response.json({
-                name: "Cloudflare",
-            });
-        }
+        // if (url.pathname.startsWith("/api/")) {
+        //     return Response.json({
+        //         name: "Cloudflare",
+        //     });
+        // }
 
         return new Response(null, { status: 404 });
     },
