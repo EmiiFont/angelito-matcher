@@ -7,6 +7,17 @@ import { RegistrationAPI } from './api/registration';
 import { createEmailService } from './lib/email';
 import { createMessagingService } from './lib/messaging';
 
+function cors(origin: string) {
+    const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://myangelito.com";
+    return {
+        "Access-Control-Allow-Origin": allow,
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS,HEAD",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization",
+        "Access-Control-Allow-Credentials": "true",
+        "Vary": "Origin",
+    };
+}
+
 export default {
     async fetch(request: Request, env: any) {
         const url = new URL(request.url);
@@ -46,42 +57,34 @@ export default {
             }
         };
 
+
+        // ---- AUTH MOUNT ----
         if (url.pathname.startsWith("/api/auth")) {
-            console.log("Auth request URL:", url.pathname);
-            console.log("Auth request:", JSON.stringify(request));
-            // Preflight/health
             if (request.method === "OPTIONS" || request.method === "HEAD") {
-                return new Response(null, {
-                    status: 204,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET,POST,OPTIONS,HEAD",
-                        "Access-Control-Allow-Headers": "Content-Type,Authorization",
-                    },
-                });
+                return new Response(null, { status: 204, headers: cors(origin) });
             }
 
-            // Clone the request to read the body without consuming it
-            const clonedRequest = request.clone();
-            try {
-                const body = await clonedRequest.text();
-                console.log("Auth request body:", body);
-            } catch (e) {
-                console.log("Could not read body:", e);
+            // IMPORTANT: don’t read/consume the body here
+            const res = await auth.handler(request);
+
+            // DEBUG: correctly log all Set-Cookie headers coming from Better Auth
+            const cookies: string[] = [];
+            for (const [k, v] of res.headers) {
+                if (k.toLowerCase() === "set-cookie") cookies.push(v);
             }
+            console.log("auth.handler Set-Cookie count:", cookies.length);
+            if (cookies.length) console.log("First Set-Cookie:", cookies[0]);
 
-            try {
-                const result = await auth.handler(request);
-                Object.entries(result.headers).forEach(([key, value]) => {
-                    console.log(`Auth response header: ${key} = ${value}`);
-                });
-
-                return result
-            } catch (error) {
-                console.log("Auth error:", error)
-                return Response.json({ error: "Authentication error" }, { status: 500 });
+            // If you need CORS, copy ALL headers incl. every Set-Cookie
+            const hdrs = new Headers();
+            for (const [k, v] of res.headers) {
+                if (k.toLowerCase() === "set-cookie") hdrs.append(k, v);
+                else hdrs.set(k, v);
             }
+            const c = cors(origin);
+            for (const [k, v] of Object.entries(c)) hdrs.set(k, v);
 
+            return new Response(res.body, { status: res.status, headers: hdrs });
         }
 
         if (url.pathname.startsWith("/api/events")) {
