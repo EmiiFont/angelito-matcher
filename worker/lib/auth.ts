@@ -32,7 +32,12 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         session: { expiresIn: 60 * 60 * 24 * 7, updateAge: 60 * 60 * 24 },
         advanced: { defaultCookieAttributes },
         logger: { level: "debug", disabled: false },
-        trustedOrigins: [frontendOrigin, "https://appleid.apple.com"],
+        trustedOrigins: [
+            frontendOrigin, 
+            "https://appleid.apple.com",
+            "https://accounts.google.com",
+            apiBaseURL !== frontendOrigin ? apiBaseURL : null
+        ].filter(Boolean),
     };
 
     const socialProviders: any = {};

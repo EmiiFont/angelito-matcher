@@ -49,6 +49,7 @@ export default {
         const registrationAPI = new RegistrationAPI(db, emailService, messagingService);
 
         console.log("request URL:", url.pathname);
+        console.log("request origin:", origin);
 
         // Helper function to extract user ID from session
         const getUserIdFromRequest = async (request: Request): Promise<string | null> => {
