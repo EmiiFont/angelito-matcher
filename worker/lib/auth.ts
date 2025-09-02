@@ -35,6 +35,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
         baseURL: "https://myangelito.com",
+        secret: env.BETTER_AUTH_SECRET,
     };
 
     // Add social providers only if environment variables are available
