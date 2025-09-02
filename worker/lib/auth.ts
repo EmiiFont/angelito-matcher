@@ -1,7 +1,8 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, config } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createDB } from "../db/client";
 import { user, session, account, verification } from "../db/schema";
+import type { env } from "process";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const config: any = {
@@ -21,44 +22,39 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         session: {
             expiresIn: 60 * 60 * 24 * 7, // 7 days
             updateAge: 60 * 60 * 24, // 1 day
-            cookieCache: {
-                enabled: true,
-                maxAge: 60 * 5, // 5 minutes
-
-            },
-        cookie: {
-          // If everything is on myangelito.com:
-          domain: ".myangelito.com",
-          path: "/",
-          sameSite: "lax",
-          secure: true,
-         },
         },
+        cookie: {
+            domain: ".myangelito.com",
+            path: "/",
+            sameSite: "none",
+            secure: true,
+        },
+    },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
-        baseURL:  "https://myangelito.com",
+        baseURL: "https://myangelito.com",
         basePath: "/api/auth",
+};
+
+// Add social providers only if environment variables are available
+const socialProviders: any = {};
+
+if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+    socialProviders.google = {
+        clientId: env.GOOGLE_CLIENT_ID,
+        clientSecret: env.GOOGLE_CLIENT_SECRET,
     };
+}
 
-    // Add social providers only if environment variables are available
-    const socialProviders: any = {};
-    
-    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-        socialProviders.google = {
-            clientId: env.GOOGLE_CLIENT_ID,
-            clientSecret: env.GOOGLE_CLIENT_SECRET,
-        };
-    }
-    
-    if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
-        socialProviders.apple = {
-            clientId: env.APPLE_CLIENT_ID,
-            clientSecret: env.APPLE_CLIENT_SECRET,
-        };
-    }
+if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
+    socialProviders.apple = {
+        clientId: env.APPLE_CLIENT_ID,
+        clientSecret: env.APPLE_CLIENT_SECRET,
+    };
+}
 
-    if (Object.keys(socialProviders).length > 0) {
-        config.socialProviders = socialProviders;
-    }
+if (Object.keys(socialProviders).length > 0) {
+    config.socialProviders = socialProviders;
+}
 
-    return betterAuth(config);
+return betterAuth(config);
 }
