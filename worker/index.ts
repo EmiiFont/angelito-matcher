@@ -26,6 +26,7 @@ function cors(origin: string) {
 export default {
     async fetch(request: Request, env: any) {
         const url = new URL(request.url);
+        const origin = request.headers.get("origin") || "https://myangelito.com";
         const db = createDB(env.DB);
         const auth = createAuth(db, env);
 
