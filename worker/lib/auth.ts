@@ -29,33 +29,32 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
                 partitioned: true,
                 sameSite: "none",
             },
-        }
-    },
+        },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
         baseURL: "https://myangelito.com",
         basePath: "/api/auth",
-};
-
-// Add social providers only if environment variables are available
-const socialProviders: any = {};
-
-if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-    socialProviders.google = {
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
     };
-}
 
-if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
-    socialProviders.apple = {
-        clientId: env.APPLE_CLIENT_ID,
-        clientSecret: env.APPLE_CLIENT_SECRET,
-    };
-}
+    // Add social providers only if environment variables are available
+    const socialProviders: any = {};
 
-if (Object.keys(socialProviders).length > 0) {
-    config.socialProviders = socialProviders;
-}
+    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+        socialProviders.google = {
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+        };
+    }
 
-return betterAuth(config);
+    if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
+        socialProviders.apple = {
+            clientId: env.APPLE_CLIENT_ID,
+            clientSecret: env.APPLE_CLIENT_SECRET,
+        };
+    }
+
+    if (Object.keys(socialProviders).length > 0) {
+        config.socialProviders = socialProviders;
+    }
+
+    return betterAuth(config);
 }
