@@ -35,7 +35,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
          },
         },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
-        baseURL: env.NODE_ENV === "production" ? "https://myangelito.com" : "http://localhost:8787",
+        baseURL:  "https://myangelito.com",
         basePath: "/api/auth",
     };
 
