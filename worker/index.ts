@@ -8,6 +8,11 @@ import { createEmailService } from './lib/email';
 import { createMessagingService } from './lib/messaging';
 
 function cors(origin: string) {
+
+    const ALLOWED_ORIGINS = new Set([
+        "http://localhost:5173",
+        "https://myangelito.com",
+    ]);
     const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://myangelito.com";
     return {
         "Access-Control-Allow-Origin": allow,
