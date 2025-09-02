@@ -5,7 +5,7 @@ import { createDB } from "../db/client";
 import { user, session, account, verification } from "../db/schema";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
-    const isProd = env.NODE_ENV === "production";
+    const isProd = env.ENVIRONMENT === "production";
     const apiBaseURL = isProd
         ? "https://myangelito.com"
         : (env.API_ORIGIN ?? "http://localhost:8787");
@@ -33,7 +33,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         advanced: { defaultCookieAttributes },
         logger: { level: "debug", disabled: false },
         trustedOrigins: [
-            frontendOrigin, 
+            frontendOrigin,
             "https://appleid.apple.com",
             "https://accounts.google.com",
             "https://myangelito.com",  // Always include production domain
