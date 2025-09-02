@@ -73,6 +73,10 @@ export default {
             }
             console.log(`Auth request URL: ${url.pathname}, method: ${request.method}`);
 
+            // Log incoming cookies for debugging auth callbacks
+            const incomingCookies = request.headers.get("cookie");
+            console.log("auth request cookies for", url.pathname, ":", incomingCookies);
+
             // IMPORTANT: don’t read/consume the body here
             const res = await auth.handler(request);
 
