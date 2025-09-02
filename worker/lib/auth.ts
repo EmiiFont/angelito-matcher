@@ -1,8 +1,7 @@
-import { betterAuth, config } from "better-auth";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createDB } from "../db/client";
 import { user, session, account, verification } from "../db/schema";
-import type { env } from "process";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const config: any = {
