@@ -21,7 +21,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         : { httpOnly: true, secure: true, sameSite: "none" as const, path: "/" }; // requires HTTPS on both
 
     const config: any = {
-        baseURL: apiBaseURL,
+        baseURL: "https://myangelito.com",
         basePath: "/api/auth",
         secret: env.BETTER_AUTH_SECRET,
         database: drizzleAdapter(db, {

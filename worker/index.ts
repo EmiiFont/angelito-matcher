@@ -72,6 +72,16 @@ export default {
             // IMPORTANT: don’t read/consume the body here
             const res = await auth.handler(request);
 
+            console.log("auth.handler status:", res.status);
+            const errHeader = res.headers.get("x-better-auth-error");
+            if (errHeader) console.log("auth handler error header:", errHeader);
+
+            // Only read the body if status >= 400, to avoid consuming success redirects
+            if (res.status >= 400) {
+                const txt = await res.clone().text();
+                console.log("auth.handler error body:", txt);
+            }
+
             // DEBUG: correctly log all Set-Cookie headers coming from Better Auth
             const cookies: string[] = [];
             for (const [k, v] of res.headers) {
