@@ -46,6 +46,7 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
                 provider: "google"
             });
 
+            console.log('Google sign-in response:', data);
             if (data.error) {
                 setError(data.error.message || 'Failed to sign in with Google');
             } else {
