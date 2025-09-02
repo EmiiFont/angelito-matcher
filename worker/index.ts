@@ -72,7 +72,9 @@ export default {
 
             try {
                 const result = await auth.handler(request);
-                console.log("Auth handler result:", result);
+                Object.entries(result.headers).forEach(([key, value]) => {
+                    console.log(`Auth response header: ${key} = ${value}`);
+                });
 
                 return result
             } catch (error) {
