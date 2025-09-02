@@ -71,6 +71,10 @@ export default {
                 return new Response(null, { status: 204, headers: cors(origin) });
             }
 
+            // Log incoming cookies for debugging auth callbacks
+            const incomingCookies = request.headers.get("cookie");
+            console.log("auth request cookies for", url.pathname, ":", incomingCookies);
+
             // IMPORTANT: don’t read/consume the body here
             const res = await auth.handler(request);
 
