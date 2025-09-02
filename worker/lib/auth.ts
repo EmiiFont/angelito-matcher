@@ -25,14 +25,11 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         advanced: {
             defaultCookieAttributes: {
                 httpOnly: true,
-                secure: true,
-                partitioned: true,
                 sameSite: "none",
             },
         },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
         baseURL: "https://myangelito.com",
-        basePath: "/api/auth",
     };
 
     // Add social providers only if environment variables are available
