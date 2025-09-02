@@ -6,7 +6,6 @@ import type { env } from "process";
 
 export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const config: any = {
-
         database: drizzleAdapter(db, {
             provider: "sqlite",
             schema: {
@@ -23,12 +22,14 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
             expiresIn: 60 * 60 * 24 * 7, // 7 days
             updateAge: 60 * 60 * 24, // 1 day
         },
-        cookie: {
-            domain: ".myangelito.com",
-            path: "/",
-            sameSite: "none",
-            secure: true,
-        },
+        advanced: {
+            defaultCookieAttributes: {
+                httpOnly: true,
+                secure: true,
+                partitioned: true,
+                sameSite: "none",
+            },
+        }
     },
         trustedOrigins: ["http://localhost:5173", "https://myangelito.com", "https://appleid.apple.com"],
         baseURL: "https://myangelito.com",
