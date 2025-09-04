@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "./lib/auth-client";
+import { useSession, signOut, authClient } from "./lib/auth-client";
 import { SignInForm } from "./components/auth/SignInForm";
 import { SignUpForm } from "./components/auth/SignUpForm";
 import { Dashboard } from "./components/Dashboard";
@@ -21,14 +21,21 @@ function App() {
 
     const handleSignOut = async () => {
         try {
+            console.log("adadsads")
             await signOut();
         } catch (error) {
             console.error("Sign out failed:", error);
         }
     };
 
-    const handleAuthSuccess = () => {
+    const handleAuthSuccess = async () => {
+
         setShowAuthModal(false);
+        console.log("success");
+        const dataj = await authClient.getAccessToken({
+            providerId: "google", // or any other provider id
+        })
+        console.log(dataj);
         setShowLandingPage(false);
     };
 
@@ -60,7 +67,7 @@ function App() {
     useEffect(() => {
         const path = window.location.pathname;
         const hash = window.location.hash;
-        
+
         // Check URL path first
         const joinMatch = path.match(/^\/join\/([a-zA-Z0-9]+)$/);
         if (joinMatch) {
@@ -68,7 +75,7 @@ function App() {
             setShowLandingPage(false);
             return;
         }
-        
+
         // Fallback: check URL hash for registration links
         const hashMatch = hash.match(/^#\/join\/([a-zA-Z0-9]+)$/);
         if (hashMatch) {
@@ -76,7 +83,7 @@ function App() {
             setShowLandingPage(false);
             return;
         }
-        
+
         // Also check for URL parameters as a workaround
         const urlParams = new URLSearchParams(window.location.search);
         const joinParam = urlParams.get('join');

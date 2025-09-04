@@ -42,10 +42,21 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
     const handleGoogleSignIn = async () => {
         try {
             setError('');
+
+            console.log('Google sign in request:');
             const data = await authClient.signIn.social({
-                provider: "google"
+                provider: "google",
+
+            }, {
+                onError: (error) => {
+                    console.error(error)
+                },
+                onSuccess: (data) => {
+                    console.log(data)
+                }
             });
 
+            console.log('Google sign in response:', data);
             if (data.error) {
                 setError(data.error.message || 'Failed to sign in with Google');
             } else {

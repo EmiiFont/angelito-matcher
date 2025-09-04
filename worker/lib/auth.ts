@@ -8,7 +8,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
     const isProd = env.NODE_ENV === "production";
     const apiBaseURL = isProd
         ? "https://myangelito.com"
-        : (env.API_ORIGIN ?? "http://localhost:8787");
+        : (env.API_ORIGIN ?? "http://localhost:5173");
 
     const frontendOrigin = isProd
         ? "https://myangelito.com"
@@ -16,34 +16,40 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
 
     const sameOrigin = apiBaseURL === frontendOrigin;
 
-    const defaultCookieAttributes = sameOrigin
-        ? { httpOnly: true, secure: isProd, sameSite: "lax" as const, path: "/" }
-        : { httpOnly: true, secure: true, sameSite: "none" as const, path: "/" }; // requires HTTPS on both
+    // const defaultCookieAttributes = sameOrigin
+    //     ? { httpOnly: true, secure: isProd, sameSite: "lax" as const, path: "/" }
+    //     : { httpOnly: true, secure: false, sameSite: "none" as const, path: "/" }; // requires HTTPS on both
 
     const config: any = {
-        baseURL: apiBaseURL,
-        basePath: "/api/auth",
         secret: env.BETTER_AUTH_SECRET,
         database: drizzleAdapter(db, {
             provider: "sqlite",
             schema: { user, session, account, verification },
         }),
+        logger: {
+            disabled: false,
+            level: "info",
+            log: (level, message, ...args) => {
+                // Custom logging implementation
+                console.log(`[${level}] ${message}`, ...args);
+            }
+        },
         emailAndPassword: { enabled: true },
-        session: { expiresIn: 60 * 60 * 24 * 7, updateAge: 60 * 60 * 24 },
-        advanced: { defaultCookieAttributes },
-        logger: { level: "debug", disabled: false },
         trustedOrigins: [
-            frontendOrigin, 
+            frontendOrigin,
             "https://appleid.apple.com",
             "https://accounts.google.com",
             "https://myangelito.com",  // Always include production domain
-            apiBaseURL !== frontendOrigin ? apiBaseURL : null
+            "http://localhost:5173",   // Always include localhost for development
         ].filter(Boolean),
     };
 
     const socialProviders: any = {};
+    console.log("activating google")
     if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-        socialProviders.google = { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET };
+        socialProviders.google = {
+            clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET,
+        };
     }
     if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
         socialProviders.apple = { clientId: env.APPLE_CLIENT_ID, clientSecret: env.APPLE_CLIENT_SECRET };
