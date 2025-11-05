@@ -28,6 +28,23 @@ export interface CreateEventRequest {
     notificationChannels: string[]; // notification methods (email, sms, whatsapp)
 }
 
+interface ParticipantMatch {
+    participant: ParticipantWithRestrictions;
+    match: ParticipantWithRestrictions;
+}
+
+interface RegistrationLinkDetails {
+    id: string;
+    eventId: string | null;
+    linkId: string;
+    eventName: string;
+    organizerName: string;
+    isActive: boolean;
+    createdAt: Date;
+    expiresAt: Date | null;
+    notificationChannels: string[];
+}
+
 export class EventsAPI {
     private db: Database;
     private emailService?: EmailService;
@@ -39,7 +56,7 @@ export class EventsAPI {
         this.messagingService = messagingService;
     }
 
-    private async sendNotifications(event: Event, participantMatches: Array<{ participant: any; match: any }>, notificationChannels: string[]): Promise<void> {
+    private async sendNotifications(event: Event, participantMatches: ParticipantMatch[], notificationChannels: string[]): Promise<void> {
         for (const { participant, match } of participantMatches) {
             const message = `🎁 Your Secret Santa match for "${event.name}" is ${match.name}! Event details: ${event.location} on ${new Date(event.date).toLocaleDateString()}. Budget: $${event.budget}`;
             
@@ -362,7 +379,7 @@ export class EventsAPI {
                         const participant = eventData.participants.find(p => p.email === giverEmail);
                         const match = eventData.participants.find(p => p.email === receiverEmail);
                         return { participant, match };
-                    }).filter(pm => pm.participant && pm.match);
+                    }).filter((pm): pm is ParticipantMatch => pm.participant !== undefined && pm.match !== undefined);
 
                     await this.sendNotifications(createdEvent, participantMatches, eventData.notificationChannels);
                 } catch (notificationError) {
@@ -439,7 +456,7 @@ export class EventsAPI {
         }
     }
 
-    async getRegistrationLink(linkId: string): Promise<any> {
+    async getRegistrationLink(linkId: string): Promise<RegistrationLinkDetails | null> {
         try {
             const result = await this.db
                 .select()
@@ -525,7 +542,7 @@ export class EventsAPI {
         }
     }
 
-    async getPreRegisteredParticipants(linkId: string): Promise<any[]> {
+    async getPreRegisteredParticipants(linkId: string): Promise<unknown[]> {
         try {
             // Get all pre-registered participants for this link
             const preRegistered = await this.db

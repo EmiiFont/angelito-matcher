@@ -9,14 +9,36 @@ vi.mock('../../lib/matching', () => ({
   }
 }));
 
+// Basic interfaces for mock data
+interface MockEvent {
+  id: string;
+  name: string;
+  date: string;
+  budget: number;
+  location: string;
+  userId: string;
+  numberOfParticipants: number;
+  createdAt: string;
+  updatedAt: string;
+  endedAt?: string;
+}
+
+interface MockParticipant {
+  id: string;
+  eventId: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+}
+
 // Mock database implementation
 class MockDatabase {
-  private events: any[] = [];
-  private participants: any[] = [];
-  private userParticipants: any[] = [];
-  private eventParticipantMatches: any[] = [];
-  private participantRestrictions: any[] = [];
-  private participantMatchViews: any[] = [];
+  private events: MockEvent[] = [];
+  private participants: MockParticipant[] = [];
+  private userParticipants: unknown[] = [];
+  private eventParticipantMatches: unknown[] = [];
+  private participantRestrictions: unknown[] = [];
+  private participantMatchViews: unknown[] = [];
 
   constructor() {
     this.reset();
@@ -32,10 +54,10 @@ class MockDatabase {
   }
 
   // Mock drizzle query builder pattern
-  select(fields?: any) {
+  select() {
     return {
-      from: (table: any) => ({
-        where: (condition: any) => ({
+      from: (table: unknown) => ({
+        where: (condition: unknown) => ({
           limit: (count: number) => this.mockSelect(table, condition, count),
           execute: () => this.mockSelect(table, condition)
         }),
@@ -44,26 +66,26 @@ class MockDatabase {
     };
   }
 
-  insert(table: any) {
+  insert(table: unknown) {
     return {
-      values: (data: any) => ({
+      values: (data: unknown) => ({
         returning: () => this.mockInsert(table, data)
       }),
       execute: () => this.mockInsert(table)
     };
   }
 
-  update(table: any) {
+  update(table: unknown) {
     return {
-      set: (data: any) => ({
-        where: (condition: any) => ({
+      set: (data: unknown) => ({
+        where: (condition: unknown) => ({
           returning: () => this.mockUpdate(table, data, condition)
         })
       })
     };
   }
 
-  private mockSelect(table: any, condition?: any, limit?: number) {
+  private mockSelect(table: unknown, condition?: unknown, limit?: number) {
     const tableName = this.getTableName(table);
     let data = this.getTableData(tableName);
     
@@ -79,7 +101,7 @@ class MockDatabase {
     return Promise.resolve(data);
   }
 
-  private mockInsert(table: any, data?: any) {
+  private mockInsert(table: unknown, data?: unknown) {
     const tableName = this.getTableName(table);
     const tableData = this.getTableData(tableName);
     
@@ -96,12 +118,13 @@ class MockDatabase {
     return Promise.resolve([]);
   }
 
-  private mockUpdate(table: any, data: any, condition: any) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private mockUpdate(table: unknown, data: unknown, _condition: unknown) {
     // Simplified update mock
     return Promise.resolve([data]);
   }
 
-  private getTableName(table: any): string {
+  private getTableName(table: unknown): string {
     // This would need to be adapted based on your actual table objects
     if (table === 'events') return 'events';
     if (table === 'participants') return 'participants';
@@ -112,7 +135,7 @@ class MockDatabase {
     return 'unknown';
   }
 
-  private getTableData(tableName: string): any[] {
+  private getTableData(tableName: string): unknown[] {
     switch (tableName) {
       case 'events': return this.events;
       case 'participants': return this.participants;
@@ -125,7 +148,7 @@ class MockDatabase {
   }
 
   // Mock transaction method
-  async transaction<T>(callback: (tx: any) => Promise<T>): Promise<T> {
+  async transaction<T>(callback: (tx: unknown) => Promise<T>): Promise<T> {
     // For testing purposes, we'll just pass this mock instance as the transaction
     // In a real transaction, all operations would be atomic
     return await callback(this);
@@ -138,12 +161,14 @@ describe('EventsAPI', () => {
   
   beforeEach(() => {
     mockDb = new MockDatabase();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     eventsAPI = new EventsAPI(mockDb as any);
     
     // Reset mocks
     vi.clearAllMocks();
     
     // Setup default mock for matching algorithm
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (Matching.matchParticipants as any).mockReturnValue([
       ['alice@test.com', 'bob@test.com'],
       ['bob@test.com', 'alice@test.com']
@@ -157,6 +182,7 @@ describe('EventsAPI', () => {
       budget: 50,
       location: 'Test Location',
       userId: 'user-123',
+      notificationChannels: ['email'],
       participants: [
         {
           name: 'Alice',
@@ -400,6 +426,7 @@ describe('EventsAPI', () => {
         })
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const failingAPI = new EventsAPI(failingDb as any);
 
       await expect(failingAPI.create({
@@ -407,6 +434,7 @@ describe('EventsAPI', () => {
         date: '2024-12-25',
         budget: 50,
         location: 'Test Location',
+        notificationChannels: ['email'],
         participants: [
           {
             name: 'Alice',
@@ -419,6 +447,7 @@ describe('EventsAPI', () => {
 
     it('should handle matching algorithm errors', async () => {
       // Mock matching algorithm to throw error
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (Matching.matchParticipants as any).mockImplementation(() => {
         throw new Error('Matching failed');
       });
@@ -428,6 +457,7 @@ describe('EventsAPI', () => {
         date: '2024-12-25',
         budget: 50,
         location: 'Test Location',
+        notificationChannels: ['email'],
         participants: [
           {
             name: 'Alice',
@@ -449,6 +479,7 @@ describe('EventsAPI', () => {
         date: 'invalid-date',
         budget: 50,
         location: 'Test Location',
+        notificationChannels: ['email'],
         participants: [
           {
             name: 'Alice',

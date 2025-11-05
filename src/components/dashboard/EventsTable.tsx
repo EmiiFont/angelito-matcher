@@ -25,8 +25,28 @@ interface Event {
     status?: 'active' | 'completed' | 'draft' | 'cancelled';
 }
 
+interface MockEvent extends Event {
+    startDate: string;
+    endDate: string;
+    participants: number;
+    matches: number;
+    notificationsSent: number;
+}
+
+interface ApiEvent {
+    id: string;
+    name: string;
+    date: string;
+    numberOfParticipants: number;
+    budget: number;
+    location: string;
+    endedAt?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 // Mock data for events
-const mockEvents: any[] = [
+const mockEvents: MockEvent[] = [
     {
         id: '1',
         name: 'Christmas 2024 Gift Exchange',
@@ -38,6 +58,7 @@ const mockEvents: any[] = [
         matches: 15,
         notificationsSent: 15,
         createdAt: '2024-11-15',
+        updatedAt: '2024-11-15',
         date: '2024-12-01',
         numberOfParticipants: 15,
         location: 'Office'
@@ -53,6 +74,7 @@ const mockEvents: any[] = [
         matches: 25,
         notificationsSent: 25,
         createdAt: '2024-11-01',
+        updatedAt: '2024-11-01',
         date: '2024-11-20',
         numberOfParticipants: 25,
         location: 'Conference Room'
@@ -68,6 +90,7 @@ const mockEvents: any[] = [
         matches: 0,
         notificationsSent: 0,
         createdAt: '2024-11-28',
+        updatedAt: '2024-11-28',
         date: '2024-12-15',
         numberOfParticipants: 8,
         location: 'Home'
@@ -101,7 +124,7 @@ export function EventsTable({ onCreateEvent, onViewEvent, refreshTrigger }: Even
                 const eventsData = await response.json();
 
                 // Map the API response to match the expected Event interface
-                const formattedEvents = eventsData.map((event: any) => ({
+                const formattedEvents = eventsData.map((event: ApiEvent) => ({
                     ...event,
                     status: 'active', // You might want to determine this based on event.endedAt
                     createdAt: new Date(event.createdAt).toISOString(),
