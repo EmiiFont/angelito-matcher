@@ -4,23 +4,43 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createDB } from "../db/client";
 import { user, session, account, verification } from "../db/schema";
 
-export function createAuth(db: ReturnType<typeof createDB>, env: any) {
-    const isProd = env.NODE_ENV === "production";
-    const apiBaseURL = isProd
-        ? "https://myangelito.com"
-        : (env.API_ORIGIN ?? "http://localhost:5173");
+interface AuthEnv {
+    NODE_ENV?: string;
+    API_ORIGIN?: string;
+    FRONTEND_ORIGIN?: string;
+    BETTER_AUTH_SECRET: string;
+    GOOGLE_CLIENT_ID?: string;
+    GOOGLE_CLIENT_SECRET?: string;
+    APPLE_CLIENT_ID?: string;
+    APPLE_CLIENT_SECRET?: string;
+    [key: string]: unknown;
+}
 
+export function createAuth(db: ReturnType<typeof createDB>, env: AuthEnv) {
+    const isProd = env.NODE_ENV === "production";
+    
     const frontendOrigin = isProd
         ? "https://myangelito.com"
         : (env.FRONTEND_ORIGIN ?? "http://localhost:5173");
 
-    const sameOrigin = apiBaseURL === frontendOrigin;
+    // const sameOrigin = apiBaseURL === frontendOrigin;
 
     // const defaultCookieAttributes = sameOrigin
     //     ? { httpOnly: true, secure: isProd, sameSite: "lax" as const, path: "/" }
     //     : { httpOnly: true, secure: false, sameSite: "none" as const, path: "/" }; // requires HTTPS on both
 
-    const config: any = {
+    const config: {
+        secret: string;
+        database: unknown;
+        logger: {
+            disabled: boolean;
+            level: "info";
+            log: (level: string, message: string, ...args: unknown[]) => void;
+        };
+        emailAndPassword: { enabled: boolean };
+        trustedOrigins: string[];
+        socialProviders?: Record<string, unknown>;
+    } = {
         secret: env.BETTER_AUTH_SECRET,
         database: drizzleAdapter(db, {
             provider: "sqlite",
@@ -28,8 +48,8 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         }),
         logger: {
             disabled: false,
-            level: "info",
-            log: (level, message, ...args) => {
+            level: "info" as const,
+            log: (level: string, message: string, ...args: unknown[]) => {
                 // Custom logging implementation
                 console.log(`[${level}] ${message}`, ...args);
             }
@@ -44,7 +64,7 @@ export function createAuth(db: ReturnType<typeof createDB>, env: any) {
         ].filter(Boolean),
     };
 
-    const socialProviders: any = {};
+    const socialProviders: Record<string, unknown> = {};
     console.log("activating google")
     if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
         socialProviders.google = {

@@ -32,7 +32,7 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
                 onSuccess?.();
             }
 
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred');
         } finally {
             setLoading(false);
@@ -65,7 +65,7 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
                     onSuccess?.();
                 }, 100);
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred during Google sign in');
         }
     };
@@ -82,7 +82,7 @@ export function SignInForm({ onSuccess, onToggleMode }: SignInFormProps) {
             } else {
                 onSuccess?.();
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred during Apple sign in');
         }
     };

@@ -1,5 +1,4 @@
 import { createDB } from './db/client';
-import { items } from './db/schema';
 import { createAuth } from './lib/auth';
 
 function cors(origin: string) {
@@ -19,8 +18,13 @@ function cors(origin: string) {
     };
 }
 
+interface Env {
+    DB: D1Database;
+    [key: string]: unknown;
+}
+
 export default {
-    async fetch(request: Request, env: any) {
+    async fetch(request: Request, env: Env) {
         const url = new URL(request.url);
         const origin = request.headers.get("origin") || "http://localhost:5173";
         const db = createDB(env.DB);
@@ -47,18 +51,18 @@ export default {
         // console.log("request URL:", url.pathname);
         // console.log("request origin:", request.headers);
 
-        // Helper function to extract user ID from session
-        const getUserIdFromRequest = async (request: Request): Promise<string | null> => {
-            try {
-                const session = await auth.api.getSession({
-                    headers: request.headers
-                });
-                return session?.user?.id || null;
-            } catch (error) {
-                console.error('Failed to get session:', error);
-                return null;
-            }
-        };
+        // Helper function to extract user ID from session (currently unused)
+        // const getUserIdFromRequest = async (request: Request): Promise<string | null> => {
+        //     try {
+        //         const session = await auth.api.getSession({
+        //             headers: request.headers
+        //         });
+        //         return session?.user?.id || null;
+        //     } catch (error) {
+        //         console.error('Failed to get session:', error);
+        //         return null;
+        //     }
+        // };
 
 
         // ---- AUTH MOUNT ----

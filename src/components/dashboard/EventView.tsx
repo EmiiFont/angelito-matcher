@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Eye, EyeOff, Calendar, MapPin, DollarSign, Users, CheckCircle, Clock } from 'lucide-react';
 
 interface Participant {
@@ -43,11 +43,7 @@ export function EventView({ eventId, onBack }: EventViewProps) {
     const [error, setError] = useState<string | null>(null);
     const [showMatches, setShowMatches] = useState(false);
 
-    useEffect(() => {
-        fetchEventDetails();
-    }, [eventId]);
-
-    const fetchEventDetails = async () => {
+    const fetchEventDetails = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
@@ -64,7 +60,11 @@ export function EventView({ eventId, onBack }: EventViewProps) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [eventId]);
+
+    useEffect(() => {
+        fetchEventDetails();
+    }, [fetchEventDetails]);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
